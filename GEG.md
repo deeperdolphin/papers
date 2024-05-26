@@ -15,7 +15,7 @@ Gauged Emergent Gravity
 
 # **Gauged Emergent Gravity: Formulating a Unified Field Theory from Gauge-Symmetric Foundations**
 
-by [TheProfessor-155b](https://huggingface.co/abacusai/TheProfessor-155b), [Claude 3 Opus](https://www.anthropic.com/news/claude-3-family), [OpenAI GPT4](https://openai.com/gpt-4), [Google Gemini](https://gemini.google.com/), facilitated by [Eric Hartford](https://erichartford.com)
+by [TheProfessor-155b](https://huggingface.co/abacusai/TheProfessor-155b), [Claude 3 Opus](https://www.anthropic.com/news/claude-3-family), [OpenAI GPT4](https://openai.com/gpt-4), [Google Gemini](https://gemini.google.com/), [Eric Hartford](https://erichartford.com)
 
 **Abstract:**
 
