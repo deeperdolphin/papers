@@ -25,22 +25,38 @@ The interconnectedness of observers is formalized within the mathematical langua
 ### Observer Entanglement State
 
 The entangled state of the observers is denoted by:
-$$ |\Psi\rangle \in \mathcal{H} $$
+$$|\Psi\rangle \in \mathcal{H}$$
 This state cannot be factorized into individual observer states, highlighting their interconnectedness. We can express it in terms of basis states:
-$$ |\Psi\rangle = \sum_{j} c_{j} |\psi_{1_j}\rangle \otimes |\psi_{2_j}\rangle \otimes \ldots \otimes |\psi_{n_j}\rangle $$
+$$|\Psi\rangle = \sum_{j} c_{j} |\psi_{1_j}\rangle \otimes |\psi_{2_j}\rangle \otimes \ldots \otimes |\psi_{n_j}\rangle$$
 
 Where:
 
-|ψᵢⱼ⟩ is the j-th basis state of observer i.
-cⱼ are complex coefficients satisfying the normalization condition ∑ⱼ |cⱼ|² = 1.
+$$ |\psi_{ij}\rangle $$
 
-Entanglement Operator (Ξ): To quantify the degree of entanglement, we introduce an entanglement operator Ξ acting on the composite Hilbert space. This operator could be defined in terms of entanglement measures like negativity or concurrence.
-Ξ : ℋ → ℝ
+is the $j-th$ basis state of observer $i$.
+
+$c_j$ are complex coefficients satisfying the normalization condition:
+
+$$ \sum_j |c_j|^2 = 1 $$
+
+### Entanglement Operator (Ξ)
+
+To quantify the degree of entanglement, we introduce an entanglement operator Ξ acting on the composite Hilbert space. This operator could be defined in terms of entanglement measures like negativity or concurrence.
+
+$$ \Xi : \mathcal{H} \to \mathbb{R} $$
+
 The entanglement operator maps the entangled state to a real number representing the degree of entanglement:
-Ξ(|Ψ⟩) = E
-Where E is the entanglement measure.
-Observer Evolution: The evolution of the entangled observer state can be described using the Lindblad equation, which accounts for both unitary and open system dynamics:
-dρ/dt = -i[H, ρ] + ∑_{k} (L_{k}ρL_{k}† - 1/2 (L_{k}†L_{k}ρ + ρL_{k}†L_{k}))
+
+$$ \Xi(|\Psi\rangle) = E $$
+
+Where $E$ is the entanglement measure.
+
+### Observer Evolution
+
+The evolution of the entangled observer state can be described using the Lindblad equation, which accounts for both unitary and open system dynamics:
+
+$$ \frac{d\rho}{dt} = -i[H, \rho] + \sum_{k} \left( L_{k}\rho L_{k}^{\dagger} - \frac{1}{2} \left( L_{k}^{\dagger}L_{k}\rho + \rho L_{k}^{\dagger}L_{k} \right) \right) $$
+
 Where:
 
 ρ is the density matrix of the entangled state.
