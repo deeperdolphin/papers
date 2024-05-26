@@ -1,4 +1,5 @@
-Gauge Emergent Gravity
+# Summary
+Gauged Emergent Gravity
 **Preon Field**: \phi scalar with U(1) gauge symmetry.  
 **Gauge Field**: A_{\mu}  
 **Lagrangian Components**:
@@ -12,7 +13,7 @@ Gauge Emergent Gravity
 
 
 
-**Title: "Gauged Emergent Gravity: Formulating a Unified Field Theory from Gauge-Symmetric Foundations"**
+# **Gauged Emergent Gravity: Formulating a Unified Field Theory from Gauge-Symmetric Foundations**
 
 by [TheProfessor-155b](https://huggingface.co/abacusai/TheProfessor-155b), [Claude 3 Opus](https://www.anthropic.com/news/claude-3-family), [OpenAI GPT4](https://openai.com/gpt-4), [Google Gemini](https://gemini.google.com/), facilitated by [Eric Hartford](https://erichartford.com)
 
