@@ -1,3 +1,4 @@
 # papers
 
-[Gauged Emergent Gravity](GEG.md)
+[Gauged Emergent Gravity](GEG.md) Eric Hartford
+[]() Eric Hartford
