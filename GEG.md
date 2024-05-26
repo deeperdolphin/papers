@@ -5,7 +5,7 @@
 **Lagrangian Components**:
 - **Gauge**: $\mathcal{L}{\text{gauge}} = -\frac{1}{4} F^{\mu\nu}F{\mu\nu}$, where $F_{\mu\nu} = \partial_{\mu} A_{\nu} - \partial_{\nu} A_{\mu}$
 - **Interaction**: $\mathcal{L}{\text{interaction}} = q \bar{\phi} \gamma^\mu \phi A\mu$
-- **Spontaneous Symmetry Breaking**: \langle \phi \rangle = v (non-zero vacuum expectation)
+- **Spontaneous Symmetry Breaking**: $\langle \phi \rangle = v$ (non-zero vacuum expectation)
 - **Emergent Gravity**: S_{\text{gravity}} = \int d^4x \sqrt{-g} \left( \frac{R}{16\pi G} + \mathcal{L}_{\text{emergent}} \right), \mathcal{L}_{\text{emergent}} reflects post-symmetry breaking preon dynamics.
 - **Emergent Lagrangian**: \mathcal{L}_{\text{emergent}} = \Lambda + \alpha R^2 + \beta (F_{\mu\nu} F^{\mu\nu})^2 + \gamma \epsilon_{\mu\nu\rho\sigma} F^{\mu\nu} F^{\rho\sigma} + \frac{1}{2} (\partial_{\mu} \phi)(\partial^{\mu} \phi) + \xi \phi^2 R
 - **Matter Lagrangian**: \mathcal{L}_{\text{matter}} = \sum_i \left( \frac{i}{2} \bar{\psi}_i \gamma^\mu \partial_\mu \psi_i - m_i \bar{\psi}_i \psi_i \right) - \frac{1}{4} \sum_a F^a_{\mu\nu} F^{a\mu\nu} + \mathcal{L}_{\text{Yukawa}} + \mathcal{L}_{\text{Higgs}}
