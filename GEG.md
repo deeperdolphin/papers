@@ -1,10 +1,10 @@
-# Summary
-Gauged Emergent Gravity
-**Preon Field**: \phi scalar with U(1) gauge symmetry.  
-**Gauge Field**: A_{\mu}  
+## Summary
+### Gauged Emergent Gravity
+**Preon Field**: $\phi$ scalar with $U(1)$ gauge symmetry.  
+**Gauge Field**: $A_{\mu}$  
 **Lagrangian Components**:
-- **Gauge**: \mathcal{L}_{\text{gauge}} = -\frac{1}{4} F^{\mu\nu}F_{\mu\nu}, where F_{\mu\nu} = \partial_{\mu} A_{\nu} - \partial_{\nu} A_{\mu}
-- **Interaction**: \mathcal{L}_{\text{interaction}} = q \bar{\phi} \gamma^\mu \phi A_\mu
+- **Gauge**: $\mathcal{L}{\text{gauge}} = -\frac{1}{4} F^{\mu\nu}F{\mu\nu}$, where $F_{\mu\nu} = \partial_{\mu} A_{\nu} - \partial_{\nu} A_{\mu}$
+- **Interaction**: $\mathcal{L}{\text{interaction}} = q \bar{\phi} \gamma^\mu \phi A\mu$
 - **Spontaneous Symmetry Breaking**: \langle \phi \rangle = v (non-zero vacuum expectation)
 - **Emergent Gravity**: S_{\text{gravity}} = \int d^4x \sqrt{-g} \left( \frac{R}{16\pi G} + \mathcal{L}_{\text{emergent}} \right), \mathcal{L}_{\text{emergent}} reflects post-symmetry breaking preon dynamics.
 - **Emergent Lagrangian**: \mathcal{L}_{\text{emergent}} = \Lambda + \alpha R^2 + \beta (F_{\mu\nu} F^{\mu\nu})^2 + \gamma \epsilon_{\mu\nu\rho\sigma} F^{\mu\nu} F^{\rho\sigma} + \frac{1}{2} (\partial_{\mu} \phi)(\partial^{\mu} \phi) + \xi \phi^2 R
@@ -12,8 +12,8 @@ Gauged Emergent Gravity
 - **Total Lagrangian**: \mathcal{L}_{\text{GEG}} = \mathcal{L}_{\text{gauge}} + \mathcal{L}_{\text{emergent}} + \mathcal{L}_{\text{interaction}} + \mathcal{L}_{\text{matter}}
 
 
-
-# **Gauged Emergent Gravity: Formulating a Unified Field Theory from Gauge-Symmetric Foundations**
+## Paper
+### Gauged Emergent Gravity: Formulating a Unified Field Theory from Gauge-Symmetric Foundations
 
 by [TheProfessor-155b](https://huggingface.co/abacusai/TheProfessor-155b), [Claude 3 Opus](https://www.anthropic.com/news/claude-3-family), [OpenAI GPT4](https://openai.com/gpt-4), [Google Gemini](https://gemini.google.com/), [Eric Hartford](https://erichartford.com)
 
