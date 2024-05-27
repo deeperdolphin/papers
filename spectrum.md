@@ -1,4 +1,4 @@
-Abstract
+#Abstract
 
 Efficient training of large language models is a critical challenge in natural language processing. Existing approaches often require significant computational resources and time, limiting accessibility and progress. In this paper, we introduce Spectrum, a novel method for accelerating language model training by selectively updating a subset of layers based on their signal-to-noise ratio (SNR). Spectrum dynamically adapts the set of trainable parameters during training, focusing compute on the most informative layers.
 
@@ -8,7 +8,7 @@ Qualitative analyses reveal that Spectrum learns more discriminative and coheren
 
 Our work opens up several promising directions for future research, including SNR-guided learning rate scheduling and pruning, applications to domain adaptation and transfer learning, and scaling to larger models and datasets. We hope that Spectrum will help democratize access to state-of-the-art language models and facilitate further progress in natural language processing.
 
-Introduction
+#1. Introduction
 
 Recent advances in large language models (LLMs) have demonstrated remarkable capabilities across a wide range of natural language tasks. However, training these massive models efficiently remains a significant challenge, requiring substantial computational resources and time. An emerging line of research has focused on developing techniques to reduce the memory footprint and accelerate the training of LLMs without compromising performance.
 
@@ -24,7 +24,7 @@ We release our code and models publicly to facilitate future research on efficie
 Spectrum opens up exciting opportunities to train large language models more quickly and cheaply without sacrificing quality. This has significant implications for democratizing LLM research and enabling new applications. In the remainder of this paper, we provide a comprehensive description and evaluation of the Spectrum methodology. Section 2 discusses relevant related work, followed by a detailed explanation of Spectrum in Section 3. We then present experimental results in Section 4 and concluding remarks in Section 5.
 [1] Dettmers, Tim, et al. "QLORA: Efficient Finetuning of Quantized LLMs." arXiv preprint arXiv:2305.14314 (2023).
 
-2. Related Work
+#2. Related Work
 
 Efficient training of large language models has attracted significant research attention in recent years. Two notable prior works that aim to reduce the computational cost and memory requirements of LLM training are qLoRA [1] and LASER [2].
 
@@ -44,7 +44,7 @@ In summary, Spectrum combines the strengths of qLoRA and LASER - efficient memor
 [2] Sharma, Pratyusha, et al. "The Truth is in There: Improving Reasoning in Language Models with Layer-Selective Rank Reduction." arXiv preprint arXiv:2312.13558 (2023).  
 [3] Hu, Edward J., et al. "Lora: Low-rank adaptation of large language models." arXiv preprint arXiv:2106.09685 (2021).
 
-Mathematical Foundation
+#3. Mathematical Foundation
 
 The Spectrum method leverages insights from Random Matrix Theory (RMT) to efficiently identify and focus training on the most informative layers of a neural network. The key idea is to use the Marchenko-Pastur distribution, which characterizes the eigenvalue distribution of large random matrices, to separate signal from noise in the network's weight matrices.
 
