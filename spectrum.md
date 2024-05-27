@@ -97,9 +97,19 @@ Thus, in polynomial regression, overfitting is not only a statistical issue but 
 
 ### Random Matrix Theory (RMT) Perspective
 
-From the Random Matrix Theory (RMT) perspective, all of these situations push the smallest singular values of the matrix towards zero, which from now here we will call these very small singular values as “noisy singular values”.
+From the perspective of Random Matrix Theory (RMT), components of matrices that represent less frequent data might often be misconstrued as noise due to several theoretical and practical reasons:
 
-Skipping matrices with less singular values that are not distinguishable from zero have several benefits. First, factual or scattered information obtained in the pre-training phase is preserved, so layers that are already overwhelmed with scattered pieces of information are preserved; Second, avoiding these matrices push the training away from less stable and ill-posed matrices, considering it ends up focusing on matrices with max-min singular values; Third, focusing on matrices that have larger singular values enables us to focus on the transformations that have the largest impact over the latent representations.
+Eigenvalue/Singular Value Spectrum: In Random Matrix Theory, the eigenvalues/singular values of a matrix can provide insights into the nature of the data the matrix represents. For large matrices derived from real-world data, such as those in big data analytics or machine learning, the bulk of the eigenvalues/singular values typically forms a 'bulk spectrum' which is well-predicted by RMT. Eigenvalues/singular values associated with less frequent data points often fall outside this main bulk as smaller or outlier eigenvalues. These outlier singular values can be misinterpreted as noise because they deviate from the typical eigenvalue distribution expected under RMT assumptions of data properties.
+
+Signal vs. Noise Separation: RMT helps in distinguishing signal from noise by analyzing the statistical properties of matrices. The theory predicts that in a high-dimensional data setting, the eigenvalues/singular values that deviate significantly from the bulk of the spectrum might represent either important signals or noise. However, the challenge lies in correctly identifying whether these deviations are indeed meaningful signals (representing less frequent but important data points) or merely statistical noise. Often, without additional information or domain knowledge, these components can be mistakenly dismissed as noise.
+
+### Bennefits of focusing on Matrices with larger max-min Singular Values
+
+Skipping matrices with less singular values that are not distinguishable from zero have several benefits.
+
+1) factual or scattered information obtained in the pre-training phase is preserved, so layers that are already overwhelmed with scattered pieces of information are preserved;
+2) avoiding these matrices push the training away from less stable and ill-posed matrices, considering it ends up focusing on matrices with max-min singular values;
+3)  focusing on matrices that have larger singular values enables us to focus on the transformations that have the largest impact over the latent representations.
 
 ## 3.1 Singular Value Decomposition and Quadratic Form
 Consider a weight matrix $W$ in the neural network. The singular value decomposition (SVD) of $W$ is given by:
