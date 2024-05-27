@@ -11,7 +11,9 @@ Our work opens up several promising directions for future research, including SN
 Introduction
 
 Recent advances in large language models (LLMs) have demonstrated remarkable capabilities across a wide range of natural language tasks. However, training these massive models efficiently remains a significant challenge, requiring substantial computational resources and time. An emerging line of research has focused on developing techniques to reduce the memory footprint and accelerate the training of LLMs without compromising performance.
-In this paper, we introduce Spectrum, a novel method for selectively training the layers of an LLM based on their signal-to-noise ratio (SNR). Unlike previous approaches such as qLoRA [1] which quantize the entire model, Spectrum strategically targets specific layers and modules for training while keeping others frozen. By focusing computational resources on the most informative parameters, Spectrum achieves superior performance while significantly reducing training time and memory requirements compared to state-of-the-art methods.
+
+In this paper, we introduce Spectrum, a novel method for selectively training the layers of an LLM based on their signal-to-noise ratio (SNR). Spectrum is grounded in Random Matrix Theory and leverages the Marchenko-Pastur distribution to identify informative layers based on their signal-to-noise ratio.  Unlike previous approaches such as qLoRA [1] which quantize the entire model, Spectrum strategically targets specific layers and modules for training while keeping others frozen. By focusing computational resources on the most informative parameters, Spectrum achieves superior performance while significantly reducing training time and memory requirements compared to state-of-the-art methods.
+
 Our main contributions can be summarized as follows:
 
 We propose Spectrum, a new approach for efficient LLM training that selectively trains layers based on their SNR. Spectrum identifies the most valuable parameters to update via a novel SpectrumAnalyzer.
@@ -33,6 +35,8 @@ LASER [2] takes a different approach by selectively applying a low-rank approxim
 Spectrum builds upon the insights of qLoRA and LASER while addressing their limitations. Like qLoRA, Spectrum enables efficient training of very large language models. However, instead of quantizing all layers, Spectrum selectively trains a subset of layers in full precision based on their SNR. This allows devoting compute to the most informative parameters during training.
 
 Similar to LASER, Spectrum uses SNR to identify important layers. But while LASER approximates layers after training for model compression, Spectrum dynamically selects layers to train based on SNR to accelerate convergence. Spectrum also introduces a novel SpectrumAnalyzer module to efficiently compute layer SNRs during training.
+
+Unlike LASER and qLoRA, Spectrum explicitly considers the signal-to-noise ratio of layers and insights from Random Matrix Theory.  Spectrum's mathematical foundation sets it apart from prior approaches and enables a more principled way of selecting informative layers for efficient training.
 
 In summary, Spectrum combines the strengths of qLoRA and LASER - efficient memory usage and SNR-based layer selection - while improving upon them to enable faster, better LLM training. By strategically focusing compute on high-SNR layers during training, Spectrum achieves higher performance with lower time and memory costs. The following sections describe the Spectrum methodology in detail and present rigorous experimental comparisons to prior works.
 
@@ -86,14 +90,16 @@ In summary, the Spectrum method leverages RMT to analyze the singular value spec
 Spectrum is a novel training method that selectively updates the layers of a language model based on their signal-to-noise ratio (SNR). By focusing computational resources on the most informative parameters, Spectrum significantly accelerates training and reduces memory requirements compared to training all layers. This section describes the key components of the Spectrum methodology.
 
 4.1 Measuring Signal-to-Noise Ratio
-
 At the core of Spectrum is the ability to efficiently measure the SNR of each layer in a neural network. We introduce SpectrumAnalyzer, a module that computes layer SNRs using the following procedure (see Algorithm 1):
 
-1) For each target layer, compute the singular value decomposition (SVD) of the layer's weight matrix. 
-2) Calculate the SNR as the ratio between the sum of singular values above a noise threshold τ (signal) and the sum of singular values below τ (noise).
-3) Normalize the SNR by the layer's largest singular value to enable comparisons between layers.
+For each target layer, compute the singular value decomposition (SVD) of the layer's weight matrix.
+Calculate the SNR as the ratio between the sum of singular values above a noise threshold τ (signal) and the sum of singular values below τ (noise).
+Normalize the SNR by the layer's largest singular value to enable comparisons between layers.
 
-The noise threshold τ is determined adaptively for each layer using the Marchenko-Pastur distribution [4], which models the singular value spectrum of pure noise. Singular values above this theoretically derived threshold are considered signal. SpectrumAnalyzer is optimized to compute SNRs in batches, enabling efficient analysis of the entire model (see Appendix A for implementation details).
+The noise threshold τ is determined adaptively for each layer using the Marchenko-Pastur distribution [4], which models the singular value spectrum of pure noise. As discussed in the Mathematical Foundation section, the Marchenko-Pastur distribution provides a theoretically grounded way to separate signal from noise in the singular value spectrum of large random matrices. By setting the noise threshold based on this distribution, Spectrum can effectively identify the informative components of each layer's weight matrix.
+The SNR formula used in Spectrum is derived from the properties of the singular value spectrum described in the Mathematical Foundation section. Specifically, the sum of singular values above the noise threshold corresponds to the signal component, while the sum of singular values below the threshold represents the noise component. This formulation aligns with the theoretical understanding of how the singular value spectrum is partitioned according to the Marchenko-Pastur distribution.
+SpectrumAnalyzer is optimized to compute SNRs in batches, enabling efficient analysis of the entire model (see Appendix A for implementation details). By leveraging the insights from Random Matrix Theory and the Marchenko-Pastur distribution, Spectrum provides a principled and efficient approach to measuring the signal-to-noise ratio of neural network layers, which forms the basis for its selective training strategy.
+[4] Marchenko, V. A., and Leonid A. Pastur. "Distribution of eigenvalues for some sets of random matrices." Matematicheskii Sbornik 114.4 (1967): 507-536.
 
 4.2 Layer Selection
 
