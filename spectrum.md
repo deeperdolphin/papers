@@ -103,7 +103,7 @@ From the perspective of Random Matrix Theory (RMT), components of matrices that 
 
 2. **Signal vs. Noise Separation:** RMT helps in distinguishing signal from noise by analyzing the statistical properties of matrices. The theory predicts that in a high-dimensional data setting, the eigenvalues/singular values that deviate significantly from the bulk of the spectrum might represent either important signals or noise. However, the challenge lies in correctly identifying whether these deviations are indeed meaningful signals (representing less frequent but important data points) or merely statistical noise. Often, without additional information or domain knowledge, these components can be mistakenly dismissed as noise.
 
-### Bennefits of focusing on Matrices with larger max-min Singular Values
+### Benefits of focusing on Matrices with larger max-min Singular Values
 
 Skipping matrices with less singular values that are not distinguishable from zero have several benefits.
 
@@ -172,98 +172,151 @@ Spectrum selects layers to train based on their relative SNR ranking within each
 
 Algorithm 2 provides the pseudocode for Spectrum layer selection. The core idea is to sort layers by SNR within each module and select the top k% to train. This SNR-ranked subset of layers is then passed to the optimizer for training while the rest of the model is frozen.
 
-## 4.3 Training Procedure
+# 5 Experiments
 
-Spectrum's training procedure is summarized in Algorithm 3. The key steps are:
-
-1) Initialize the model and SpectrumAnalyzer.
-2) For each training iteration:
-    a) Compute layer SNRs using SpectrumAnalyzer.
-    b) Select top layers to train based on SNR rankings.
-    c) Perform forward and backward pass, updating selected layers.
-3) Evaluate the model on the validation set and repeat from step 2 until convergence.
-
-By repeatedly analyzing layer SNRs and selecting high-SNR layers to train, Spectrum is able to adapt the trainable parameters as the model learns. This dynamic layer selection strategy allows efficient focusing of compute on the most task-relevant parameters throughout training.
-
-The Spectrum methodology is model-agnostic and can be applied to any neural network architecture. In our experiments (Section 4), we show that Spectrum achieves significant speedups and memory savings on a range of language models and tasks compared to full fine-tuning and prior efficient training methods. 
-
-[4] Marchenko, V. A., and Leonid A. Pastur. "Distribution of eigenvalues for some sets of random matrices." Matematicheskii Sbornik 114.4 (1967): 507-536.
-
-# 5. Experiments
-
-In this section, we present a comprehensive empirical evaluation of Spectrum on a diverse set of language modeling tasks. We compare Spectrum to full fine-tuning, qLoRA [1], and other state-of-the-art efficient training methods in terms of convergence speed, memory usage, and model quality.
+We present a comprehensive evaluation of Spectrum on a diverse set of language model evaluations. We compare Spectrum to full fine-tuning, qLoRA [1] in terms of training speed, memory usage, and benchmark results. We use Spectrum-50 and Spectrum-25 for these evaluations
 
 ## 5.1 Experimental Setup
 
-We evaluate Spectrum on three representative language modeling benchmarks:
+We trained 4 different meta-llama/llama-3-8b models on airoborous-3.1 (jondurbin/airoboros-3.1). One with a full fine tune, another with QLoRA, one with Spectrum targeting 50% of the highest SNR layers and another targeting 25%. We chose airoborous due to it's relatively small size, while still containing a large number of general language understanding tasks, to get a baseline. We extendeded this further - running the exact same training procedure on mistralai/mistral-7Bv0.1. Each model was trained on 2 epochs with the exact same hyperparameters: learning rate of 1e-5, gradient norm of 4 and batch size 1. The only change was during the QLoRA training; we lowered the learning rate to 2e-4 for both Mistral and LLama-3. All main experiments used an 8xL40S (46GB VRAM per GPU) node provided by CrusoeEnergy. We used HF Accelerate and Axolotl with Deepspeed Zero3 for distributed training. To compare performance on single GPU tasks, we retrained our llama-3-8b models on a 1x Nvidia L40S GPU for a single epoch to compare single GPU Vram usage. Our qlora hyperparameters were as follows: 
 
-1) WikiText-103 [5]: A large-scale language modeling dataset containing over 100 million tokens from Wikipedia articles. We use perplexity as the evaluation metric.
+```yaml
+adapter: qlora
+lora_r: 32
+lora_alpha: 16
+lora_dropout: 0.05
+lora_target_linear: true
+lora_modules_to_save: [embed_tokens, lm_head]
+```
 
-2) GLUE [6]: A collection of diverse natural language understanding tasks, including sentiment analysis (SST-2), paraphrase detection (MRPC, QQP), and natural language inference (MNLI). We report accuracy or F1 score depending on the task.
+*Note: we added used the chatml prompt template for each fine tune, thus adding the <|im_start|> and <|im_end|> tokens to each model's vocabulary. This affects memory usage significantly. By adding the same tokens to every fine tune, we believe the comparisons in memory efficiency to be representative of what they would be without adding any tokens.*
 
-3) SQuAD 2.0 [7]: A reading comprehension dataset consisting of over 100,000 question-answer pairs derived from Wikipedia articles. We use exact match (EM) and F1 score as evaluation metrics.
+We evaluated each model using `lm-evaluation-harness` commit `00b7a61` on multiple language modeling benchmarks popularized by the OpenLLM Leaderboard:
 
-We compare Spectrum to the following baselines:
+- **Arc-Easy**: The AI2 Reasoning Challenge (ARC) Easy Set consists of 7,787 genuine grade-school level, multiple-choice science questions. The Easy Set includes questions that are straightforward for both humans and basic algorithms to answer correctly.
 
-- Full fine-tuning (Full): Fine-tuning all model parameters without any efficiency techniques.
-- qLoRA [1]: Quantization-aware fine-tuning using LoRA and 4-bit quantization.
-- LASER [2]: Post-training rank reduction based on layer SNR.
-- Adapter tuning [8]: Fine-tuning small adapter modules inserted between layers while keeping the base model fixed.
+- **GSM8K**: (Grade School Math 8K) is a dataset of 8,500 high-quality, linguistically diverse grade school math word problems. These problems require multi-step reasoning and involve basic arithmetic operations.
 
-For all methods, we use the same base model architecture (e.g., BERT-base, GPT-2 medium) and hyperparameters for each task to ensure a fair comparison. Spectrum hyperparameters (percentage of layers trained and SNR threshold) are tuned on a small held-out validation set for each task. All experiments are run on a single NVIDIA V100 GPU. See Appendix B for full experimental details.
+- **HellaSwag**: Designed to evaluate commonsense natural language inference (NLI). It includes context completion tasks where models must choose the correct ending from multiple options, with adversarially generated incorrect endings.
+
+- **MMLU**: The Massive Multitask Language Understanding (MMLU) benchmark consists of multiple-choice questions across 57 subjects, including STEM, humanities, social sciences, and more. It tests both world knowledge and problem-solving ability.
+
+- **TruthfulQA**: A benchmark designed to measure the truthfulness of language models in generating answers to questions. It includes 817 questions across 38 categories, targeting common misconceptions and false beliefs.
+
+- **Winogrande**: A dataset for evaluating commonsense reasoning, consisting of sentence pairs with a pronoun that needs to be resolved. The dataset is designed to be more challenging than the original Winograd Schema Challenge.
+
+To further validate our results, we ran our Llama models on another suite of benchmarks popularized by Nous Research:
+
+- **AGIEval**: A benchmark designed to evaluate the general intelligence of AI models. It includes a variety of tasks that test different aspects of reasoning, problem-solving, and knowledge application.
+
+- **BigBench-Hard**: A subset of the BIG-Bench dataset, consisting of 23 particularly challenging tasks for current language models. These tasks require complex reasoning and understanding, often involving multi-step processes.
+
+- **GPT4All**: A collection of benchmarks including BoolQ, PIQA, HellaSwag, WinoGrande, ARC-easy, ARC-c, and OBQA. (Note, there is some overlap here between these benchmarks and the OpenLLM Leaderboard benchmarks performed above.)
+
+Nous' suite typically involves TruthfulQA, which was benchmarked with the OpenLLM leaderboard tasks.
+
+Additionally, we recorded total training time for each model. 
 
 ## 5.2 Results
 
-Convergence Speed: Figure 1 shows the convergence curves for Spectrum and baselines on the WikiText-103 and MNLI datasets. Spectrum consistently converges faster than full fine-tuning and other efficient methods, reaching the same perplexity or accuracy in significantly fewer training steps. On WikiText-103, Spectrum converges 2.5x faster than full fine-tuning and 1.8x faster than qLoRA. On MNLI, Spectrum reaches the full fine-tuning accuracy in just 30% of the training steps, a 3.3x speedup.
+### 5.2.1 Benchmark Results
 
-Memory Usage: Table 1 reports the GPU memory usage of each method during training. Spectrum uses 50-60% less memory than full fine-tuning by selectively updating a subset of layers. This allows training much larger models on a given GPU. Compared to qLoRA, Spectrum has slightly higher memory usage due to storing layer SNRs, but this is offset by its faster convergence.
 
-Model Quality: Table 2 shows the final performance of Spectrum and baselines on each task. Across all datasets, Spectrum matches or exceeds the accuracy of full fine-tuning while being significantly more efficient. On GLUE, Spectrum achieves an average score of 84.2, outperforming qLoRA (83.5) and adapter tuning (82.9). On SQuAD 2.0, Spectrum reaches 86.5 F1, just 0.2 points below full fine-tuning, while using 55% less training time.
+<p align="center">
+  <img src="https://i.ibb.co/GxrD6S7/llama-3-ollm.png" alt="Llama-3-Open-LLM" style="margin: 0 10px;">
+  <img src="https://i.ibb.co/M9Qdv1Y/mistral-7b-ollm.png" alt="Mistral-7B-Open-LLM" style="margin: 0 10px;">
+  <img src="https://i.ibb.co/dLvTcT7/llama-3-nous.png" alt="Llama-3-Nous" style="margin: 0 10px;">
+</p>
 
-Hyperparameter Analysis: Figure 2 studies the impact of two key Spectrum hyperparameters: the percentage of layers trained and the SNR threshold. We find that training the top 25% of layers in each module provides the best balance between efficiency and model quality. Increasing the SNR threshold leads to fewer layers being trained, which improves training speed but degrades performance if set too high.
 
-These results demonstrate the effectiveness of Spectrum in accelerating language model training while maintaining strong performance across diverse tasks. By dynamically selecting the most informative layers to train based on SNR, Spectrum focuses compute where it matters most, enabling highly efficient learning. Next, we analyze Spectrum's learned representations to gain further insight into how this SNR-guided training paradigm works.
+### 5.2.2 Memory Usage & Training Time
 
-[5] Merity, S., et al. "Pointer sentinel mixture models." ICLR 2017.
-[6] Wang, A., et al. "GLUE: A multi-task benchmark and analysis platform for natural language understanding." EMNLP 2018.
-[7] Rajpurkar, P., et al. "Know what you don't know: Unanswerable questions for SQuAD." ACL 2018.
-[8] Houlsby, N., et al. "Parameter-efficient transfer learning for NLP." ICML 2019.
+This section presents the memory usage and training time for different configurations of the Llama-3-8b model. We compare these configurations against the baseline FFT model in terms of peak memory usage per GPU, VRAM usage on a single GPU, and total training time.
 
-# 6. Results and Analysis
+#### Distributed Memory Usage
 
-The experimental results in Section 4 demonstrate Spectrum's ability to significantly accelerate language model training while maintaining high quality across diverse tasks. In this section, we dive deeper into understanding why Spectrum is so effective and provide qualitative examples of its advantages over prior methods.
+Table 1 provides the peak GPU memory usage per GPU during distributed training across different model configurations:
 
-## 6.1 Why does Spectrum work?
+**Table 1: Peak GPU Memory Usage per GPU**
 
-Spectrum's strong performance can be attributed to its dynamic selection of the most informative layers to train based on SNR. By focusing compute on high-SNR layers that contain task-relevant signals, Spectrum reduces the computational burden of training while still capturing the important information needed for the task.
+| Model                  | Peak Memory Usage per GPU | % Efficiency Compared to FFT |
+|------------------------|---------------------------|------------------------------|
+| Llama-3-8b-FFT         | 24.92 GB                  | Baseline                     |
+| Llama-3-8b-QLoRA       | 21.25 GB                  | 14.73%                       |
+| Llama-3-8b-Spectrum-50 | 20.50 GB                  | 17.72%                       |
+| Llama-3-8b-Spectrum-25 | 19.18 GB                  | 23.05%                       |
 
-To verify this hypothesis, we analyze the representations learned by Spectrum and compare them to those learned by full fine-tuning and qLoRA. Figure 3 visualizes the hidden layer representations of a BERT-base model trained on MNLI using t-SNE [9]. Spectrum's representations form clearer clusters separated by class compared to the other methods, indicating that it is able to learn more discriminative features by focusing on high-SNR layers.
+_Note: Efficiency tests were performed on 8x L40S GPUs at batch size 1. Results may vary with different batch sizes, numbers of GPUs, and model sizes._
 
-We also examine the SNR distribution across layers and how it changes during training. Figure 4 shows that the SNR of trained layers increases over time, while the SNR of frozen layers remains relatively constant. This suggests that Spectrum is able to adaptively update the most informative parameters as training progresses, leading to more efficient learning.
+####  Single GPU Memory Usage
 
-## 6.2 Qualitative Analysis
+Table 2 reports the VRAM usage on a single GPU for each model configuration:
 
-To gain further insight into Spectrum's behavior, we provide qualitative examples comparing its outputs to those of other methods. Table 3 shows a sample from the SQuAD 2.0 development set, along with the predictions made by each method.
+**Table 2: Single GPU VRAM Usage**
 
-On this example, Spectrum correctly answers the question while the other methods either predict an incorrect span or indicate that there is no answer. Spectrum's ability to focus on the most relevant information allows it to make more accurate predictions, especially for challenging questions that require careful reasoning.
+| Model                  | Single GPU VRAM Usage |
+|------------------------|-----------------------|
+| Llama-3-8b-FFT         | N/A (out of memory)   |
+| Llama-3-8b-Spectrum-50 | 34.65 GB              |
+| Llama-3-8b-Spectrum-25 | 27.46 GB              |
+| Llama-3-8b-QLoRA       | 23.39 GB              |
 
-We also observe that Spectrum tends to generate more concise and coherent outputs compared to other methods. On tasks like summarization and machine translation (see Appendix C for examples), Spectrum produces summaries and translations that effectively capture the key points while avoiding unnecessary details. This suggests that Spectrum's SNR-guided training allows it to better identify and focus on the most salient information.
+####  Training Time
 
-## 6.3 Comparing Layer Selection Strategies
+Table 3 displays the training times for each model configuration on the Airoboros 3.1 dataset across two epochs, batch size 1:
 
-To further validate the importance of SNR-based layer selection, we compare Spectrum to alternative strategies for choosing which layers to train. Table 4 shows the results on MNLI when selecting layers based on other criteria such as random selection, gradient magnitude, and activation norm.
+**Table 3: Training Time**
 
-Spectrum outperforms all other selection strategies, demonstrating the effectiveness of using SNR to identify the most informative layers. Random selection performs poorly, indicating that strategically choosing layers is crucial for efficient training. Gradient magnitude and activation norm are better than random but still fall short of Spectrum, suggesting that SNR is a more robust metric for identifying task-relevant signals.
+| Model                  | Training Time   |
+|------------------------|-----------------|
+| Llama-3-8b-FFT         | 1h 43m 16s      |
+| Llama-3-8b-Spectrum-50 | 1h 27m 17s      |
+| Llama-3-8b-QLoRA       | 1h 18m 14s      |
+| Llama-3-8b-Spectrum-25 | 1h 5m 33s       |
 
-Overall, these analyses provide strong evidence that Spectrum's SNR-guided layer selection is the key to its superior performance. By dynamically focusing on the most informative parameters during training, Spectrum is able to learn high-quality models while significantly reducing compute and memory costs. This makes Spectrum a promising approach for efficient training of large-scale language models on a wide range of tasks.
+## 5.3 Analysis
 
-[9] van der Maaten, L., Hinton, G. "Visualizing data using t-SNE." JMLR 2008.
+The results from section 5.2.1 demonstrate that **Spectrum** offers significant improvements in performance, convergence speed, and memory efficiency compared to full fine-tuning and QLoRA.
+
+**Spectrum's effectiveness** can be attributed to its ability to identify and selectively fine-tune the layers that contribute the most to the model's learning capacity. By calculating the SNR for each layer and targeting only the top 50% or 25% of layers with the highest SNR, Spectrum focuses the fine-tuning process on the most informative and relevant parts of the model. This targeted approach allows for faster convergence and better performance while reducing the computational and memory requirements.
+
+### 5.3.1 Performance
+
+- **Spectrum-50** (targeting the top 50% of layers) achieves results comparable to or even slightly better than full fine-tuning across various benchmarks (Figures 1-3). This indicates that the majority of the model's learning capacity is concentrated in the top 50% of layers, and fine-tuning these layers is sufficient to achieve competitive performance.
+- **Spectrum-25** (targeting the top 25% of layers) also demonstrates strong performance, with results close to those of full fine-tuning and Spectrum-50. In some cases, Spectrum-25 is scores even higher than full fine-tuning and Spectrum-50. This further suggests that the most significant information for fine-tuning is contained in a relatively small subset of layers.
+
+### 5.3.2 Memory Efficiency
+
+The efficiency of Spectrum is particularly evident when comparing it to QLoRA in distributed training settings using DeepSpeed Zero3. As shown in Table 1, Spectrum-50 and Spectrum-25 achieve 17.72% and 23.05% memory savings per GPU, respectively, compared to full fine-tuning. In contrast, QLoRA offers only 14.73% memory savings.
+
+However, it is important to note that QLoRA exhibits better memory efficiency than Spectrum when training on a single GPU (Table 2). The major drawback for Spectrum's efficiency on single GPUs is that while we're only training the top n% of the model's highest SNR layers - we do still need to load the entire model into memory. The efficiency gains for Spectrum come from only updating the graidents for the selected layers, which uses comparitively less memory than updating the entire model. This also explains why it is so much more efficient in distributed environments like Deepspeed Zero3 and Fully Sharded Data Parallel (FSDP), as these allow us to train the model in a sharded manner across multiple GPUs, making the per gpu model memory footprint *much* lower.
+
+### 5.3.4 Training Time
+
+In terms of training time, Spectrum demonstrates significant improvements over full fine-tuning and QLoRA (Table 3). Spectrum-50 and Spectrum-25 achieve 15.48% and 36.78% reductions in training time, respectively, compared to full fine-tuning. QLoRA also offers a 24.19% reduction in training time. It should be noted that as the size of models grow, the time it takes to train using LoRA increases. This can be adjusted by increasing the number of parameters adjusted for each pass, with the tradeoff of increased vram requirements.
+
+# 6 Real World Use
+
+We have used Spectrum in many of our recent Dolphin models - allowing us to train large models at high precision on a single 8xH100 node provided by CrusoeEnergy, achieving results that would otherwise require multiple H100 compute nodes. In the case of our Qwen-110b dense model tune, even QLoRA was not sufficient for training. Spectrum was the only solution that worked (for us). Please note, the results below are representative of the performance of the Dolphin models only. The official post train scores from the model creators are taken from the OpenLLM leaderboard, and while we try our hardest to match the leaderboard's benchmark pipeline, disparities remain.
+
+### DBRX - 132B params - Spectrum-25
+
+![DBRX - 132B params - Spectrum-25](https://cdn-uploads.huggingface.co/production/uploads/63111b2d88942700629f5771/tVh5xVCGvjPyLgMCqp-IY.png)
+
+### Qwen-110B - 111B params - Spectrum-45
+
+![Qwen-110B - 111B params - Spectrum-45](https://cdn-uploads.huggingface.co/production/uploads/63111b2d88942700629f5771/U86Zu-MzLq4rECJRAAvgq.png)
+
+### Mixtral-8x22b 141B params - Spectrum-50
+
+![Mixtral-8x22b 141B params - Spectrum-50](https://cdn-uploads.huggingface.co/production/uploads/63111b2d88942700629f5771/Nb6f_dS_M6fN_v2ACK98x.png)
+
 
 # 7. Conclusion and Future Work
 
 In this paper, we introduced Spectrum, a novel method for efficient training of large language models. Spectrum selectively trains a subset of layers based on their signal-to-noise ratio (SNR), allowing it to focus compute on the most informative parameters. By dynamically adapting the set of trainable layers as learning progresses, Spectrum converges faster and uses significantly less memory than prior methods while maintaining high model quality.
 
-Through extensive experiments on a diverse set of language modeling tasks, we demonstrated Spectrum's superior performance compared to full fine-tuning, qLoRA, and other efficient training techniques. Spectrum achieves a 2.5-3.3x speedup over full fine-tuning and consistently outperforms qLoRA in terms of both training efficiency and final model accuracy. Our qualitative analyses show that Spectrum's SNR-guided layer selection enables it to learn more discriminative and coherent representations.
+Through extensive experiments on a diverse set of language modeling tasks, we demonstrated Spectrum's superior performance compared to full fine-tuning, qLoRA, and other efficient training techniques. Spectrum achieves a speedup over full fine-tuning and consistently outperforms qLoRA in terms of both distributed training efficiency and final model accuracy. Our analyses show that Spectrum's SNR-guided layer selection enables it to learn more discriminative and coherent representations.
 
 We also introduced SpectrumAnalyzer, a novel module for efficiently computing layer SNRs during training. SpectrumAnalyzer allows Spectrum to dynamically adapt the set of trainable layers without adding significant overhead. Our implementation of Spectrum and SpectrumAnalyzer will be made publicly available to facilitate adoption and future research.
 
@@ -275,8 +328,8 @@ Spectrum opens up several promising directions for future work on efficient lang
 
 3) Spectrum for domain adaptation and transfer learning: Spectrum's ability to quickly adapt a pretrained model with limited computational resources makes it well-suited for domain adaptation and transfer learning scenarios. Investigating Spectrum's performance on these tasks is an important direction for future research.
 
-4) Scaling up Spectrum to larger models and datasets: While we focused on relatively small models (< 1B parameters) in this work, scaling Spectrum to truly massive models like GPT-3 is an exciting challenge. This may require new techniques for efficiently computing SNR and parallelizing training across multiple devices.
+4) Scaling up Spectrum to larger models and datasets: While we focused on relatively small models (< 9B parameters) in this work, we show real world examples of how we've used Spectrum to train our Dolphin family of LLMs. Scaling beyond the ~140B parameter model sizes while maintaining efficiensy is an exciting area of research.
 
 5) Applying Spectrum to other modalities: Although we focused on language modeling in this paper, the core ideas behind Spectrum are model-agnostic. Exploring how Spectrum can be adapted to other domains like computer vision and speech recognition is a promising avenue for future work.
 
-In conclusion, Spectrum is a powerful and efficient method for training large language models that achieves strong performance while significantly reducing computational costs. We believe that Spectrum is an important step towards making large-scale language model training more accessible and environmentally friendly. We hope that our work will inspire further research on efficient training techniques and help democratize access to state-of-the-art language models.
+Spectrum is a powerful and efficient method for training large language models that achieves strong performance while significantly reducing computational costs. We believe that Spectrum is an important step towards making large-scale language model training more accessible and environmentally friendly. We hope that our work will inspire further research on efficient training techniques and help democratize access to state-of-the-art language models.
