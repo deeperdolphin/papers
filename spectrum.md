@@ -242,7 +242,7 @@ Additionally, we recorded total training time for each model.
 <p align="center">
   <img src="https://i.ibb.co/GxrD6S7/llama-3-ollm.png" alt="Llama-3-Open-LLM" style="margin: 0 10px;">
   <img src="https://i.ibb.co/M9Qdv1Y/mistral-7b-ollm.png" alt="Mistral-7B-Open-LLM" style="margin: 0 10px;">
-  <img src="https://i.ibb.co/dLvTcT7/llama-3-nous.png" alt="Llama-3-Nous" style="margin: 0 10px;">
+  <img src="https://i.ibb.co/sCTtpDn/llama-nous-correct.png" alt="Llama-3-Nous" style="margin: 0 10px;">
 </p>
 
 
