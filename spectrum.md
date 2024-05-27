@@ -93,11 +93,13 @@ When $\Sigma$ contains zeros, the computation of $(X^T X)^{-1}$ becomes problema
 
 Thus, in polynomial regression, overfitting is not only a statistical issue but also manifests as a numerical problem in terms of the singular values of the design matrix.
 
+### Random Matrix Theory (RMT) Perspective
+
 From the Random Matrix Theory (RMT) perspective, all of these situations push the smallest singular values of the matrix towards zero, which from now here we will call these very small singular values as “noisy singular values”.
 
 Skipping matrices with less singular values that are not distinguishable from zero have several benefits. First, factual or scattered information obtained in the pre-training phase is preserved, so layers that are already overwhelmed with scattered pieces of information are preserved; Second, avoiding these matrices push the training away from less stable and ill-posed matrices, considering it ends up focusing on matrices with max-min singular values; Third, focusing on matrices that have larger singular values enables us to focus on the transformations that have the largest impact over the latent representations.
 
-3.1 Singular Value Decomposition and Quadratic Form
+## 3.1 Singular Value Decomposition and Quadratic Form
 Consider a weight matrix $W$ in the neural network. The singular value decomposition (SVD) of $W$ is given by:
 
 $$W = USV^T$$
