@@ -150,7 +150,7 @@ Matrices with higher SNR contain more informative features and less noise. By fo
 The Spectrum method leverages RMT to analyze the singular value spectrum of neural network weight matrices, separating signal from noise. By targeting training on high-SNR matrices, Spectrum achieves faster, more memory efficient generalization compared to standard training approaches.
 
 # 4 Measuring Signal-to-Noise Ratio
-At the core of Spectrum is the ability to efficiently measure the SNR of each layer in a neural network. We introduce SpectrumAnalyzer, a module that computes layer SNRs using the following procedure (see Algorithm 1):
+At the core of Spectrum is the ability to efficiently measure the SNR of each layer in an LLM. We introduce SpectrumAnalyzer, a module that computes layer SNRs using the following procedure (see Algorithm 1):
 
 For each target layer, compute the singular value decomposition (SVD) of the layer's weight matrix.
 Calculate the SNR as the ratio between the sum of singular values above a noise threshold $\varepsilon$ (signal) and the sum of singular values below $\varepsilon$ (noise).
@@ -241,12 +241,14 @@ Table 1 provides the peak GPU memory usage per GPU during distributed training a
 
 **Table 1: Peak GPU Memory Usage per GPU**
 
-| Model                  | Peak Memory Usage per GPU | % Efficiency Compared to FFT |
-|------------------------|---------------------------|------------------------------|
-| Llama-3-8b-FFT         | 24.92 GB                  | Baseline                     |
-| Llama-3-8b-QLoRA       | 21.25 GB                  | 14.73%                       |
-| Llama-3-8b-Spectrum-50 | 20.50 GB                  | 17.72%                       |
-| Llama-3-8b-Spectrum-25 | 19.18 GB                  | 23.05%                       |
+| Model                        | Peak Memory Usage per GPU | % Efficiency Compared to FFT |
+|------------------------------|---------------------------|------------------------------|
+| Llama-3-8b-FFT               | 24.92 GB                  | Baseline                     |
+| Llama-3-8b-QLoRA             | 21.25 GB                  | 14.73%                       |
+| Llama-3-8b-Spectrum-50       | 20.50 GB                  | 17.72%                       |
+| Llama-3-8b-Spectrum-25       | 19.18 GB                  | 23.05%                       |
+| Llama-3-8b-Spectrum-25+QLoRA | 16.95 GB                  | 31.99%                       |
+
 
 _Note: Efficiency tests were performed on 8x L40S GPUs at batch size 1. Results may vary with different batch sizes, number of GPUs, and model sizes._
 
@@ -256,12 +258,14 @@ Table 2 reports the VRAM usage on a single GPU for each model configuration:
 
 **Table 2: Single GPU VRAM Usage**
 
-| Model                  | Single GPU VRAM Usage |
-|------------------------|-----------------------|
-| Llama-3-8b-FFT         | N/A (out of memory)   |
-| Llama-3-8b-Spectrum-50 | 34.65 GB              |
-| Llama-3-8b-Spectrum-25 | 27.46 GB              |
-| Llama-3-8b-QLoRA       | 23.39 GB              |
+| Model                        | Single GPU VRAM Usage |
+|------------------------------|-----------------------|
+| Llama-3-8b-FFT               | N/A (out of memory)   |
+| Llama-3-8b-Spectrum-50       | 34.65 GB              |
+| Llama-3-8b-Spectrum-25       | 27.46 GB              |
+| Llama-3-8b-QLoRA             | 23.39 GB              |
+| Llama-3-8b-Spectrum-25+QLoRA | 21.18 GB              |
+
 
 ####  Training Time
 
@@ -269,12 +273,14 @@ Table 3 displays the training times for each model configuration on the Airoboro
 
 **Table 3: Training Time**
 
-| Model                  | Training Time   |
-|------------------------|-----------------|
-| Llama-3-8b-FFT         | 1h 43m 16s      |
-| Llama-3-8b-Spectrum-50 | 1h 27m 17s      |
-| Llama-3-8b-QLoRA       | 1h 18m 14s      |
-| Llama-3-8b-Spectrum-25 | 1h 5m 33s       |
+| Model                        | Training Time   |
+|------------------------------|-----------------|
+| Llama-3-8b-FFT               | 1h 43m 16s      |
+| Llama-3-8b-Spectrum-50       | 1h 27m 17s      |
+| Llama-3-8b-QLoRA             | 1h 18m 14s      |
+| Llama-3-8b-Spectrum-25       | 1h 5m 33s       |
+| Llama-3-8b-Spectrum-25+QLoRA | 54m 55s         |
+
 
 ## 5.3 Analysis
 
