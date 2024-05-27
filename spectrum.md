@@ -50,7 +50,7 @@ The Spectrum method leverages insights from Random Matrix Theory (RMT) to effici
 
 Before running into detailed mathematical formulation, first it is worthy providing the mathematical background of the idea, which is related to how singular value decomposition explains knowledge representation in matrices. Lower singular values often represent noise, less important information or less frequent terms in the data. In the LASER paper [2], the original authors showed that zeroing these values, one effectively filters out noise, which enhances the quality of the representations learned by the model. This process is akin to denoising, where the aim is to retain only the most significant features of the data. Having that said from another perspective, less-frequent data and scattered information traditionally leads to overfit.
 
-## Relating Zero Singular Values and Overfit
+## Relating Zero Singular Values and Overfit - A Polynomial Regression Case
 
 Abusing of examples, to illustrate how overfit pushes singular values towards zero, given dataset with $n$ data points $(x_i, y_i)$, the design matrix $X$ in a polynomial regression of degree $d$ is constructed as follows:
 
