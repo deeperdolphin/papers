@@ -237,8 +237,6 @@ This section presents the memory usage and training time for different configura
 
 #### Distributed Memory Usage
 
-Table 1 provides the peak GPU memory usage per GPU during distributed training across different model configurations:
-
 **Table 1: Peak GPU Memory Usage per GPU**
 
 | Model                        | Peak Memory Usage per GPU | % Efficiency Compared to FFT |
@@ -254,7 +252,6 @@ _Note: Efficiency tests were performed on 8x L40S GPUs at batch size 1. Results 
 
 ####  Single GPU Memory Usage
 
-Table 2 reports the VRAM usage on a single GPU for each model configuration:
 
 **Table 2: Single GPU VRAM Usage**
 
@@ -269,9 +266,7 @@ Table 2 reports the VRAM usage on a single GPU for each model configuration:
 
 ####  Training Time
 
-Table 3 displays the training times for each model configuration on the Airoboros 3.1 dataset across two epochs, batch size 1:
-
-**Table 3: Training Time**
+**Table 3: Training Time (Distributed)**
 
 | Model                        | Training Time   |
 |------------------------------|-----------------|
