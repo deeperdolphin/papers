@@ -40,11 +40,52 @@ In summary, Spectrum combines the strengths of qLoRA and LASER - efficient memor
 [2] Sharma, Pratyusha, et al. "The Truth is in There: Improving Reasoning in Language Models with Layer-Selective Rank Reduction." arXiv preprint arXiv:2312.13558 (2023).  
 [3] Hu, Edward J., et al. "Lora: Low-rank adaptation of large language models." arXiv preprint arXiv:2106.09685 (2021).
 
-3. Spectrum Methodology
+Mathematical Foundation
+
+The Spectrum method leverages insights from Random Matrix Theory (RMT) to efficiently identify and focus training on the most informative layers of a neural network. The key idea is to use the Marchenko-Pastur distribution, which characterizes the eigenvalue distribution of large random matrices, to separate signal from noise in the network's weight matrices.
+
+3.1 Singular Value Decomposition and Quadratic Form
+Consider a weight matrix $W$ in the neural network. The singular value decomposition (SVD) of $W$ is given by:
+
+$$W = USV^T$$
+
+where $U$ and $V$ are orthogonal matrices containing the left and right singular vectors, and $S$ is a diagonal matrix of singular values. The eigenvalues of the matrix $W^TW$ can be expressed in terms of the singular values of $W$:
+
+$$W^TW = (USV^T)^T(USV^T) = VS^2V^T$$
+
+This relationship between the eigenvalues of $W^TW$ and the squared singular values of $W$ is key to applying the Marchenko-Pastur distribution.
+
+3.2 Marchenko-Pastur Distribution
+The Marchenko-Pastur distribution describes the limiting eigenvalue distribution of large random matrices as the matrix dimensions go to infinity with a fixed aspect ratio. For a matrix $W$ of size $m \times n$, the eigenvalues of the matrix $C = (1/n)W^TW$ converge to a distribution bounded by:
+
+$$\lambda_+ = \sigma^2\left(1 + \sqrt{\frac{m}{n}}\right)^2$$
+
+$$\lambda_- = \sigma^2\left(1 - \sqrt{\frac{m}{n}}\right)^2$$
+
+where $\lambda_+$ and $\lambda_-$ are the largest and smallest eigenvalues, and $\sigma$ is the standard deviation of the eigenvalues.
+Using the relationship between the eigenvalues of $C$ and the singular values of $W$, we can derive bounds on the singular values:
+
+$$\varepsilon_+ = \frac{1}{\sqrt{n}}\sigma\left(1 + \sqrt{\frac{m}{n}}\right)$$
+
+$$\varepsilon_- = \frac{1}{\sqrt{n}}\sigma\left(1 - \sqrt{\frac{m}{n}}\right)$$
+
+3.3 Signal-to-Noise Ratio and Matrix Ranking
+To avoid numerical instability and enable efficient computation, we omit the normalization term $(1/\sqrt{n})$ when calculating the singular value bounds. This simplification does not affect the relative ordering of matrices by their signal-to-noise ratio.
+Furthermore, to account for potential skewness and kurtosis in the singular value distribution, we replace the standard deviation $\sigma$ with the interquartile range in our calculations.
+The signal-to-noise ratio (SNR) of a weight matrix can be defined as:
+
+$$SNR = \frac{\sum_{k | \sigma_k > \varepsilon} \sigma_k}{\sum_{n | \sigma_n < \varepsilon} \sigma_n}$$
+
+where $\varepsilon$ is a threshold separating signal from noise singular values.
+
+Matrices with higher SNR contain more informative features and less noise. By focusing training on these matrices, Spectrum improves learning efficiency and model performance. RMT provides a principled way to identify high-SNR matrices and guide the training process.
+In summary, the Spectrum method leverages RMT to analyze the singular value spectrum of neural network weight matrices, separating signal from noise. By targeting training on high-SNR matrices, Spectrum achieves faster convergence and better generalization compared to standard training approaches.
+
+4. Spectrum Methodology
 
 Spectrum is a novel training method that selectively updates the layers of a language model based on their signal-to-noise ratio (SNR). By focusing computational resources on the most informative parameters, Spectrum significantly accelerates training and reduces memory requirements compared to training all layers. This section describes the key components of the Spectrum methodology.
 
-3.1 Measuring Signal-to-Noise Ratio
+4.1 Measuring Signal-to-Noise Ratio
 
 At the core of Spectrum is the ability to efficiently measure the SNR of each layer in a neural network. We introduce SpectrumAnalyzer, a module that computes layer SNRs using the following procedure (see Algorithm 1):
 
@@ -54,7 +95,7 @@ At the core of Spectrum is the ability to efficiently measure the SNR of each la
 
 The noise threshold τ is determined adaptively for each layer using the Marchenko-Pastur distribution [4], which models the singular value spectrum of pure noise. Singular values above this theoretically derived threshold are considered signal. SpectrumAnalyzer is optimized to compute SNRs in batches, enabling efficient analysis of the entire model (see Appendix A for implementation details).
 
-3.2 Layer Selection
+4.2 Layer Selection
 
 Given the SNRs of all layers, Spectrum selects a subset to train while freezing the rest. Layers with higher SNR contain more information relevant to the task, so focusing updates on these layers allows Spectrum to converge faster. The number of layers trained is a key hyperparameter that controls the tradeoff between training speed and model performance.
 
@@ -62,7 +103,7 @@ Spectrum selects layers to train based on their relative SNR ranking within each
 
 Algorithm 2 provides the pseudocode for Spectrum layer selection. The core idea is to sort layers by SNR within each module and select the top k% to train. This SNR-ranked subset of layers is then passed to the optimizer for training while the rest of the model is frozen.
 
-3.3 Training Procedure
+4.3 Training Procedure
 
 Spectrum's training procedure is summarized in Algorithm 3. The key steps are:
 
@@ -79,11 +120,11 @@ The Spectrum methodology is model-agnostic and can be applied to any neural netw
 
 [4] Marchenko, V. A., and Leonid A. Pastur. "Distribution of eigenvalues for some sets of random matrices." Matematicheskii Sbornik 114.4 (1967): 507-536.
 
-4. Experiments
+5. Experiments
 
 In this section, we present a comprehensive empirical evaluation of Spectrum on a diverse set of language modeling tasks. We compare Spectrum to full fine-tuning, qLoRA [1], and other state-of-the-art efficient training methods in terms of convergence speed, memory usage, and model quality.
 
-4.1 Experimental Setup
+5.1 Experimental Setup
 
 We evaluate Spectrum on three representative language modeling benchmarks:
 
@@ -102,7 +143,7 @@ We compare Spectrum to the following baselines:
 
 For all methods, we use the same base model architecture (e.g., BERT-base, GPT-2 medium) and hyperparameters for each task to ensure a fair comparison. Spectrum hyperparameters (percentage of layers trained and SNR threshold) are tuned on a small held-out validation set for each task. All experiments are run on a single NVIDIA V100 GPU. See Appendix B for full experimental details.
 
-4.2 Results
+5.2 Results
 
 Convergence Speed: Figure 1 shows the convergence curves for Spectrum and baselines on the WikiText-103 and MNLI datasets. Spectrum consistently converges faster than full fine-tuning and other efficient methods, reaching the same perplexity or accuracy in significantly fewer training steps. On WikiText-103, Spectrum converges 2.5x faster than full fine-tuning and 1.8x faster than qLoRA. On MNLI, Spectrum reaches the full fine-tuning accuracy in just 30% of the training steps, a 3.3x speedup.
 
@@ -119,11 +160,11 @@ These results demonstrate the effectiveness of Spectrum in accelerating language
 [7] Rajpurkar, P., et al. "Know what you don't know: Unanswerable questions for SQuAD." ACL 2018.
 [8] Houlsby, N., et al. "Parameter-efficient transfer learning for NLP." ICML 2019.
 
-5. Results and Analysis
+6. Results and Analysis
 
 The experimental results in Section 4 demonstrate Spectrum's ability to significantly accelerate language model training while maintaining high quality across diverse tasks. In this section, we dive deeper into understanding why Spectrum is so effective and provide qualitative examples of its advantages over prior methods.
 
-5.1 Why does Spectrum work?
+6.1 Why does Spectrum work?
 
 Spectrum's strong performance can be attributed to its dynamic selection of the most informative layers to train based on SNR. By focusing compute on high-SNR layers that contain task-relevant signals, Spectrum reduces the computational burden of training while still capturing the important information needed for the task.
 
@@ -131,7 +172,7 @@ To verify this hypothesis, we analyze the representations learned by Spectrum an
 
 We also examine the SNR distribution across layers and how it changes during training. Figure 4 shows that the SNR of trained layers increases over time, while the SNR of frozen layers remains relatively constant. This suggests that Spectrum is able to adaptively update the most informative parameters as training progresses, leading to more efficient learning.
 
-5.2 Qualitative Analysis
+6.2 Qualitative Analysis
 
 To gain further insight into Spectrum's behavior, we provide qualitative examples comparing its outputs to those of other methods. Table 3 shows a sample from the SQuAD 2.0 development set, along with the predictions made by each method.
 
@@ -139,7 +180,7 @@ On this example, Spectrum correctly answers the question while the other methods
 
 We also observe that Spectrum tends to generate more concise and coherent outputs compared to other methods. On tasks like summarization and machine translation (see Appendix C for examples), Spectrum produces summaries and translations that effectively capture the key points while avoiding unnecessary details. This suggests that Spectrum's SNR-guided training allows it to better identify and focus on the most salient information.
 
-5.3 Comparing Layer Selection Strategies
+6.3 Comparing Layer Selection Strategies
 
 To further validate the importance of SNR-based layer selection, we compare Spectrum to alternative strategies for choosing which layers to train. Table 4 shows the results on MNLI when selecting layers based on other criteria such as random selection, gradient magnitude, and activation norm.
 
@@ -149,7 +190,7 @@ Overall, these analyses provide strong evidence that Spectrum's SNR-guided layer
 
 [9] van der Maaten, L., Hinton, G. "Visualizing data using t-SNE." JMLR 2008.
 
-6. Conclusion and Future Work
+7. Conclusion and Future Work
 
 In this paper, we introduced Spectrum, a novel method for efficient training of large language models. Spectrum selectively trains a subset of layers based on their signal-to-noise ratio (SNR), allowing it to focus compute on the most informative parameters. By dynamically adapting the set of trainable layers as learning progresses, Spectrum converges faster and uses significantly less memory than prior methods while maintaining high model quality.
 
