@@ -263,7 +263,7 @@ Table 1 provides the peak GPU memory usage per GPU during distributed training a
 | Llama-3-8b-Spectrum-50 | 20.50 GB                  | 17.72%                       |
 | Llama-3-8b-Spectrum-25 | 19.18 GB                  | 23.05%                       |
 
-_Note: Efficiency tests were performed on 8x L40S GPUs at batch size 1. Results may vary with different batch sizes, numbers of GPUs, and model sizes._
+_Note: Efficiency tests were performed on 8x L40S GPUs at batch size 1. Results may vary with different batch sizes, number of GPUs, and model sizes._
 
 ####  Single GPU Memory Usage
 
