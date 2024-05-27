@@ -48,6 +48,55 @@ Mathematical Foundation
 
 The Spectrum method leverages insights from Random Matrix Theory (RMT) to efficiently identify and focus training on the most informative layers of a neural network. The key idea is to use the Marchenko-Pastur distribution, which characterizes the eigenvalue distribution of large random matrices, to separate signal from noise in the network's weight matrices.
 
+Before running into detailed mathematical formulation, first it is worthy providing the mathematical background of the idea, which is related to how singular value decomposition explains knowledge representation in matrices. Lower singular values often represent noise, less important information or less frequent terms in the data. In the LASER paper [2], the original authors showed that zeroing these values, one effectively filters out noise, which enhances the quality of the representations learned by the model. This process is akin to denoising, where the aim is to retain only the most significant features of the data. Having that said from another perspective, less-frequent data and scattered information traditionally leads to overfit.
+
+Abusing of examples, to illustrate how overfit pushes singular values towards zero, given dataset with $n$ data points $(x_i, y_i)$, the design matrix $X$ in a polynomial regression of degree $d$ is constructed as follows:
+
+$$
+X = \begin{bmatrix}
+1 & x_1 & x_1^2 & \cdots & x_1^d \\
+1 & x_2 & x_2^2 & \cdots & x_2^d \\
+\vdots & \vdots & \vdots & & \vdots \\
+1 & x_n & x_n^2 & \cdots & x_n^d
+\end{bmatrix}
+$$
+
+### Overfitting and its Consequences
+
+Overfitting occurs when the model is too complex relative to the amount of data or the noise in the data. Specifically, in polynomial regression, this happens when the degree $d$ of the polynomial is too high relative to the number of data points $n$.
+
+### Impact on Singular Values
+
+The singular value decomposition (SVD) of the matrix $X$ is given by:
+
+$$X = U \Sigma V^T$$
+
+Where:
+- $U$ and $V$ are orthogonal matrices.
+- $\Sigma$ is a diagonal matrix whose diagonal elements are the singular values $\sigma_i$ of $X$.
+
+The singular values $\sigma_i$ in $\Sigma$ give us insight into the linear independence of the columns of $X$. If $X$ has linearly dependent columns, some of these singular values will be zero. This is crucial in understanding overfitting:
+
+1. **High Degree Polynomial ($d \geq n$)**: If the degree $d$ of the polynomial is too high, it can lead to a situation where the columns of $X$ are linearly dependent. This typically happens when $d \geq n$, meaning the polynomial degree is at least as large as the number of data points.
+   
+2. **Linear Dependency**: The linear dependency among columns of $X$ (e.g., if two columns are multiples of each other or one column can be expressed as a linear combination of others) results in a rank-deficient matrix. That is, the rank of $X$ is less than the minimum of $n$ and $d+1$ (the number of columns).
+
+3. **Zero Singular Values**: When $X$ is rank-deficient, it will have zero as some of its singular values. In mathematical terms, if $\text{rank}(X) < d+1$, then there will be $d+1 - \text{rank}(X)$ zero singular values in $\Sigma$.
+
+### Mathematical Consequence
+
+A design matrix $X$ with zero singular values implies issues in solving the normal equation for polynomial regression, $X^T X \beta = X^T y$, due to the non-invertibility of $X^T X$. Singular values being zero mean that $X^T X$ is not full rank, and hence, its inverse does not exist. This directly impacts the stability and reliability of the regression coefficients $\beta$ calculated, leading to overfitting.
+
+$$\beta = (X^T X)^{-1} X^T y$$
+
+When $\Sigma$ contains zeros, the computation of $(X^T X)^{-1}$ becomes problematic or impossible, which signifies that the model has perfectly fitted the noise instead of the underlying data pattern, a clear sign of overfitting.
+
+Thus, in polynomial regression, overfitting is not only a statistical issue but also manifests as a numerical problem in terms of the singular values of the design matrix.
+
+From the Random Matrix Theory (RMT) perspective, all of these situations push the smallest singular values of the matrix towards zero, which from now here we will call these very small singular values as “noisy singular values”.
+
+Skipping matrices with less singular values that are not distinguishable from zero have several benefits. First, factual or scattered information obtained in the pre-training phase is preserved, so layers that are already overwhelmed with scattered pieces of information are preserved; Second, avoiding these matrices push the training away from less stable and ill-posed matrices, considering it ends up focusing on matrices with max-min singular values; Third, focusing on matrices that have larger singular values enables us to focus on the transformations that have the largest impact over the latent representations.
+
 3.1 Singular Value Decomposition and Quadratic Form
 Consider a weight matrix $W$ in the neural network. The singular value decomposition (SVD) of $W$ is given by:
 
