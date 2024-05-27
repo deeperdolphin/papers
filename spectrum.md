@@ -206,7 +206,7 @@ lora_target_linear: true
 lora_modules_to_save: [embed_tokens, lm_head]
 ```
 
-*Note: we added used the chatml prompt template for each fine tune, thus adding the <|im_start|> and <|im_end|> tokens to each model's vocabulary. This affects memory usage significantly. By adding the same tokens to every fine tune, we believe the comparisons in memory efficiency to be representative of what they would be without adding any tokens.*
+*Note: we used the chatml prompt template for each fine tune, thus adding the <|im_start|> and <|im_end|> tokens to each model's vocabulary. This affects memory usage. By adding the same tokens to every fine tune, we believe the comparisons in memory efficiency to be representative of what they would be without adding any additional tokens.*
 
 We evaluated each model using `lm-evaluation-harness` commit `00b7a61` on multiple language modeling benchmarks popularized by the OpenLLM Leaderboard:
 
