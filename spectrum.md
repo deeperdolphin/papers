@@ -172,21 +172,6 @@ Spectrum selects layers to train based on their relative SNR ranking within each
 
 Algorithm 2 provides the pseudocode for Spectrum layer selection. The core idea is to sort layers by SNR within each module and select the top k% to train. This SNR-ranked subset of layers is then passed to the optimizer for training while the rest of the model is frozen.
 
-## 4.3 Training Procedure
-
-Spectrum's training procedure is summarized in Algorithm 3. The key steps are:
-
-1) Initialize the model and SpectrumAnalyzer.
-2) For each training iteration:
-    a) Compute layer SNRs using SpectrumAnalyzer.
-    b) Select top layers to train based on SNR rankings.
-    c) Perform forward and backward pass, updating selected layers.
-3) Evaluate the model on the validation set and repeat from step 2 until convergence.
-
-By repeatedly analyzing layer SNRs and selecting high-SNR layers to train, Spectrum is able to adapt the trainable parameters as the model learns. This dynamic layer selection strategy allows efficient focusing of compute on the most task-relevant parameters throughout training.
-
-The Spectrum methodology is model-agnostic and can be applied to any neural network architecture. In our experiments (Section 4), we show that Spectrum achieves significant speedups and memory savings on a range of language models and tasks compared to full fine-tuning and prior efficient training methods. 
-
 [4] Marchenko, V. A., and Leonid A. Pastur. "Distribution of eigenvalues for some sets of random matrices." Matematicheskii Sbornik 114.4 (1967): 507-536.
 
 # 5 Experiments
@@ -293,7 +278,7 @@ Table 3 displays the training times for each model configuration on the Airoboro
 
 ## 5.3 Analysis
 
-The results from section 5.2.1 demonstrate that **Spectrum** offers significant improvements in performance, convergence speed, and memory efficiency compared to full fine-tuning and QLoRA.
+The results from section 5.2.1 demonstrate that **Spectrum** offers improvements in performance, speed, and memory efficiency compared to full fine-tuning and QLoRA.
 
 **Spectrum's effectiveness** can be attributed to its ability to identify and selectively fine-tune the layers that contribute the most to the model's learning capacity. By calculating the SNR for each layer and targeting only the top 50% or 25% of layers with the highest SNR, Spectrum focuses the fine-tuning process on the most informative and relevant parts of the model. This targeted approach allows for faster convergence and better performance while reducing the computational and memory requirements.
 
@@ -304,7 +289,7 @@ The results from section 5.2.1 demonstrate that **Spectrum** offers significant 
 
 ### 5.3.2 Memory Efficiency
 
-The efficiency of Spectrum is particularly evident when comparing it to QLoRA in distributed training settings using DeepSpeed Zero3. As shown in Table 1, Spectrum-50 and Spectrum-25 achieve 17.72% and 23.05% memory savings per GPU, respectively, compared to full fine-tuning. In contrast, QLoRA offers only 14.73% memory savings.
+The efficiency of Spectrum is particularly evident when comparing it to QLoRA in distributed training settings using DeepSpeed Zero3. As shown in Table 1, Spectrum-50 and Spectrum-25 achieve 17.72% and 23.05% memory savings per GPU, respectively, compared to full fine-tuning. In contrast, QLoRA offers 14.73% memory savings.
 
 However, it is important to note that QLoRA exhibits better memory efficiency than Spectrum when training on a single GPU (Table 2). The major drawback for Spectrum's efficiency on single GPUs is that while we're only training the top n% of the model's highest SNR layers - we do still need to load the entire model into memory. The efficiency gains for Spectrum come from only updating the graidents for the selected layers, which uses comparitively less memory than updating the entire model. This also explains why it is so much more efficient in distributed environments like Deepspeed Zero3 and Fully Sharded Data Parallel (FSDP), as these allow us to train the model in a sharded manner across multiple GPUs, making the per gpu model memory footprint *much* lower.
 
