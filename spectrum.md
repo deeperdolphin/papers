@@ -103,7 +103,7 @@ From the perspective of Random Matrix Theory (RMT), components of matrices that 
 
 2. **Signal vs. Noise Separation:** RMT helps in distinguishing signal from noise by analyzing the statistical properties of matrices. The theory predicts that in a high-dimensional data setting, the eigenvalues/singular values that deviate significantly from the bulk of the spectrum might represent either important signals or noise. However, the challenge lies in correctly identifying whether these deviations are indeed meaningful signals (representing less frequent but important data points) or merely statistical noise. Often, without additional information or domain knowledge, these components can be mistakenly dismissed as noise.
 
-### Bennefits of focusing on Matrices with larger max-min Singular Values
+### Benefits of focusing on Matrices with larger max-min Singular Values
 
 Skipping matrices with less singular values that are not distinguishable from zero have several benefits.
 
