@@ -203,7 +203,7 @@ Spectrum selects layers to train based on their relative SNR ranking within each
 
 We present a comprehensive evaluation of Spectrum on a diverse set of language model evaluations. We compare Spectrum to full fine-tuning, qLoRA [1] in terms of training speed, memory usage, and benchmark results. We use Spectrum-50 and Spectrum-25 for these evaluations
 
-## 5.1 Experimental Setup
+## 5.1 Setup
 
 We trained 4 different meta-llama/llama-3-8b models on airoborous-3.1 (jondurbin/airoboros-3.1). One with a full fine tune, another with QLoRA, one with Spectrum targeting 50% of the highest SNR layers and another targeting 25%. We chose airoborous due to it's relatively small size, while still containing a large number of general language understanding tasks, to get a baseline. We extendeded this further - running the exact same training procedure on mistralai/mistral-7Bv0.1. Each model was trained on 2 epochs with the exact same hyperparameters: learning rate of 1e-5, gradient norm of 4, batch size 1 and a max sequence length of 4096. The only change was during the QLoRA training; we lowered the learning rate to 2e-4 for both Mistral and LLama-3. All main experiments used an 8xL40S (46GB VRAM per GPU) node provided by CrusoeEnergy. We used HF Accelerate and Axolotl with Deepspeed Zero3 for distributed training. To compare performance on single GPU jobs, we retrained our llama-3-8b models on a 1x Nvidia L40S GPU for a single epoch to compare single GPU Vram usage. Our qlora hyperparameters were as follows: 
 
