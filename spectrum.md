@@ -151,9 +151,9 @@ After that, we normalize $SNR$ in relation to the largest singular value, for se
 
 **1. Normalization**: It normalizes the SNR, making it dimensionless and comparable across different systems or matrices. This is particularly useful in scenarios where matrices have varying scales.
 
-**2. Sensitivity Analysis**: The largest singular value represents the maximum stretching factor of the matrix. By dividing the SNR by this value, we can better understand the system's sensitivity to noise. This helps in assessing the robustness and stability of the system.
+**2. Sensitivity Analysis**: The largest singular value represents the maximum stretching factor of the matrix. By dividing the SNR by this value, one can better understand the system's sensitivity to noise. This helps in assessing the robustness and stability of the system.
 
-**3. Enhanced Comparison**: It allows for a fair comparison between different systems or matrices. By normalizing the SNR with the largest singular value, we can compare systems of different magnitudes on a common scale.
+**3. Enhanced Comparison**: It allows for a fair comparison between different systems or matrices. By normalizing the SNR with the largest singular value, one can compare systems of different magnitudes on a common scale.
 
 **4. Conditioning Information**: The largest singular value provides information about the conditioning of the matrix. A higher value indicates that the matrix is more ill-conditioned, which implies that small changes in input can cause large changes in output. Normalizing SNR with the largest singular value gives insight into how noise affects the system considering its conditioning.
 
