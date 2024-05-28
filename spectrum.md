@@ -285,8 +285,13 @@ The results from section 5.2.1 demonstrate that **Spectrum** offers improvements
 
 ### 5.3.1 Performance
 
-- **Spectrum-50** (targeting the top 50% of layers) achieves results comparable to or even slightly better than full fine-tuning across various benchmarks (Figures 1-3). This indicates that the majority of the model's learning capacity is concentrated in the top 50% of layers, and fine-tuning these layers is sufficient to achieve competitive performance.
-- **Spectrum-25** (targeting the top 25% of layers) also demonstrates strong performance, with results close to those of full fine-tuning and Spectrum-50. In some cases, Spectrum-25 is scores even higher than full fine-tuning and Spectrum-50. This further suggests that the most significant information for fine-tuning is contained in a relatively small subset of layers.
+**Spectrum-50** (targeting the top 50% of layers) achieves results comparable to or even slightly better than full fine-tuning across various benchmarks (Figures 1-3). This indicates that the majority of the model's learning capacity is concentrated in the top 50% of layers, and fine-tuning these layers is sufficient to achieve competitive performance.
+**Spectrum-25** (targeting the top 25% of layers) also demonstrates strong performance, with results close to those of full fine-tuning and Spectrum-50. In some cases, Spectrum-25 is scores even higher than full fine-tuning and Spectrum-50. This further suggests that the most significant information for fine-tuning is contained in a relatively small subset of layers.
+
+Additionally, we found that when combining Spectrum 25 with QLoRA, we could further decrease the VRAM use while also increasing the speed - while keeping performance almost identical to stock QLoRA.
+
+![Spectrum+QLoRA Performance](https://i.ibb.co/xmr4VPR/spectrum-qlora-llama.png)
+
 
 ### 5.3.2 Memory Efficiency
 
