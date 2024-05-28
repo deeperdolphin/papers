@@ -4,11 +4,11 @@
 
 Efficient training of large language models is a critical challenge in natural language processing. Existing approaches often require significant computational resources and time, limiting accessibility and progress. In this paper, we introduce Spectrum, a novel method for accelerating language model training by selectively updating a subset of layers based on their signal-to-noise ratio (SNR).
 
-We propose SpectrumAnalyzer, a module for efficiently computing layer SNRs, and show how it can be used to guide layer selection. Through extensive experiments on a range of language modeling tasks, we demonstrate that Spectrum achieves nearly identical results to full finetuning while using signifigantly less GPU memory. Spectrum also consistently outperforms prior efficient training methods like qLoRA in terms of model quality and VRAM use (in distributed training environments).
+We propose SpectrumAnalyzer, a module for efficiently computing layer SNRs, and show how it can be used to guide layer selection. Through extensive experiments on a range of language modeling tasks, we demonstrate that Spectrum achieves nearly identical results to full finetuning while using significantly less GPU memory. Spectrum also consistently outperforms prior efficient training methods like qLoRA in terms of model quality and VRAM use (in distributed training environments).
 
 Qualitative analyses reveal that Spectrum learns more discriminative and coherent representations by focusing on high-SNR layers. Ablation studies confirm the importance of SNR-based layer selection, as Spectrum significantly outperforms alternative strategies. Overall, Spectrum is a powerful and efficient approach for training large language models that achieves strong performance while dramatically reducing computational costs.
 
-Our work opens up several promising directions for future research, including SNR-guided learning rate scheduling and pruning, applications to domain adaptation and transfer learning, and effectively training larger models on comparitively less compute. We hope that Spectrum will help democratize access to state-of-the-art language models and facilitate further progress in natural language processing.
+Our work opens up several promising directions for future research, including SNR-guided learning rate scheduling and pruning, applications to domain adaptation and transfer learning, and effectively training larger models on comparatively less compute. We hope that Spectrum will help democratize access to state-of-the-art language models and facilitate further progress in natural language processing.
 
 # 1. Introduction
 
@@ -30,7 +30,7 @@ Spectrum opens up exciting opportunities to train large language models more qui
 
 Efficient training of large language models has attracted significant research attention in recent years. Two notable prior works that aim to reduce the computational cost and memory requirements of LLM training are qLoRA [1] and LASER [2].
 
-Dettmers et al. [1] introduced qLoRA, a method that combines LoRA (Low-Rank Adaptation) [3] with 4-bit quantization to enable efficient finetuning of LLMs. By quantizing the base model weights to 4 bits and storing the LoRA adaptation parameters in 16-bit precision, qLoRA significantly reduces memory usage during training. This allows finetuning of billions-parameter models like GPT-3 on a single GPU. However, qLoRA applies quantization and LoRA uniformly across all model layers, which may not be optimal.
+Dettmers et al. [1] introduced qLoRA, a method that combines LoRA (Low-Rank Adaptation) [3] with 4-bit quantization to enable efficient finetuning of LLMs. By quantizing the base model weights to 4 bits and storing the LoRA adaptation parameters in 16-bit precision, qLoRA significantly reduces memory usage during training. This allows finetuning of billion-parameter models on a single GPU. However, qLoRA applies quantization and LoRA uniformly across all model layers, which may not be optimal.
 
 LASER [2] takes a different approach by selectively applying a low-rank approximation to specific layers of a trained model. The authors measure the signal-to-noise ratio (SNR) of each layer and reduce the rank of high-SNR layers, showing that this can boost performance on certain tasks. However, LASER is primarily designed for model compression after training rather than improving training itself. 
 
