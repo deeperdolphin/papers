@@ -1,4 +1,4 @@
-# Spectrum: No compromise Memory Efficient LLM Training
+# Spectrum: Targeted Training Based on Signal to Noise Ratio
 
 # Abstract
 
