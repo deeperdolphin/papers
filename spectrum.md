@@ -152,32 +152,45 @@ The Spectrum method leverages RMT to analyze the singular value spectrum of neur
 # 4 Measuring The Signal-to-Noise Ratio
 At the core of Spectrum is the ability to efficiently measure the SNR of each layer in an LLM. We introduce SpectrumAnalyzer, a module that computes layer SNRs using the following procedure:
 
-```sql
-Def `calculate_snr_for_layer` with parameters `self` and `layer_type`
-    Find all layers in the model that match `layer_type` and have weights
-    Calculate the number of batches needed
+## Pseudocode for the Spectrum Method
 
-    For each batch of layers:
-        For each layer in the batch:
-            Get the weights of the layer
-            If weights have less than 2 dimensions, add an extra dimension
+### Abstract
+This pseudocode describes the Spectrum method for selectively updating model layers based on their signal-to-noise ratio (SNR) to accelerate training of large language models.
 
-            Calculate the singular values of the weights
-            Find the maximum singular value
+### Classes and Methods
 
-            Estimate the noise level (sigma)
-            Get the shape of the weights (n and m)
+#### Class: ModelModifier
+- **Attributes**:
+  - `model_name`: Identifier for the pre-trained language model.
+  - `top_percent`: Percentage of layers to update based on high SNR.
+  - `batch_size`: Number of layers processed in one batch for SNR calculation.
+  - `model`, `optimizer`, `tokenizer`: Model components from the transformers library.
+  - `layer_snr`: Dictionary to store SNR values for each layer.
 
-            Calculate the noise threshold
+- **Methods**:
+  - `__init__(model_name, top_percent, batch_size)`: Initializes the model, optimizer, and tokenizer based on the given model name.
+  - `get_weight_types()`: Identifies unique weight types (bias, weight matrices) in the model's layers.
+  - `interactive_select_weights()`: Displays an interactive checkbox dialog for users to select which weight types to analyze.
+  - `calculate_snr_for_layer(layer_type)`: Computes SNR for layers of the specified type using singular value decomposition (SVD) and Marchenko-Pastur law.
+    - **SVD Formula**: \( S = \text{svd}(weights) \)
+    - **Marchenko-Pastur Threshold**: \( \text{threshold} = \sigma \times \sqrt{(1 + \sqrt{\beta})^2} \)
+  - `assess_layers_snr(selected_weight_types)`: Aggregates SNR calculations across selected weight types and updates internal state.
+  - `save_snr_to_json()`: Serializes the layer SNR data to a JSON file.
+  - `generate_unfrozen_params_yaml(json_filename, top_percent)`: Generates a YAML file listing the layers with top SNR values.
 
-            Calculate signal as the sum of singular values above the threshold
-            Calculate noise as the sum of singular values below the threshold
+#### Main Execution Flow
+- Parse command-line arguments if present (e.g., JSON path, top percent override).
+- If JSON path is provided:
+  - Load SNR data from JSON and generate YAML file listing top layers.
+- Otherwise:
+  - Initialize `ModelModifier` with user-specified model and batch size.
+  - Select weight types via interactive dialogue.
+  - Compute SNR for selected weights and save results.
+  - Optionally, print results and status updates.
 
-            Calculate the Signal-to-Noise Ratio (SNR) as signal divided by noise
-            Calculate the SNR ratio as SNR divided by the maximum singular value
-
-            Store the SNR ratio in a dictionary with the layer name and type
-```
+### Additional Functions
+- `marchenko_pastur_threshold(sigma, n, m)`: Computes threshold value using Marchenko-Pastur law based on layer dimensions \(n\) and \(m\), and estimated noise level \(sigma\).
+- `estimate_sigma_with_full_iqr(S)`: Estimates noise level from the interquartile range (IQR) of singular values.
 
 For each target layer, compute the singular value decomposition (SVD) of the layer's weight matrix.
 Calculate the SNR as the ratio between the sum of singular values above a noise threshold $\varepsilon$ (signal) and the sum of singular values below $\varepsilon$ (noise).
