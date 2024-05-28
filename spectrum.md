@@ -172,8 +172,8 @@ This pseudocode describes the Spectrum method for selectively updating model lay
   - `get_weight_types()`: Identifies unique weight types (bias, weight matrices) in the model's layers.
   - `interactive_select_weights()`: Displays an interactive checkbox dialog for users to select which weight types to analyze.
   - `calculate_snr_for_layer(layer_type)`: Computes SNR for layers of the specified type using singular value decomposition (SVD) and Marchenko-Pastur law.
-    - **SVD Formula**: \( S = \text{svd}(weights) \)
-    - **Marchenko-Pastur Threshold**: \( \text{threshold} = \sigma \times \sqrt{(1 + \sqrt{\beta})^2} \)
+    - **SVD Formula**: $\( S = \text{svd}(weights) \)$
+    - **Marchenko-Pastur Threshold**: $\( \text{threshold} = \sigma \times \sqrt{(1 + \sqrt{\beta})^2} \)$
   - `assess_layers_snr(selected_weight_types)`: Aggregates SNR calculations across selected weight types and updates internal state.
   - `save_snr_to_json()`: Serializes the layer SNR data to a JSON file.
   - `generate_unfrozen_params_yaml(json_filename, top_percent)`: Generates a YAML file listing the layers with top SNR values.
@@ -189,7 +189,7 @@ This pseudocode describes the Spectrum method for selectively updating model lay
   - Optionally, print results and status updates.
 
 ### Additional Functions
-- `marchenko_pastur_threshold(sigma, n, m)`: Computes threshold value using Marchenko-Pastur law based on layer dimensions \(n\) and \(m\), and estimated noise level \(sigma\).
+- `marchenko_pastur_threshold($\sigma$, $n$, $m$)`: Computes threshold value using Marchenko-Pastur law based on layer dimensions \(n\) and \(m\), and estimated noise level $\(sigma\)$.
 - `estimate_sigma_with_full_iqr(S)`: Estimates noise level from the interquartile range (IQR) of singular values.
 
 For each target layer, compute the singular value decomposition (SVD) of the layer's weight matrix.
