@@ -147,17 +147,15 @@ $$SNR = \frac{\sum_{k | \sigma_k > \varepsilon} \sigma_k}{\sum_{n | \sigma_n < \
 
 where $\varepsilon$ is a threshold separating signal from noise singular values.
 
-After that, we normalize $$SNR$$ in relation to the largest singular value, for several reasons:
+After that, we normalize $ SNR $ in relation to the largest singular value, for several reasons:
 
-1. Normalization: It normalizes the SNR, making it dimensionless and comparable across different systems or matrices. This is particularly useful in scenarios where matrices have varying scales.
+**1. Normalization**: It normalizes the SNR, making it dimensionless and comparable across different systems or matrices. This is particularly useful in scenarios where matrices have varying scales.
 
-2. Sensitivity Analysis: The largest singular value represents the maximum stretching factor of the matrix. By dividing the SNR by this value, we can better understand the system's sensitivity to noise. This helps in assessing the robustness and stability of the system.
+**2. Sensitivity Analysis**: The largest singular value represents the maximum stretching factor of the matrix. By dividing the SNR by this value, we can better understand the system's sensitivity to noise. This helps in assessing the robustness and stability of the system.
 
-3. Enhanced Comparison: It allows for a fair comparison between different systems or matrices. By normalizing the SNR with the largest singular value, we can compare systems of different magnitudes on a common scale.
+**3. Enhanced Comparison**: It allows for a fair comparison between different systems or matrices. By normalizing the SNR with the largest singular value, we can compare systems of different magnitudes on a common scale.
 
-4. Conditioning Information: The largest singular value provides information about the conditioning of the matrix. A higher value indicates that the matrix is more ill-conditioned, which implies that small changes in input can cause large changes in output. Normalizing SNR with the largest singular value gives insight into how noise affects the system considering its conditioning.
-
-5. Improved Metrics: In signal processing and communications, normalized metrics often provide a clearer understanding of system performance. This normalization can lead to more accurate assessments and better design choices.
+**4. Conditioning Information**: The largest singular value provides information about the conditioning of the matrix. A higher value indicates that the matrix is more ill-conditioned, which implies that small changes in input can cause large changes in output. Normalizing SNR with the largest singular value gives insight into how noise affects the system considering its conditioning.
 
 With all these adjustments, matrices with higher SNR contain more informative features and less noise. By focusing training on these matrices, Spectrum improves learning efficiency and model performance. RMT provides a principled way to identify high-SNR matrices and guide the training process.
 
