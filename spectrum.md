@@ -157,7 +157,7 @@ At the core of Spectrum is the ability to efficiently measure the SNR of each la
 ### Description
 This pseudocode describes the Spectrum method for selectively updating model layers based on their signal-to-noise ratio (SNR) to accelerate training of large language models.
 
-```sql
+```python
 // Function to compute Marchenko-Pastur threshold
 function marchenko_pastur_threshold(σ, n, m):
     β ← n / m
