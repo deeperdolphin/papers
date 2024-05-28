@@ -147,7 +147,7 @@ $$SNR = \frac{\sum_{k | \sigma_k > \varepsilon} \sigma_k}{\sum_{n | \sigma_n < \
 
 where $\varepsilon$ is a threshold separating signal from noise singular values.
 
-After that, we normalize $SNR$ in relation to the largest singular value $SNR / \[ \max_{\sigma_i} \]$ for several reasons:
+After that, we normalize $SNR$ in relation to the largest singular value, obtaining $$SNR / \[ \max_{\sigma_i} \]$$ for several reasons:
 
 **1. Normalization**: It normalizes the SNR, making it dimensionless and comparable across different systems or matrices. This is particularly useful in scenarios where matrices have varying scales.
 
