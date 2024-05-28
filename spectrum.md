@@ -1,3 +1,5 @@
+# Spectrum: No compromise Memery Efficient LLM Training
+
 # Abstract
 
 Efficient training of large language models is a critical challenge in natural language processing. Existing approaches often require significant computational resources and time, limiting accessibility and progress. In this paper, we introduce Spectrum, a novel method for accelerating language model training by selectively updating a subset of layers based on their signal-to-noise ratio (SNR).
