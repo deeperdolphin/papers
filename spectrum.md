@@ -259,7 +259,7 @@ Additionally, we recorded total training time for each model.
 
 ## 5.2 Results
 
-### 5.2.1 Benchmark Results
+### 5.2.1 Benchmark Scores
 
 
 <p align="center">
@@ -272,8 +272,6 @@ Additionally, we recorded total training time for each model.
 ### 5.2.2 Memory Usage & Training Time
 
 This section presents the memory usage and training time for different configurations of the Llama-3-8b model. We compare these configurations against the baseline FFT model in terms of peak memory usage per GPU, VRAM usage on a single GPU, and total training time.
-
-#### Distributed Memory Usage
 
 **Table 1: Peak GPU Memory Usage per GPU**
 
@@ -288,9 +286,6 @@ This section presents the memory usage and training time for different configura
 
 _Note: Efficiency tests were performed on 8x L40S GPUs at batch size 1. Results may vary with different batch sizes, number of GPUs, and model sizes._
 
-####  Single GPU Memory Usage
-
-
 **Table 2: Single GPU VRAM Usage**
 
 | Model                        | Single GPU VRAM Usage |
@@ -300,9 +295,6 @@ _Note: Efficiency tests were performed on 8x L40S GPUs at batch size 1. Results 
 | Llama-3-8b-Spectrum-25       | 27.46 GB              |
 | Llama-3-8b-QLoRA             | 23.39 GB              |
 | Llama-3-8b-Spectrum-25+QLoRA | 21.18 GB              |
-
-
-####  Training Time
 
 **Table 3: Training Time (Distributed)**
 
@@ -319,14 +311,14 @@ _Note: Efficiency tests were performed on 8x L40S GPUs at batch size 1. Results 
 
 The results from section 5.2.1 demonstrate that **Spectrum** offers improvements in performance, speed, and memory efficiency compared to full fine-tuning and QLoRA.
 
-**Spectrum's effectiveness** can be attributed to its ability to identify and selectively fine-tune the layers that contribute the most to the model's learning capacity. By calculating the SNR for each layer and targeting only the top 50% or 25% of layers with the highest SNR, Spectrum focuses the fine-tuning process on the most informative and relevant parts of the model. This targeted approach allows for faster convergence and better performance while reducing the computational and memory requirements.
+**Spectrum's effectiveness** can be attributed to its ability to identify and selectively fine-tune the layers that contribute the most to the model's learning capacity. By calculating the SNR for each layer and targeting only a percentage of the layers with the highest SNR, Spectrum focuses the fine-tuning process on the most informative and relevant parts of the model. This targeted approach allows for faster training and nearly identical (within margin of error) performance to FFT while reducing the computational and memory requirements.
 
 ### 5.3.1 Performance
 
-**Spectrum-50** (targeting the top 50% of layers) achieves results comparable to or even slightly better than full fine-tuning across various benchmarks (Figures 1-3). This indicates that the majority of the model's learning capacity is concentrated in the top 50% of layers, and fine-tuning these layers is sufficient to achieve competitive performance.
-**Spectrum-25** (targeting the top 25% of layers) also demonstrates strong performance, with results close to those of full fine-tuning and Spectrum-50. In some cases, Spectrum-25 is scores even higher than full fine-tuning and Spectrum-50. This further suggests that the most significant information for fine-tuning is contained in a relatively small subset of layers.
+**Spectrum-50** (targeting the top 50% of layers) achieves results comparable to or even slightly better than full fine-tuning across various benchmarks (Figures 1-3). This indicates that the majority of the model's learning capacity is concentrated in the highest SNR layers, and fine-tuning these layers is sufficient to achieve competitive performance.
+**Spectrum-25** (targeting the top 25% of layers) also demonstrates strong performance, with results close to those of full fine-tuning and Spectrum-50. In some cases, Spectrum-25 is scores even higher than full fine-tuning and Spectrum-50. This further suggests that the most significant information for post-training is contained in a relatively small subset of layers.
 
-Additionally, we found that when combining Spectrum 25 with QLoRA, we could further decrease the VRAM use while also increasing the speed - while keeping performance almost identical to stock QLoRA.
+Additionally, we found that when combining Spectrum 25 with QLoRA, we could further decrease the VRAM use while also increasing speed - while keeping performance almost identical to stock QLoRA.
 
 ![Spectrum+QLoRA Performance](https://i.ibb.co/xmr4VPR/spectrum-qlora-llama.png)
 
@@ -335,7 +327,7 @@ Additionally, we found that when combining Spectrum 25 with QLoRA, we could furt
 
 The efficiency of Spectrum is particularly evident when comparing it to QLoRA in distributed training settings using DeepSpeed Zero3. As shown in Table 1, Spectrum-50 and Spectrum-25 achieve 17.72% and 23.05% memory savings per GPU, respectively, compared to full fine-tuning. In contrast, QLoRA offers 14.73% memory savings.
 
-However, it is important to note that QLoRA exhibits better memory efficiency than Spectrum when training on a single GPU (Table 2). The major drawback for Spectrum's efficiency on single GPUs is that while we're only training the top n% of the model's highest SNR layers - we do still need to load the entire model into memory. The efficiency gains for Spectrum come from only updating the gradients for the selected layers, which uses comparitively less memory than updating the entire model. This also explains why it is so much more efficient in distributed environments like Deepspeed Zero3 and Fully Sharded Data Parallel (FSDP), as these allow us to train the model in a sharded manner across multiple GPUs, making the per gpu model memory footprint *much* lower.
+However, it is important to note that QLoRA exhibits better memory efficiency than Spectrum when training on a single GPU (Table 2). The major drawback for Spectrum's efficiency on single GPUs is that while we're only training the top n% of the model's highest SNR layers - we do still need to load the entire model into memory. The efficiency gains for Spectrum come from only updating the gradients for the selected layers, which uses comparitively less memory than updating the entire model. This also explains why it is so much more efficient in distributed environments like Deepspeed Zero3 and Fully Sharded Data Parallel (FSDP), as these allow us to train the model in a sharded manner across multiple GPUs, making the per gpu model memory footprint *much* lower. Spectrum+QLoRA had the lowest VRAM requirement on both single and distributed workloads.
 
 ### 5.3.4 Training Time
 
