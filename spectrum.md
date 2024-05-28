@@ -157,40 +157,51 @@ At the core of Spectrum is the ability to efficiently measure the SNR of each la
 ### Description
 This pseudocode describes the Spectrum method for selectively updating model layers based on their signal-to-noise ratio (SNR) to accelerate training of large language models.
 
-### Classes and Methods
+```sql
+// Function to compute Marchenko-Pastur threshold
+function marchenko_pastur_threshold(σ, n, m):
+    β ← n / m
+    threshold ← σ × sqrt((1 + sqrt(β))^2)
+    return threshold
 
-#### Class: ModelModifier
-- **Attributes**:
-  - `model_name`: Identifier for the pre-trained language model.
-  - `top_percent`: Percentage of layers to update based on high SNR.
-  - `batch_size`: Number of layers processed in one batch for SNR calculation.
-  - `model`, `optimizer`, `tokenizer`: Model components from the transformers library.
-  - `layer_snr`: Dictionary to store SNR values for each layer.
+// Function to estimate noise level from singular values using IQR
+function estimate_sigma_with_full_iqr(S):
+    IQR ← compute_iqr(S)
+    σ ← IQR / 1.349
+    return σ
 
-- **Methods**:
-  - `__init__(model_name, top_percent, batch_size)`: Initializes the model, optimizer, and tokenizer based on the given model name.
-  - `get_weight_types()`: Identifies unique weight types (bias, weight matrices) in the model's layers.
-  - `interactive_select_weights()`: Displays an interactive checkbox dialog for users to select which weight types to analyze.
-  - `calculate_snr_for_layer(layer_type)`: Computes SNR for layers of the specified type using singular value decomposition (SVD) and Marchenko-Pastur law.
-    - **SVD Formula**: $\( S = \text{svd}(weights) \)$
-    - **Marchenko-Pastur Threshold**: $\( \text{threshold} = \sigma \times \sqrt{(1 + \sqrt{\beta})^2} \)$
-  - `assess_layers_snr(selected_weight_types)`: Aggregates SNR calculations across selected weight types and updates internal state.
-  - `save_snr_to_json()`: Serializes the layer SNR data to a JSON file.
-  - `generate_unfrozen_params_yaml(json_filename, top_percent)`: Generates a YAML file listing the layers with top SNR values.
+// Function to compute SNR for a given layer's weights
+function calculate_snr(weights):
+    // Perform Singular Value Decomposition (SVD)
+    S ← svd(weights)
+    
+    // Estimate the noise level σ
+    σ ← estimate_sigma_with_full_iqr(S)
+    
+    // Compute the Marchenko-Pastur threshold
+    n, m ← dimensions(weights)
+    threshold ← marchenko_pastur_threshold(σ, n, m)
+    
+    // Calculate SNR (ratio of signal above threshold to noise below)
+    signal ← sum(S[S > threshold])
+    noise ← sum(S[S ≤ threshold])
+    SNR ← signal / noise
+    
+    return SNR
 
-#### Main Execution Flow
-- Parse command-line arguments if present (e.g., JSON path, top percent override).
-- If JSON path is provided:
-  - Load SNR data from JSON and generate YAML file listing top layers.
-- Otherwise:
-  - Initialize `ModelModifier` with user-specified model and batch size.
-  - Select weight types via interactive dialogue.
-  - Compute SNR for selected weights and save results.
-  - Optionally, print results and status updates.
-
-### Additional Functions
-- `marchenko_pastur_threshold($\sigma$, n, m)`: Computes threshold value using Marchenko-Pastur law based on layer dimensions \(n\) and \(m\), and estimated noise level $\(\sigma\)$.
-- `estimate_sigma_with_full_iqr(S)`: Estimates noise level from the interquartile range (IQR) of singular values.
+// Main function to iterate over model layers and calculate SNR
+function assess_layers_snr(model):
+    layer_snr ← empty dictionary
+    
+    // Iterate over each layer in the model
+    for each layer in model.layers do:
+        if has_weights(layer):
+            weights ← get_weights(layer)
+            SNR ← calculate_snr(weights)
+            layer_snr[layer] ← SNR
+            
+    return layer_snr
+```
 
 For each target layer, compute the singular value decomposition (SVD) of the layer's weight matrix.
 Calculate the SNR as the ratio between the sum of singular values above a noise threshold $\varepsilon$ (signal) and the sum of singular values below $\varepsilon$ (noise).
