@@ -150,7 +150,34 @@ Matrices with higher SNR contain more informative features and less noise. By fo
 The Spectrum method leverages RMT to analyze the singular value spectrum of neural network weight matrices, separating signal from noise. By targeting training on high-SNR matrices, Spectrum achieves faster, more memory efficient generalization compared to standard training approaches.
 
 # 4 Measuring Signal-to-Noise Ratio
-At the core of Spectrum is the ability to efficiently measure the SNR of each layer in an LLM. We introduce SpectrumAnalyzer, a module that computes layer SNRs using the following procedure (see Algorithm 1):
+At the core of Spectrum is the ability to efficiently measure the SNR of each layer in an LLM. We introduce SpectrumAnalyzer, a module that computes layer SNRs using the following procedure:
+
+```sql
+Def `calculate_snr_for_layer` with parameters `self` and `layer_type`
+    Find all layers in the model that match `layer_type` and have weights
+    Calculate the number of batches needed
+
+    For each batch of layers:
+        For each layer in the batch:
+            Get the weights of the layer
+            If weights have less than 2 dimensions, add an extra dimension
+
+            Calculate the singular values of the weights
+            Find the maximum singular value
+
+            Estimate the noise level (sigma)
+            Get the shape of the weights (n and m)
+
+            Calculate the noise threshold
+
+            Calculate signal as the sum of singular values above the threshold
+            Calculate noise as the sum of singular values below the threshold
+
+            Calculate the Signal-to-Noise Ratio (SNR) as signal divided by noise
+            Calculate the SNR ratio as SNR divided by the maximum singular value
+
+            Store the SNR ratio in a dictionary with the layer name and type
+```
 
 For each target layer, compute the singular value decomposition (SVD) of the layer's weight matrix.
 Calculate the SNR as the ratio between the sum of singular values above a noise threshold $\varepsilon$ (signal) and the sum of singular values below $\varepsilon$ (noise).
@@ -169,8 +196,6 @@ SpectrumAnalyzer is optimized to compute SNRs in batches using VRAM (or system r
 Given the SNRs of all layers, Spectrum selects a subset to train while freezing the rest. Layers with higher SNR contain more information relevant to the task, so focusing updates on these layers allows Spectrum to converge faster. The number of layers trained is a key hyperparameter that controls the tradeoff between training speed and model performance.
 
 Spectrum selects layers to train based on their relative SNR ranking within each module (e.g. attention layers, FFN layers). This ensures a balanced distribution of updates across different parts of the model. By default, Spectrum trains the top 25% of layers in each module, as we find this provides a good balance between efficiency and quality.
-
-Algorithm 2 provides the pseudocode for Spectrum layer selection. The core idea is to sort layers by SNR within each module and select the top k% to train. This SNR-ranked subset of layers is then passed to the optimizer for training while the rest of the model is frozen.
 
 [4] Marchenko, V. A., and Leonid A. Pastur. "Distribution of eigenvalues for some sets of random matrices." Matematicheskii Sbornik 114.4 (1967): 507-536.
 
