@@ -149,7 +149,7 @@ Matrices with higher SNR contain more informative features and less noise. By fo
 
 The Spectrum method leverages RMT to analyze the singular value spectrum of neural network weight matrices, separating signal from noise. By targeting training on high-SNR matrices, Spectrum achieves faster, more memory efficient generalization compared to standard training approaches.
 
-# 4 Measuring Signal-to-Noise Ratio
+# 4 Measuring The Signal-to-Noise Ratio
 At the core of Spectrum is the ability to efficiently measure the SNR of each layer in an LLM. We introduce SpectrumAnalyzer, a module that computes layer SNRs using the following procedure:
 
 ```sql
