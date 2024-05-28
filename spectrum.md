@@ -1,4 +1,4 @@
-# Spectrum: No compromise Memery Efficient LLM Training
+# Spectrum: No compromise Memory Efficient LLM Training
 
 # Abstract
 
