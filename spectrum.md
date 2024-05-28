@@ -154,7 +154,7 @@ At the core of Spectrum is the ability to efficiently measure the SNR of each la
 
 ## Pseudocode for the Spectrum Method
 
-### Abstract
+### Description
 This pseudocode describes the Spectrum method for selectively updating model layers based on their signal-to-noise ratio (SNR) to accelerate training of large language models.
 
 ### Classes and Methods
