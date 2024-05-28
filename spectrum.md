@@ -189,7 +189,7 @@ This pseudocode describes the Spectrum method for selectively updating model lay
   - Optionally, print results and status updates.
 
 ### Additional Functions
-- `marchenko_pastur_threshold($\sigma$, $n$, $m$)`: Computes threshold value using Marchenko-Pastur law based on layer dimensions \(n\) and \(m\), and estimated noise level $\(sigma\)$.
+- `marchenko_pastur_threshold($\sigma$, n, m)`: Computes threshold value using Marchenko-Pastur law based on layer dimensions \(n\) and \(m\), and estimated noise level $\(\sigma\)$.
 - `estimate_sigma_with_full_iqr(S)`: Estimates noise level from the interquartile range (IQR) of singular values.
 
 For each target layer, compute the singular value decomposition (SVD) of the layer's weight matrix.
