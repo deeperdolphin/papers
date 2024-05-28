@@ -356,7 +356,7 @@ However, it is important to note that qLoRA exhibits better memory efficiency th
 
 In terms of training time, Spectrum demonstrates significant improvements over full finetuning and qLoRA (Table 3). Spectrum-50 and Spectrum-25 achieve 15.48% and 36.78% reductions in training time, respectively, compared to full finetuning. qLoRA also offers a 24.19% reduction in training time. It should be noted that as the size of models grow, the time it takes to train using LoRA increases. This can be adjusted by increasing the number of parameters adjusted for each pass, with the tradeoff of increased VRAM requirements.
 
-# 6 Real World Use
+# 6. Real World Use
 
 We have used Spectrum in many of our recent Dolphin models - allowing us to train large models at high precision on a single 8xH100 node provided by CrusoeEnergy, achieving results that would otherwise require multiple H100 compute nodes. In the case of our Qwen-110b dense model tune, even qLoRA was not sufficient for training. Spectrum was the only solution that worked (for us). Please note, the results below are representative of the performance of the Dolphin models only. The official post train scores from the model creators are taken from the OpenLLM leaderboard, and while we try our hardest to match the leaderboard's benchmark pipeline, disparities remain.
 
