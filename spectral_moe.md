@@ -25,9 +25,9 @@ Original Linear Transformation: linear output = x * W
 
 Expert Scaling: expert_outputs = linear output * s
 
-Gating Mechanism: gate_output = sigmoid(linear output * G)
+Gating Mechanism: gate output = sigmoid(linear output * G)
 
-Applying Gate to Expert Outputs: gated_expert_outputs = expert_outputs * gate_output
+Applying Gate to Expert Outputs: gated_expert_outputs = expert_outputs * gate output
 
 Averaging Expert Outputs: averaged expert output = sum(gated_expert_outputs, axis=2) / gate count
 
@@ -66,10 +66,10 @@ The Spectral MoE consists of several key components that build upon the SVD deco
    $$\text{expert outputs} = \text{linear output} * s = ((x U) \Sigma V^T) * s = ((x U) (\Sigma * s)) V^T$$
 
 3. **Gating Mechanism:**
-   $$\text{gate_output} = \sigma(\text{linear output} * G) = \sigma(((x U) \Sigma V^T) * G)$$
+   $$\text{gate output} = \sigma(\text{linear output} * G) = \sigma(((x U) \Sigma V^T) * G)$$
 
 4. **Applying Gate to Expert Outputs:**
-   $$\text{gated_expert_outputs} = \text{expert_outputs} * \text{gate_output}$$
+   $$\text{gated_expert_outputs} = \text{expert_outputs} * \text{gate output}$$
    $$= (((x U) (\Sigma * s)) V^T) * \sigma(((x U) \Sigma V^T) * G)$$
 
 5. **Averaging Expert Outputs:**
