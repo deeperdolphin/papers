@@ -23,13 +23,13 @@ The Spectral MoE module can be mathematically formulated as follows:
 
 Original Linear Transformation: linear output = x * W
 
-Expert Scaling: expert_outputs = linear output * s
+Expert Scaling: expert outputs = linear output * s
 
 Gating Mechanism: gate output = sigmoid(linear output * G)
 
-Applying Gate to Expert Outputs: gated_expert_outputs = expert_outputs * gate output
+Applying Gate to Expert Outputs: gated_expert outputs = expert outputs * gate output
 
-Averaging Expert Outputs: averaged expert output = sum(gated_expert_outputs, axis=2) / gate count
+Averaging Expert Outputs: averaged expert output = sum(gated_expert outputs, axis=2) / gate count
 
 Learnable Router: router output = sigmoid(x * R)
 
@@ -69,11 +69,11 @@ The Spectral MoE consists of several key components that build upon the SVD deco
    $$\text{gate output} = \sigma(\text{linear output} * G) = \sigma(((x U) \Sigma V^T) * G)$$
 
 4. **Applying Gate to Expert Outputs:**
-   $$\text{gated_expert_outputs} = \text{expert_outputs} * \text{gate output}$$
+   $$\text{gated_expert outputs} = \text{expert outputs} * \text{gate output}$$
    $$= (((x U) (\Sigma * s)) V^T) * \sigma(((x U) \Sigma V^T) * G)$$
 
 5. **Averaging Expert Outputs:**
-   $$\text{averaged expert output} = \frac{\sum(\text{gated_expert_outputs}, \text{axis}=2)}{\text{gate count}}$$
+   $$\text{averaged expert output} = \frac{\sum(\text{gated_expert outputs}, \text{axis}=2)}{\text{gate count}}$$
 
 6. **Learnable Router:**
    $$\text{router output} = \sigma(x * R)$$
