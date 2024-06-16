@@ -27,13 +27,13 @@ Expert Scaling: expert outputs = linear output * s
 
 Gating Mechanism: gate output = sigmoid(linear output * G)
 
-Applying Gate to Expert Outputs: gated_expert outputs = expert outputs * gate output
+Applying Gate to Expert Outputs: gated expert outputs = expert outputs * gate output
 
-Averaging Expert Outputs: averaged expert output = sum(gated_expert outputs, axis=2) / gate count
+Averaging Expert Outputs: averaged expert output = sum(gated expert outputs, axis=2) / gate count
 
 Learnable Router: router output = sigmoid(x * R)
 
-Combining Outputs: combined_output = router output * averaged expert output + (1 - router output) * linear output
+Combining Outputs: combined output = router output * averaged expert output + (1 - router output) * linear output
 Where x is the input tensor, W is the weight matrix of the original linear transformation, s is the scaling parameters tensor, G is the gating transformation matrix, and R is the router transformation matrix.
 
 ## Benefits
@@ -69,23 +69,23 @@ The Spectral MoE consists of several key components that build upon the SVD deco
    $$\text{gate output} = \sigma(\text{linear output} * G) = \sigma(((x U) \Sigma V^T) * G)$$
 
 4. **Applying Gate to Expert Outputs:**
-   $$\text{gated_expert outputs} = \text{expert outputs} * \text{gate output}$$
+   $$\text{gated expert outputs} = \text{expert outputs} * \text{gate output}$$
    $$= (((x U) (\Sigma * s)) V^T) * \sigma(((x U) \Sigma V^T) * G)$$
 
 5. **Averaging Expert Outputs:**
-   $$\text{averaged expert output} = \frac{\sum(\text{gated_expert outputs}, \text{axis}=2)}{\text{gate count}}$$
+   $$\text{averaged expert output} = \frac{\sum(\text{gated expert outputs}, \text{axis}=2)}{\text{gate count}}$$
 
 6. **Learnable Router:**
    $$\text{router output} = \sigma(x * R)$$
 
 7. **Combining Outputs:**
-   $$\text{combined_output} = \text{router output} * \text{averaged expert output} + (1 - \text{router output}) * \text{linear output}$$
+   $$\text{combined output} = \text{router output} * \text{averaged expert output} + (1 - \text{router output}) * \text{linear output}$$
 
 ### Combined Output as a Function of SVD and Parameters
 
 The combined output can be expressed as a function of the SVD decomposition and the scaling, routing, and gating parameters as follows:
 
-$$\text{combined_output} = \sigma(x * R) * \left(\frac{\sum((((x U) (\Sigma * s)) V^T) * \sigma(((x U) \Sigma V^T) * G)), \text{axis}=2)}{\text{gate count}}\right) + (1 - \sigma(x * R)) * ((x U) \Sigma V^T)$$
+$$\text{combined output} = \sigma(x * R) * \left(\frac{\sum((((x U) (\Sigma * s)) V^T) * \sigma(((x U) \Sigma V^T) * G)), \text{axis}=2)}{\text{gate count}}\right) + (1 - \sigma(x * R)) * ((x U) \Sigma V^T)$$
 
 Here's how the combined output relates to the SVD decomposition and the parameters:
 - The original linear transformation is represented by $(x U) \Sigma V^T$, which incorporates the SVD components $U$, $\Sigma$, and $V^T$.
