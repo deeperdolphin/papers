@@ -1,7 +1,7 @@
 ## Summary: Gauged Emergent Gravity
 
-1. **Preon Field**: \(\psi\) (Dirac spinor) with U(1) gauge symmetry
-2. **Gauge Field**: \(A_\mu\)
+1. **Preon Field**: $\psi\$ (Dirac spinor) with U(1) gauge symmetry
+2. **Gauge Field**: $A_\mu$
 3. **Lagrangian Components**:
    a. **Preon**: \(\mathcal{L}_\text{preon} = i\bar{\psi}\gamma^\mu D_\mu \psi - m\bar{\psi}\psi\)
       where \(D_\mu = \partial_\mu - igA_\mu\) (covariant derivative)
