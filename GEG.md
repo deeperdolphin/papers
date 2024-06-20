@@ -3,37 +3,41 @@
 1. **Preon Field**: $\psi\$ (Dirac spinor) with U(1) gauge symmetry
 2. **Gauge Field**: $A_\mu$
 3. **Lagrangian Components**:
-   a. **Preon**: \(\mathcal{L}_\text{preon} = i\bar{\psi}\gamma^\mu D_\mu \psi - m\bar{\psi}\psi\)
-      where \(D_\mu = \partial_\mu - igA_\mu\) (covariant derivative)
+
+   a. **Preon**: $\mathcal{L}_\text{preon} = i\bar{\psi}\gamma^\mu D_\mu \psi - m\bar{\psi}\psi$
+   where $D_\mu = \partial_\mu - igA_\mu$ (covariant derivative)
+
    b. **Gauge**: \(\mathcal{L}_\text{gauge} = -\frac{1}{4}F^{\mu\nu}F_{\mu\nu}\)
       where \(F_{\mu\nu} = \partial_\mu A_\nu - \partial_\nu A_\mu\)
+
    c. **Higgs-like**: \(\mathcal{L}_\text{Higgs} = (\partial_\mu\phi)^\dagger(\partial^\mu\phi) - V(\phi)\)
       where \(V(\phi) = -\mu^2|\phi|^2 + \lambda|\phi|^4\)
+
    d. **Interaction**: \(\mathcal{L}_\text{int} = g\bar{\psi}\gamma^\mu\psi A_\mu + y(\bar{\psi}_L\phi\psi_R + \bar{\psi}_R\phi^\dagger\psi_L)\)
 
-4. **Spontaneous Symmetry Breaking**:
+5. **Spontaneous Symmetry Breaking**:
    \(\langle\phi\rangle = v = \sqrt{\frac{\mu^2}{2\lambda}}\) (non-zero VEV)
 
-5. **Order Parameter**:
+6. **Order Parameter**:
    \(\sigma = \sqrt{\langle|\phi|^2\rangle + \frac{1}{4}\langle A^\mu A_\mu\rangle^2}\)
 
-6. **Emergent Metric**:
+7. **Emergent Metric**:
    \(g_{\mu\nu} = \eta_{\mu\nu} + h_{\mu\nu}\)
    where \(h_{\mu\nu} = \kappa\langle\phi^\dagger\phi\rangle\delta_{\mu\nu} + \mathcal{O}(\kappa^2)\)
 
-7. **Emergent Gravity Action**:
+8. **Emergent Gravity Action**:
    \(S_\text{gravity} = \int d^4x \sqrt{-g} \left(\frac{R}{16\pi G} + \mathcal{L}_\text{emergent}\right)\)
    where \(\mathcal{L}_\text{emergent} = \Lambda + \alpha R^2 + \beta R_{\mu\nu}R^{\mu\nu} + \gamma R_{\mu\nu\rho\sigma}R^{\mu\nu\rho\sigma} + \delta(\nabla_\mu\phi)(\nabla^\mu\phi) + \xi\phi^2R\)
 
-8. **Effective Action (with quantum corrections)**:
+9. **Effective Action (with quantum corrections)**:
    \(\Gamma[g_{\mu\nu}] = S_\text{EH}[g_{\mu\nu}] + \hbar S_1[g_{\mu\nu}] + \hbar^2 S_2[g_{\mu\nu}] + ...\)
    where \(S_1[g_{\mu\nu}] = \int d^4x \sqrt{-g}(aR^2 + bR_{\mu\nu}R^{\mu\nu} + cR_{\mu\nu\rho\sigma}R^{\mu\nu\rho\sigma})\)
 
-9. **Modified Gravitational Potential**:
+10. **Modified Gravitational Potential**:
    \(V(r) = -\frac{Gm_1m_2}{r}(1 + \alpha e^{-r/\lambda})\)
    where \(\alpha \sim \mathcal{O}(1)\) and \(\lambda \sim \sqrt{\frac{\hbar}{m_p c}} \approx 10^{-13} \text{ m}\)
 
-10. **Total GEG Lagrangian**:
+11. **Total GEG Lagrangian**:
     \(\mathcal{L}_\text{GEG} = \mathcal{L}_\text{preon} + \mathcal{L}_\text{gauge} + \mathcal{L}_\text{Higgs} + \mathcal{L}_\text{int} + \mathcal{L}_\text{emergent}\)
 
 
