@@ -16,34 +16,46 @@ This concept finds analogy in Quantum Chromodynamics (QCD), where gluons, mediat
 
 We begin by formulating a theoretical framework for our composite graviton model. Assuming preons are fermionic fields denoted by $\psi$, we propose the following Lagrangian:
 
-$\mathcal{L} = i\bar{\psi}\gamma^\mu \partial_\mu \psi - m\bar{\psi}\psi + g \bar{\psi}\gamma^\mu \psi G_\mu - \frac{1}{4}G_{\mu\nu}G^{\mu\nu}$
+$$
+\mathcal{L} = i\bar{\psi}\gamma^\mu \partial_\mu \psi - m\bar{\psi}\psi + g \bar{\psi}\gamma^\mu \psi G_\mu - \frac{1}{4}G_{\mu\nu}G^{\mu\nu}
+$$
 
 Where:
 - The first two terms represent the preon field's kinetic and mass energy.
 - The third term describes the interaction between preons and the composite graviton, $G_\mu$, with $g$ being the coupling constant.
 - The last term is the kinetic energy of the composite graviton.
 
+In this formulation, $G_\mu$ is treated as a vector field, analogous to a gauge field in quantum field theory. The precise nature of $G_\mu$ and whether it can fully capture the characteristics of a spin-2 graviton will be a critical point of further investigation.
+
 ### 2.2 Composite Graviton Formation
 
 We propose that the composite graviton arises from preon interactions, expressed mathematically as:
 
-$G_\mu = \kappa\bar{\psi}\gamma_\mu \psi$
+$$
+G_\mu = \kappa\bar{\psi}\gamma_\mu \psi
+$$
 
-where $\kappa$ is a constant related to the strength of the interaction between preons.
+where $\kappa$ is a constant related to the strength of the interaction between preons. This equation suggests that $G_\mu$ is a bilinear form in the preon fields. To ensure consistency with the observed spin and parity of gravitons, it will be important to verify that the emergent properties of $G_\mu$ match those of a spin-2 particle, potentially requiring a more sophisticated binding mechanism or additional fields.
 
 ### 2.3 Gravitational Interaction
 
 The gravitational interaction in this model emerges from the exchange of composite gravitons, described by the interaction term:
 
-$S_{int} = \int d^4x g\bar{\psi}\gamma^\mu \psi G_\mu$
+$$
+S_{int} = \int d^4x g\bar{\psi}\gamma^\mu \psi G_\mu
+$$
+
+Given that $G_\mu$ is a composite field, this interaction term might need higher-order corrections or effective field theory terms that could emerge from the underlying preon dynamics.
 
 ### 2.4 Effective Gravitational Constant
 
 In our model, the gravitational constant arises from more basic parameters in the preon theory:
 
-$G_{eff} = \frac{g^2}{\kappa}$
+$$
+G_{eff} = \frac{g^2}{\kappa}
+$$
 
-This suggests that the universal strength of gravity could be a manifestation of more fundamental interactions at the preon level.
+This expression suggests that the universal strength of gravity could be a manifestation of more fundamental interactions at the preon level. Further analysis will be necessary to ensure that $G_{eff}$ corresponds appropriately to the Newtonian gravitational constant $G_N$ under the conditions where general relativity is well-tested.
 
 ## 3. Preon Properties
 
@@ -54,7 +66,7 @@ While the specific details of preon properties remain speculative without empiri
 3. **Interactions**: Their interactions might be governed by a yet unknown type of symmetry or dynamics that gives rise to the gravitational force.
 4. **Quantum Numbers**: Preons may possess unique quantum numbers that differentiate them from known particles and govern their interactions.
 
-Further theoretical and experimental work is needed to constrain and define these properties more precisely.
+Further theoretical and experimental work is needed to constrain and define these properties more precisely. In particular, it will be crucial to identify the symmetry that governs preon interactions and how it leads to the confinement of preons, analogous to color confinement in QCD.
 
 ## 4. Experimental Predictions and Implications
 
@@ -104,8 +116,8 @@ Like Asymptotic Safety, our model aims to formulate a consistent quantum theory 
 
 ### 6.1 Theoretical Challenges
 
-1. **Quantum Consistency**: Ensuring the quantum consistency of our model, particularly regarding renormalizability and unitarity at high energies, is essential.
-2. **Preon Confinement**: Explaining why preons are not observed at lower energies requires a robust confinement mechanism.
+1. **Quantum Consistency**: Ensuring the quantum consistency of our model, particularly regarding renormalizability and unitarity at high energies, is essential. The emergent nature of $G_\mu$ requires careful treatment to avoid inconsistencies in the theory.
+2. **Preon Confinement**: Explaining why preons are not observed at lower energies requires a robust confinement mechanism. This is akin to color confinement in QCD and needs to be developed further.
 
 ### 6.2 Experimental Challenges
 
@@ -114,10 +126,10 @@ Like Asymptotic Safety, our model aims to formulate a consistent quantum theory 
 
 ### 6.3 Future Research Directions
 
-1. **Detailed Quantum Field Theory Calculations**: To solidify the theoretical foundations and address quantum consistency issues.
+1. **Detailed Quantum Field Theory Calculations**: To solidify the theoretical foundations and address quantum consistency issues, including renormalization and gauge invariance.
 2. **Refined Experimental Proposals**: Collaborating with experimentalists to develop more precise tests of the model.
 3. **Cosmological Modeling**: Investigating how preon dynamics might influence early universe physics and structure formation.
-4. **Interdisciplinary Approaches**: Exploring potential analogies with emergent phenomena in condensed matter systems.
+4. **Interdisciplinary Approaches**: Exploring potential analogies with emergent phenomena in condensed matter systems, which might offer insights into preon confinement and graviton formation.
 
 ## 7. Conclusion
 
