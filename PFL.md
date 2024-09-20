@@ -488,12 +488,6 @@ We have introduced an enhanced Paraconsistent Fuzzy Logic (PFL^+) that extends t
 
 ---
 
-# **References**
-
-[List of references]
-
----
-
 # **Appendix: Formal Proofs and Mathematical Details**
 
 [Detailed proofs of theorems and propositions]
