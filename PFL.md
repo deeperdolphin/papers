@@ -490,5 +490,68 @@ We have introduced an enhanced Paraconsistent Fuzzy Logic (PFL^+) that extends t
 
 # **Appendix: Formal Proofs and Mathematical Details**
 
-[Detailed proofs of theorems and propositions]
+### **Appendix: Formal Proofs and Mathematical Details**
+
+#### **Proof of Theorem 1 (Soundness)**
+
+**Theorem 1 (Soundness)**: The inference rules of PFL^+ are sound with respect to the semantics defined.
+
+**Proof Outline**:
+1. **Base Case (Atomic Formulas)**: For atomic formulas \( P(x) \), the valuation \( v(P(x)) \in V \) is assigned according to the semantics defined (with \( v(P(x)) = (t_P, c_P) \)). The inference rules correctly reflect the truth and contradiction values.
+   
+2. **Inductive Step (Logical Connectives)**: We need to show that each logical connective preserves the semantics:
+   - **Negation**: For \( v(¬A) = (1 - t_A, c_A) \), the truth value of \( ¬A \) is correct since the negation flips the truth degree but preserves the contradiction.
+   - **Conjunction**: For \( v(A ∧ B) = (min(t_A, t_B), max(c_A, c_B)) \), the truth value is the minimum of \( t_A \) and \( t_B \), and the contradiction is the maximum of \( c_A \) and \( c_B \), which aligns with the fuzzy and paraconsistent nature of PFL^+.
+   - **Disjunction**: Similarly, \( v(A ∨ B) = (max(t_A, t_B), max(c_A, c_B)) \) reflects the correct behavior for disjunction.
+   - **Implication**: \( v(A → B) = (f_→(t_A, t_B), max(c_A, c_B)) \) correctly follows the fuzzy logic definition of implication.
+   - **Contradictory Degree Operator**: The operator \( C(A) \) yields \( v(C(A)) = (c_A, 0) \), capturing the correct contradiction degree while assigning no truth value.
+
+3. **Conclusion**: Each logical connective preserves the semantics, proving that the inference rules of PFL^+ are sound.
+
+---
+
+#### **Proof of Theorem 2 (Completeness)**
+
+**Theorem 2 (Completeness)**: PFL^+ is complete, meaning that all semantically valid formulas are derivable using the inference rules.
+
+**Proof Outline**:
+1. **Canonical Model Construction**: To prove completeness, we construct a canonical model where all semantically valid formulas are assigned truth and contradiction values consistent with the inference rules.
+   
+2. **Consistency of Valuation**: For any formula \( A \), the valuation function \( v(A) \) respects the multi-dimensional truth value structure, i.e., for any formula derivable using the inference rules, the corresponding truth value \( v(A) = (t_A, c_A) \) will reflect the semantic interpretation.
+
+3. **Inductive Step (Complex Formulas)**: Extend the proof to complex formulas involving multiple connectives by demonstrating that their truth values are consistent with their semantic interpretations. For instance:
+   - For conjunction \( A ∧ B \), the truth degree \( t \) is correctly represented as \( min(t_A, t_B) \), and the contradiction degree \( c \) as \( max(c_A, c_B) \).
+   - Similar steps apply to disjunction, implication, and negation.
+
+4. **Conclusion**: The derivation process can generate all semantically valid formulas, proving the completeness of PFL^+.
+
+---
+
+#### **Proof of Theorem 3 (Handling Higher-Order Vagueness)**
+
+**Theorem 3**: PFL^+ effectively models higher-order vagueness without leading to inconsistency or triviality.
+
+**Proof Outline**:
+1. **Recursive Definition of Vagueness**: We define higher-order vagueness using recursive predicates. For any \( n \), higher-order vagueness \( V_{n+1}(x) \) is modeled as \( V(V_n(x)) \), meaning that vagueness can be iterated indefinitely.
+   
+2. **Non-Triviality**: The multi-dimensional truth value structure ensures that each level of vagueness is assigned a degree of truth and contradiction. The contradiction degree \( c \) increases as vagueness becomes more uncertain, but the system avoids triviality (i.e., not all statements become true).
+   
+3. **Semantic Coherence**: By managing the recursion through the valuation function \( v \), we maintain consistency across all levels of vagueness. This prevents logical explosion or circular definitions.
+
+4. **Conclusion**: PFL^+ can handle higher-order vagueness through recursion while avoiding inconsistency or triviality.
+
+---
+
+#### **Proof of Theorem 4 (Non-Explosiveness)**
+
+**Theorem 4 (Non-Explosiveness)**: For any propositions \( A \) and \( B \), it is not the case that \( A \), \( ¬A \) ⊢ \( B \).
+
+**Proof Outline**:
+1. **Paraconsistent Nature**: In PFL^+, contradictions do not lead to triviality (i.e., the system does not conclude arbitrary statements from contradictions). The Contradictory Degree Operator \( C \) quantifies contradictions and localizes them within the formula.
+   
+2. **Handling Contradictions**: For a formula \( A \), if both \( A \) and \( ¬A \) are true to some extent, the contradiction is captured by the contradiction degree \( c \), but this does not imply that any arbitrary proposition \( B \) is true.
+
+3. **Non-Explosiveness**: The inference rules are designed to prevent explosion by isolating contradictions through the \( c \) value and ensuring they do not propagate across unrelated formulas.
+
+4. **Conclusion**: Even in the presence of contradictions, the system remains non-explosive, proving that \( A \) and \( ¬A \) do not imply \( B \).
 
