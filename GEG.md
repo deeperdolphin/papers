@@ -1,3 +1,5 @@
+https://notebooklm.google.com/notebook/76514ddf-5482-4570-b81f-6952d1b66da6/audio
+
 ## Summary: Gauged Emergent Gravity
 
 1. **Fundamental Field:** $\psi$ (Dirac spinor) with U(1) gauge symmetry.
