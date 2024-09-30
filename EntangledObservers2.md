@@ -1,3 +1,5 @@
+https://notebooklm.google.com/notebook/d8da9a97-1e18-4e92-9b9c-17be3d2fbdda/audio
+
 # The Entangled Observer Network and its Implications for Spacetime Structure
 
 ## Abstract
