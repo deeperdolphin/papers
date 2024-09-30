@@ -1,3 +1,5 @@
+https://notebooklm.google.com/notebook/602120a1-ae97-4316-88ca-b43617dc9aa8/audio
+
 # **A Formal Framework for Higher-Order Vagueness: Extending Paraconsistent Fuzzy Logic with Multi-Dimensional Truth Values**
 
 ---
