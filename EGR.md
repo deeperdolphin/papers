@@ -27,7 +27,7 @@ $$
         \exp\!\bigl[-\alpha\sum_{p<q\in P_v} d_{pq}^2/\ell_0^{\,2}\bigr]}
        {\displaystyle\sum_{k=1}^{k_{\max}}\!
          \binom{n(t)}{k}\,
-         \gamma^{k}\,\overline e^{-\alpha\cdots}}}
+         \gamma^{k}\,\overline{e}^{-\alpha\cdots}}}
 \tag{2.1}
 $$
 
