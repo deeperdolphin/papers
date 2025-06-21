@@ -4,7 +4,7 @@
 
 ### Abstract
 
-We propose *Entanglement‑Gauge Reality* (EGR): a microscopic theory in which (i) the Universe grows as a stochastic causal graph, (ii) every vertex carries a large‑$N$ gauged qudit algebra, (iii) quantum‑error‑correcting stabilisers project the global Hilbert space onto a logical code sub‑space, and (iv) classical spacetime geometry arises from coarse‑grained entanglement density. Fluctuations of link variables define a rank‑two gauge potential whose low‑energy action reduces to the teleparallel equivalent of General Relativity. Standard‑Model fields appear as boundary edge modes of the same gauge symmetry, ultraviolet divergences are controlled by a \(1/N\) expansion that realises asymptotic safety, the Bekenstein–Hawking area law counts logical qubits, and dark energy is identified with a universal “entanglement pressure.” We summarise the entire framework in a minimal set of equations and outline numerical procedures that confirm (i) a 4 → 2 spectral‑dimension flow, (ii) the expected \(d_{\text{code}} \propto N^{1/2}\) distance scaling for a \(U(N)\) hyper‑graph‑product code, and (iii) the emergence of three chiral families from a genus‑3 boundary Dirac spectrum.
+We propose *Entanglement‑Gauge Reality* (EGR): a microscopic theory in which (i) the Universe grows as a stochastic causal graph, (ii) every vertex carries a large‑$N$ gauged qudit algebra, (iii) quantum‑error‑correcting stabilisers project the global Hilbert space onto a logical code sub‑space, and (iv) classical spacetime geometry arises from coarse‑grained entanglement density. Fluctuations of link variables define a rank‑two gauge potential whose low‑energy action reduces to the teleparallel equivalent of General Relativity. Standard‑Model fields appear as boundary edge modes of the same gauge symmetry, ultraviolet divergences are controlled by a $(1/N)$ expansion that realises asymptotic safety, the Bekenstein–Hawking area law counts logical qubits, and dark energy is identified with a universal "entanglement pressure." We summarise the entire framework in a minimal set of equations and outline numerical procedures that confirm (i) a 4 → 2 spectral‑dimension flow, (ii) the expected $d_{\text{code}} \propto N^{1/2}$ distance scaling for a $U(N)$ hyper‑graph‑product code, and (iii) the emergence of three chiral families from a genus‑3 boundary Dirac spectrum.
 
 ---
 
@@ -20,9 +20,9 @@ This paper is compact by design: we list the microscopic axioms, derive the macr
 
 Each new vertex \(v\) is born with a *parent set* \(P_v\) drawn from existing vertices according to
 ```math
-\Pr(P_v) = \frac
-  { \gamma^{|P_v|} \, \exp[-\alpha\sum_{p \lt q \in P_v} \frac{d_{pq}^{2}}{\ell_0^{2}}] }
-  { \sum_{k=1}^{k_{\max}} \binom{n(t)}{k} \, \gamma^{k} \, \langle e^{-\alpha\cdots} \rangle }
+\boxed{
+\Pr(P_v) = \frac{\gamma^{|P_v|} \exp\left[-\alpha \sum_{p \lt q \in P_v} \frac{d_{pq}^2}{\ell_0^2}\right]}{\sum_{k=1}^{k_{\max}} \binom{n(t)}{k} \gamma^k \langle e^{-\alpha\cdots} \rangle}
+}
 ```
 (2.1)
 
@@ -92,7 +92,7 @@ The emergent metric is **second derivative** of entanglement density:
 
 Fluctuations of link variables define a rank‑two gauge potential
 ```math
-H^{a}{}_{\mu}(x) = \bigl\langle\operatorname{Tr}(T^{a}U_{v\to w})\bigr\rangle_{v,w\in\text{cell}},
+H^{a}{}_{\mu}(x) = \bigl\langle\text{Tr}(T^{a}U_{v\to w})\bigr\rangle_{v,w\in\text{cell}}
 ```
 (5.1)
 
