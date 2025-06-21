@@ -23,7 +23,7 @@ Each new vertex \(v\) is born with a *parent set* \(P_v\) drawn from existing ve
 \boxed{
   \Pr(P_v) = \frac
     { \gamma^{\vert P_v \vert} \, \exp\!\bigl[-\alpha\sum_{p<q\in P_v} \frac{d_{pq}^{2}}{\ell_0^{2}}\bigr] }
-    { \displaystyle\sum_{k=1}^{k_{\max}}\! \binom{n(t)}{k} \, \gamma^{k} \, \overline{e^{-\alpha\text{...}}} }
+    { \displaystyle\sum_{k=1}^{k_{\max}}\! \binom{n(t)}{k} \, \gamma^{k} \, \langle e^{-\alpha\cdots} \rangle }
 }
 ```
 (2.1)
