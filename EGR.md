@@ -49,8 +49,8 @@ Every vertex hosts
 and attaches to its parents through link operators \(U_{p\to v}\in U(N)\). A *stabiliser map* projects the enlarged Hilbert space back onto the code sub‑space:
 ```math
 S_v = \exp\!\Biggl[i\,\frac{g}{N}\!
-        \sum_{p\in P_v}\bigl(\operatorname{Tr}U_{p\to v}
-                         +\operatorname{Tr}U_{v\to p}^{\dagger}\bigr)\Biggr]
+        \sum_{p\in P_v}\bigl(\text{Tr}\,U_{p\to v}
+                         +\text{Tr}\,U_{v\to p}^{\dagger}\bigr)\Biggr]
 ```
 (3.2)
 
