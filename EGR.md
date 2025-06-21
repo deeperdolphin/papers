@@ -32,7 +32,7 @@ Each new vertex $v$ is born with a *parent set* $P_v$ drawn from existing vertic
 
 ```math
 \boxed{
-\Pr(P_v) = \frac{\gamma^{|P_v|} \exp\left[-\alpha \sum_{p \lt q \in P_v} \frac{d_{pq}^2}{\ell_0^2}\right]}{\sum_{k=1}^{k_{\max}} \binom{n(t)}{k} \gamma^k \langle e^{-\alpha\cdots} \rangle}
+\Pr(P_v) = \frac{\gamma^{|P_v|} \exp\left[-\alpha \sum_{p \lt q \in P_v} \frac{d_{pq}^2}{\ell_0^2}\right]}{\sum_{k=1}^{k_{\max}} \binom{n(t)}{k} \gamma^k \bigl\langle e^{-\alpha\cdots}\bigr\rangle}
 }
 ```
 (2.1)
