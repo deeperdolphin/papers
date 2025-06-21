@@ -20,19 +20,19 @@ This paper is compact by design: we list the microscopic axioms, derive the macr
 
 Each new vertex $v$ is born with a *parent set* $P_v$ drawn from existing vertices according to
 
-```math
+$$
 \boxed{
   \Pr(P_v) = \frac
-    { \gamma^{\,|P_v|}\,\exp\!\bigl[-\alpha\sum_{p<q\in P_v} d_{pq}^2/\ell_0^{\,2}\bigr] }
+    { \gamma^{\,\vert P_v \vert}\,\exp\!\bigl[-\alpha\sum_{p<q\in P_v} d_{pq}^2/\ell_0^{\,2}\bigr] }
     { \displaystyle\sum_{k=1}^{k_{\max}}\! \binom{n(t)}{k}\, \gamma^{k}\,\overline{e^{-\alpha\cdots}} }
 } \tag{2.1}
-```
+$$
 
 with mean vertex density
 
-```math
+$$
 n(t) = \beta\,t^{4} \quad (t: \text{coarse time}) \tag{2.2}
-```
+$$
 
 Local finiteness ($\gamma \lesssim 0.6$) and locality ($\alpha\ell_0^2 \sim 1$) guarantee a four‑dimensional spectral plateau (§9).
 
@@ -42,25 +42,25 @@ Local finiteness ($\gamma \lesssim 0.6$) and locality ($\alpha\ell_0^2 \sim 1$) 
 
 Every vertex hosts
 
-```math
+$$
 \boxed{ \mathcal A_v = M_N(\mathbb C) \otimes \mathrm{Cl}(d,1) } \tag{3.1}
-```
+$$
 
 and attaches to its parents through link operators $U_{p\to v}\in U(N)$. A *stabiliser map* projects the enlarged Hilbert space back onto the code sub‑space:
 
-```math
+$$
 S_v = \exp\!\Bigl[i\,\frac{g}{N}\!
         \sum_{p\in P_v}\bigl(\operatorname{Tr}U_{p\to v}
                          +\operatorname{Tr}U_{v\to p}^{\dagger}\bigr)\Bigr] \tag{3.2}
-```
+$$
 
 For a causal ball of radius $R_{\text{code}}$ the resulting hypergraph‑product $U(N)$ code attains distance
 
-```math
+$$
 \boxed{
   d_{\text{code}} = c_0\,N^{1/2}\,e^{\xi R_{\text{code}}/\ell_0}
 } \tag{3.3}
-```
+$$
 
 providing an intrinsic short‑distance cutoff.
 
@@ -70,23 +70,23 @@ providing an intrinsic short‑distance cutoff.
 
 Define the mutual‑information two‑form
 
-```math
+$$
 \mathcal I_{vw} = S(\rho_v) + S(\rho_w) - S(\rho_{vw}), \tag{4.1}
-```
+$$
 
 then coarse‑grain over cells:
 
-```math
+$$
 \overline{\mathcal I}(x) = \frac{1}{\text{cell}} \sum_{v,w\in\text{cell}} \mathcal I_{vw}. \tag{4.2}
-```
+$$
 
 The emergent metric is **second derivative** of entanglement density:
 
-```math
+$$
 \boxed{
   g_{\mu\nu}(x) = \frac{4\ell_P^{\,2}}{\ln 2}\, \partial_\mu\partial_\nu\overline{\mathcal I}(x)
 } \tag{4.3}
-```
+$$
 
 ---
 
@@ -94,36 +94,36 @@ The emergent metric is **second derivative** of entanglement density:
 
 Fluctuations of link variables define a rank‑two gauge potential
 
-```math
+$$
 H^{a}{}_{\mu}(x) = \bigl\langle\operatorname{Tr}(T^{a}U_{v\to w})\bigr\rangle_{v,w\in\text{cell}}, \tag{5.1}
-```
+$$
 
 with torsion field‑strength
 
-```math
+$$
 S^{a}_{\mu\nu} = \partial_\mu H^{a}_{\nu} - \partial_\nu H^{a}_{\mu}. \tag{5.2}
-```
+$$
 
 Setting
 
-```math
+$$
 \kappa = \frac{N\ell_0^{\,2}}{4\pi}, \qquad 
 G_N = \frac{1}{8\pi\kappa}, \tag{5.3}
-```
+$$
 
 the infrared effective action is
 
-```math
+$$
 \boxed{
   S_{\text{eff}} = \int d^4x\sqrt{-g}\Bigl[\tfrac{1}{2}\kappa\,S^{a}_{\mu\nu}S_{a}^{\;\mu\nu} + \Lambda_{\text{ent}}\Bigr]
 } \tag{5.4}
-```
+$$
 
 with
 
-```math
+$$
 \Lambda_{\text{ent}} = \frac{\ln 2}{R_{\text{code}}^{\,2}}. \tag{5.5}
-```
+$$
 
 ---
 
@@ -131,16 +131,16 @@ with
 
 Variation with respect to $H^{a}{}_{\mu}$ and translation to metric variables yields teleparallel Einstein equations
 
-```math
+$$
 \boxed{
   G_{\mu\nu} + \Lambda_{\text{ent}}g_{\mu\nu} = 8\pi G_N\,T_{\mu\nu}^{\text{(edge)}}
 } \tag{6.1}
-```
+$$
 
-```math
+$$
 T_{\mu\nu}^{\text{(edge)}} = -\frac{2}{\sqrt{-g}}
   \frac{\delta S_{\text{edge}}}{\delta g^{\mu\nu}}, \tag{6.2}
-```
+$$
 
 where “edge” denotes Standard‑Model modes living on graph boundaries.
 
@@ -150,27 +150,27 @@ where “edge” denotes Standard‑Model modes living on graph boundaries.
 
 A $1/N$ expansion produces
 
-```math
+$$
 \beta_g = -\frac{b_1}{N}\,g^{3} + {\cal O}(N^{-2}), \tag{7.1}
-```
+$$
 
 giving a non‑trivial asymptotically safe fixed point. The running Newton constant is
 
-```math
+$$
 G(k) = \frac{G_0}{1 + \tfrac{\beta_1}{N}\ln(k/k_0)}, \tag{7.2}
-```
+$$
 
 while the Newtonian potential acquires a Yukawa tail
 
-```math
+$$
 \Phi(r) = -\frac{G_0M}{r}\,\bigl[1 + \alpha e^{-r/R_{\text{code}}}\bigr], \quad \alpha\approx\frac{1}{N}, \tag{7.3}
-```
+$$
 
 and the graviton dispersion relation becomes
 
-```math
+$$
 \omega^2 = k^2\Bigl[1 + \tfrac{c_2}{N}(\ell_P k)^2 + \dots\Bigr]. \tag{7.4}
-```
+$$
 
 Current torsion‑balance, LIGO and CMB data require $N \gtrsim 10^3$ and $R_{\text{code}} \lesssim 30\,\mu$m.
 
@@ -180,11 +180,11 @@ Current torsion‑balance, LIGO and CMB data require $N \gtrsim 10^3$ and $R_{\t
 
 For a horizon of area $A$ the correctable‑erasure property counts logical qubits:
 
-```math
+$$
 \boxed{
   S_{\text{BH}} = \frac{A}{4\ell_P^{\,2}}\ln N
 } \tag{8.1}
-```
+$$
 
 reproducing Bekenstein–Hawking for $N \sim e$.
 
@@ -195,9 +195,11 @@ Hawking radiation is decoded information leakage; entanglement‐wedge reconstru
 ## 9 Numerical Checks
 
 1.  **Spectral dimension** from a $10^6$‑vertex graph obeys
-    ```math
+    
+    $$
     D_s(\sigma) = -2\,\frac{d\ln P(\sigma)}{d\ln\sigma}, \quad P(\sigma)=\text{Tr}\,e^{\sigma\Delta}, \tag{9.1}
-    ```
+    $$
+    
     flowing $4 \to 2$ across $\sigma \approx (5\ell_0)^2$.
 
 2.  **Code distance** measured with a qudit‑extended minimum‑weight decoder confirms Eq. (3.3).
