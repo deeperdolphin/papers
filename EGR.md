@@ -20,11 +20,9 @@ This paper is compact by design: we list the microscopic axioms, derive the macr
 
 Each new vertex \(v\) is born with a *parent set* \(P_v\) drawn from existing vertices according to
 ```math
-\boxed{
-  \Pr(P_v) = \frac
-    { \gamma^{\vert P_v \vert} \, \exp\!\bigl[-\alpha\sum_{p<q\in P_v} \frac{d_{pq}^{2}}{\ell_0^{2}}\bigr] }
-    { \displaystyle\sum_{k=1}^{k_{\max}}\! \binom{n(t)}{k} \, \gamma^{k} \, \langle e^{-\alpha\cdots} \rangle }
-}
+\Pr(P_v) = \frac
+  { \gamma^{|P_v|} \, \exp[-\alpha\sum_{p \lt q \in P_v} \frac{d_{pq}^{2}}{\ell_0^{2}}] }
+  { \sum_{k=1}^{k_{\max}} \binom{n(t)}{k} \, \gamma^{k} \, \langle e^{-\alpha\cdots} \rangle }
 ```
 (2.1)
 
