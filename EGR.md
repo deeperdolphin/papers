@@ -7,7 +7,7 @@
 We propose **Entanglement‑Gauge Reality** (EGR): a microscopic theory in which
 
 1. the Universe grows as a stochastic causal graph;
-2. each vertex carries a large‑$N$ gauged qudit algebra $M_N(\mathbb{C})\otimes\mathrm{Cl}(3,1)$;
+2. each vertex carries a large‑ $N$ gauged qudit algebra $M_N(\mathbb{C})\otimes\mathrm{Cl}(3,1)$;
 3. quantum‑error‑correcting stabilisers maintain a logical code sub‑space;
 4. the Hessian of coarse‑grained mutual information defines a Lorentzian metric;
 5. fluctuations of link variables produce a rank‑two gauge potential whose infrared dynamics reduce to teleparallel General Relativity.
@@ -30,21 +30,19 @@ We set $\ell_P$ (the Planck length) as $\sqrt{\hbar G/c^3}$ and take $\ell_0\sim
 
 Each new vertex $v$ is born with a *parent set* $P_v$ drawn from existing vertices according to
 
-$$
+```math
 \boxed{
-  \Pr(P_v) = \frac
-    { \gamma^{|P_v|} \, \exp\left[-\alpha\sum_{p<q\in P_v} \frac{d_{pq}^{\,2}}{\ell_0^{\,2}}\right] }
-    { \displaystyle\sum_{k=1}^{k_{\max}} \binom{n(t)}{k} \, \gamma^{k} \, \left\langle e^{-\alpha\cdots}\right\rangle }
+\Pr(P_v) = \frac{\gamma^{|P_v|} \exp\left[-\alpha \sum_{p \lt q \in P_v} \frac{d_{pq}^2}{\ell_0^2}\right]}{\sum_{k=1}^{k_{\max}} \binom{n(t)}{k} \gamma^k \langle e^{-\alpha\cdots} \rangle}
 }
-\tag{2.1}
-$$
+```
+(2.1)
 
 with mean vertex density
 
-$$
+```math
 n(t) = \beta\,t^{4} \quad (t: \text{coarse time})
-\tag{2.2}
-$$
+```
+(2.2)
 
 ### Physical intuition
 
@@ -58,31 +56,29 @@ $$
 
 Every vertex hosts
 
-$$
+```math
 \boxed{ \mathcal{A}_v = M_N(\mathbb{C}) \otimes \mathrm{Cl}(3,1) }
-\tag{3.1}
-$$
+```
+(3.1)
 
 - The **matrix factor** $M_N$ realises a $U(N)$ colour gauge symmetry, enabling a $1/N$ UV expansion and, after boundary reduction, the familiar $SU(3)\times SU(2)\times U(1)$.
 - The **Clifford factor** $\mathrm{Cl}(3,1)$ supplies spinor degrees of freedom so that a boundary Dirac operator exists; dropping it eliminates chiral families.
 
 and attaches to its parents through link operators $U_{p\to v}\in U(N)$. A *stabiliser map* projects the enlarged Hilbert space back onto the code sub‑space:
 
-$$
-S_v = \exp\left[i\,\frac{g}{N}
-        \sum_{p\in P_v}\left(\operatorname{Tr}U_{p\to v}
-                         +\operatorname{Tr}U_{v\to p}^{\dagger}\right)\right]
-\tag{3.2}
-$$
+```math
+S_v = \exp\left[i\,\frac{g}{N}\sum_{p\in P_v}\left(\text{Tr}\,U_{p\to v} + \text{Tr}\,U_{v\to p}^{\dagger}\right)\right]
+```
+(3.2)
 
 For a causal ball of radius $R_{\text{code}}$ the resulting hypergraph‑product $U(N)$ code attains distance
 
-$$
+```math
 \boxed{
   d_{\text{code}} = c_0\,N^{1/2}\,e^{\xi R_{\text{code}}/\ell_0}
 }
-\tag{3.3}
-$$
+```
+(3.3)
 
 providing an intrinsic short‑distance cutoff.
 
@@ -92,28 +88,28 @@ providing an intrinsic short‑distance cutoff.
 
 Define the mutual‑information two‑form
 
-$$
+```math
 \mathcal{I}_{vw} = S(\rho_v) + S(\rho_w) - S(\rho_{vw}),
-\tag{4.1}
-$$
+```
+(4.1)
 
 then coarse‑grain over a **double‑cone cell** ($\Delta t\in[0,2\ell_0]$, graph radius $\leq2\ell_0$; $\sim50$ vertices):
 
-$$
+```math
 \overline{\mathcal{I}}(x) = \frac{1}{\text{cell}} \sum_{v,w\in\text{cell}} \mathcal{I}_{vw}.
-\tag{4.2}
-$$
+```
+(4.2)
 
 ### Metric from Fisher‑information Hessian
 
 Information geometry states that the Hessian of an information potential is a tensor (Fisher metric). We therefore set
 
-$$
+```math
 \boxed{
   g_{\mu\nu}(x) = \frac{4\ell_P^{\,2}}{\ln 2}\, \partial_\mu\partial_\nu\overline{\mathcal{I}}(x)
 }
-\tag{4.3}
-$$
+```
+(4.3)
 
 Numerically the Hessian's eigenvalues converge to $(+,-,-,-)$ after $\sim10$ causal layers, confirming Lorentzian signature.
 
@@ -123,32 +119,32 @@ Numerically the Hessian's eigenvalues converge to $(+,-,-,-)$ after $\sim10$ cau
 
 Link fluctuations $U=\exp(iA/N)$ with $A=\langle A\rangle+\delta A$ define
 
-$$
-H^{a}{}_{\mu}(x) = \left\langle\operatorname{Tr}(T^{a}U_{v\to w})\right\rangle
-\tag{5.1}
-$$
+```math
+H^{a}{}_{\mu}(x) = \left\langle\text{Tr}(T^{a}U_{v\to w})\right\rangle_{v,w\in\text{cell}}
+```
+(5.1)
 
-$$
+```math
 S^{a}_{\mu\nu} = \partial_\mu H^{a}_{\nu} - \partial_\nu H^{a}_{\mu}
-\tag{5.2}
-$$
+```
+(5.2)
 
-Large‑$N$ integration of $\delta A$ over Wilson plaquettes yields
+Large‑ $N$ integration of $\delta A$ over Wilson plaquettes yields
 
-$$
+```math
 \boxed{
   S_{\text{eff}} = \int d^4x\sqrt{-g}\left[\tfrac{1}{2}\kappa\,S^{a}_{\mu\nu}S_{a}^{\;\mu\nu} + \Lambda_{\text{ent}}\right]
 }
-\tag{5.4}
-$$
+```
+(5.4)
 
 with
 
-$$
+```math
 \kappa = \frac{N\ell_0^{\,2}}{4\pi}, \qquad 
 \Lambda_{\text{ent}} = \frac{\ln 2}{R_{\text{code}}^{\,2}}
-\tag{5.3, 5.5}
-$$
+```
+(5.3, 5.5)
 
 Using the Weitzenböck identity, torsion‑squared equals the Einstein–Hilbert Lagrangian up to a boundary term, reproducing GR.
 
@@ -158,18 +154,18 @@ Using the Weitzenböck identity, torsion‑squared equals the Einstein–Hilbert
 
 Variation with respect to $H^{a}{}_{\mu}$ and translation to metric variables yields teleparallel Einstein equations
 
-$$
+```math
 \boxed{
   G_{\mu\nu} + \Lambda_{\text{ent}}g_{\mu\nu} = 8\pi G_N\,T_{\mu\nu}^{\text{(edge)}}
 }
-\tag{6.1}
-$$
+```
+(6.1)
 
-$$
+```math
 T_{\mu\nu}^{\text{(edge)}} = -\frac{2}{\sqrt{-g}}
   \frac{\delta S_{\text{edge}}}{\delta g^{\mu\nu}},
-\tag{6.2}
-$$
+```
+(6.2)
 
 where "edge" denotes Standard‑Model modes living on graph boundaries.
 
@@ -179,31 +175,31 @@ where "edge" denotes Standard‑Model modes living on graph boundaries.
 
 A $1/N$ expansion produces
 
-$$
+```math
 \beta_g = -\frac{b_1}{N}\,g^{3} + \mathcal{O}(N^{-2}),
-\tag{7.1}
-$$
+```
+(7.1)
 
 giving a non‑trivial asymptotically safe fixed point. The running Newton constant is
 
-$$
+```math
 G(k) = \frac{G_0}{1 + \tfrac{\beta_1}{N}\ln(k/k_0)},
-\tag{7.2}
-$$
+```
+(7.2)
 
 while the Newtonian potential acquires a Yukawa tail
 
-$$
+```math
 \Phi(r) = -\frac{G_0M}{r}\,\left[1 + \alpha e^{-r/R_{\text{code}}}\right], \quad \alpha\approx\frac{1}{N},
-\tag{7.3}
-$$
+```
+(7.3)
 
 and the graviton dispersion relation becomes
 
-$$
+```math
 \omega^2 = k^2\left[1 + \tfrac{c_2}{N}(\ell_P k)^2 + \dots\right].
-\tag{7.4}
-$$
+```
+(7.4)
 
 ### Current constraints
 
@@ -221,12 +217,12 @@ A consolidated exclusion plot will be provided once numerical fits are complete.
 
 For a horizon of area $A$ the correctable‑erasure property counts logical qubits:
 
-$$
+```math
 \boxed{
   S_{\text{BH}} = \frac{A}{4\ell_P^{\,2}}\ln N
 }
-\tag{8.1}
-$$
+```
+(8.1)
 
 For astrophysical black holes $\ln N\approx1$; for microscopic black holes a detectable deviation is predicted.
 
@@ -239,16 +235,17 @@ Hawking radiation is decoded information leakage; entanglement‐wedge reconstru
 The computational validation involves three key calculations:
 
 1. **Spectral dimension** from a $10^6$‑vertex graph:
-   $$
-   D_s(\sigma) = -2\,\frac{d\ln P(\sigma)}{d\ln\sigma}, \quad P(\sigma)=\operatorname{Tr}\,e^{\sigma\Delta}
-   \tag{9.1}
-   $$
+
+```math
+D_s(\sigma) = -2\,\frac{d\ln P(\sigma)}{d\ln\sigma}, \quad P(\sigma)=\text{Tr}\,e^{\sigma\Delta}
+```
+(9.1)
    
    targeting flow $4 \to 2$ across $\sigma \approx (5\ell_0)^2$.
 
-2. **Code distance** measured with a qudit‑extended minimum‑weight decoder to confirm Eq. (3.3).
+3. **Code distance** measured with a qudit‑extended minimum‑weight decoder to confirm Eq. (3.3).
 
-3. **Genus‑3 Dirac spectrum** on a hyperbolic triangulation to exhibit three chiral zero modes per colour, matching Standard‑Model family replication.
+4. **Genus‑3 Dirac spectrum** on a hyperbolic triangulation to exhibit three chiral zero modes per colour, matching Standard‑Model family replication.
 
 **Results will be inserted upon completion**; data and scripts will appear in a public GitHub repository.
 
