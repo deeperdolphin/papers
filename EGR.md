@@ -1,10 +1,10 @@
-# Entanglement‑Gauge Reality: A Unified Framework for Quantum Information, Gauge Symmetry and Emergent Gravity
+# Entanglement‑Gauge Gravity: A Unified Framework for Quantum Information, Gauge Symmetry and Emergent Gravity
 
 ---
 
 ## Abstract
 
-We propose **Entanglement‑Gauge Reality** (EGR): a microscopic theory in which
+We propose **Entanglement‑Gauge Gravity** (EGG): a microscopic theory in which
 
 1. the Universe grows as a stochastic causal graph;
 2. each vertex carries a large‑ $N$ gauged qudit algebra $M_N(\mathbb{C})\otimes\mathrm{Cl}(3,1)$;
@@ -19,7 +19,7 @@ G), and report numerical evidence that the microscopic growth law produces a fou
 
 ## 1 Introduction
 
-The twin successes of quantum field theory and General Relativity leave open a common ultraviolet description of spacetime, matter and information. Decades of work offer partial insights—causal‑set growth [1], gauge‑theoretic formulations of gravity [2], asymptotic safety [3], and holographic quantum‐error correction [4]—but no consensus framework. Entanglement‑Gauge Reality (EGR) is a synthesis: spacetime is the *hydrodynamic limit* of a self‑updating quantum error‑correcting code that lives on a growing directed acyclic graph. The same large‑$N$ gauge symmetry that protects logical qubits yields, in the infrared, a rank‑two gauge field whose field equations reproduce General Relativity with a teleparallel connection. Large $N$ controls ultraviolet divergences, entanglement density supplies the cosmological constant, and Standard‑Model edge modes inhabit the graph's boundary.
+The twin successes of quantum field theory and General Relativity leave open a common ultraviolet description of spacetime, matter and information. Decades of work offer partial insights—causal‑set growth [1], gauge‑theoretic formulations of gravity [2], asymptotic safety [3], and holographic quantum‐error correction [4]—but no consensus framework. Entanglement‑Gauge Gravity (EGG) is a synthesis: spacetime is the *hydrodynamic limit* of a self‑updating quantum error‑correcting code that lives on a growing directed acyclic graph. The same large‑$N$ gauge symmetry that protects logical qubits yields, in the infrared, a rank‑two gauge field whose field equations reproduce General Relativity with a teleparallel connection. Large $N$ controls ultraviolet divergences, entanglement density supplies the cosmological constant, and Standard‑Model edge modes inhabit the graph's boundary.
 
 This paper is compact by design: we list the microscopic axioms, derive the macroscopic action, present all governing equations, and point to numerical evidence already within reach of a modest workstation. Section 2 defines the causal growth law. Section 3 introduces the vertex algebra and stabiliser code. Section 4 establishes the entanglement–geometry map. Section 5 identifies the tensor gauge field and gives the effective action. Section 6 states the emergent Einstein equations. Section 7 sketches ultraviolet running and phenomenology. Section 8 summarises black‑hole thermodynamics. Section 9 reports numerical tests of the causal growth law and entanglement–geometry map, including spectral-dimension measurements on large graphs and a geometric proxy for code distance.
 
@@ -63,7 +63,7 @@ Every vertex hosts
 (3.1)
 
 - The **matrix factor** $M_N$ realises a $U(N)$ colour gauge symmetry, enabling a $1/N$ UV expansion and, after boundary reduction, the familiar $SU(3)\times SU(2)\times U(1)$.
-- The **Clifford factor** $\mathrm{Cl}(3,1)$ supplies spinor degrees of freedom so that a boundary Dirac operator exists; dropping it eliminates chiral families.
+- The **Clifford factor** $\mathrm{Cl}(3,1)$ supplies spinor dEGGees of freedom so that a boundary Dirac operator exists; dropping it eliminates chiral families.
 
 and attaches to its parents through link operators $U_{p\to v}\in U(N)$. A *stabiliser map* projects the enlarged Hilbert space back onto the code sub‑space:
 
@@ -130,7 +130,7 @@ S^{a}_{\mu\nu} = \partial_\mu H^{a}_{\nu} - \partial_\nu H^{a}_{\mu}
 ```
 (5.2)
 
-Large‑ $N$ integration of $\delta A$ over Wilson plaquettes yields
+Large‑ $N$ intEGGation of $\delta A$ over Wilson plaquettes yields
 
 ```math
 \boxed{
@@ -233,7 +233,7 @@ Hawking radiation is decoded information leakage; entanglement‐wedge reconstru
 
 ## **9 Numerical Programme: Results**
 
-To test the internal consistency of Entanglement–Gauge Reality (EGR), we implemented the microscopic growth law of Secs. 2–3 and subjected the resulting causal graphs to three adversarial numerical diagnostics: (i) large-scale generation of the stochastic causal network, (ii) measurement of the spectral dimension from the heat kernel of the normalized Laplacian, and (iii) a geometric proxy for logical-code distance inside causal balls.  Our objective was not to fit parameters to desired outputs but to **attempt to falsify the model** by identifying any structural or geometric signature incompatible with the claims of Secs. 4–6.
+To test the internal consistency of Entanglement–Gauge Gravity (EGG), we implemented the microscopic growth law of Secs. 2–3 and subjected the resulting causal graphs to three adversarial numerical diagnostics: (i) large-scale generation of the stochastic causal network, (ii) measurement of the spectral dimension from the heat kernel of the normalized Laplacian, and (iii) a geometric proxy for logical-code distance inside causal balls.  Our objective was not to fit parameters to desired outputs but to **attempt to falsify the model** by identifying any structural or geometric signature incompatible with the claims of Secs. 4–6.
 
 All computations were performed with independent Hutchinson probes and Lanczos quadrature on graphs with up to (3\times 10^{5}) vertices.  Growth parameters were fixed at (\gamma=0.9), (\alpha=1.6), (k_{\max}=12), a candidate pool of 25 near-lightcone vertices, and density scaling (n(t)=\beta t^4) tuned so that the final layer reaches the target vertex count.  For each (N\in{2\times 10^4,,10^5,,3\times 10^5}), the full growth process, adjacency construction, and spectral dimension computation were repeated from scratch.
 
@@ -241,7 +241,7 @@ All computations were performed with independent Hutchinson probes and Lanczos q
 
 ### **9.1 Graph geometry and connectivity**
 
-The causal growth law generates directed acyclic graphs with modest but stable local connectivity.  The undirected degree distribution narrows rapidly with increasing (N), and its mean settles near the value expected for an emergent four-dimensional structure.
+The causal growth law generates directed acyclic graphs with modest but stable local connectivity.  The undirected dEGGee distribution narrows rapidly with increasing (N), and its mean settles near the value expected for an emergent four-dimensional structure.
 
 [
 \langle k_{\rm undirected}\rangle \approx
@@ -283,7 +283,7 @@ Two features are notable:
 
 1. **Dimensional flow.**
    Across all graph sizes, (D_s(\sigma)) rises monotonically from (D_s\lesssim 2) at short diffusion times to (D_s\sim 3!-!4) at long times.
-   This is the qualitative signature predicted by EGR: a reduction of effective dimension in the UV and recovery of an approximately four-dimensional geometry in the IR.
+   This is the qualitative signature predicted by EGG: a reduction of effective dimension in the UV and recovery of an approximately four-dimensional geometry in the IR.
 
 2. **Scaling with graph size.**
    The IR plateau **increases** with (N), approaching (D_s^{\rm IR}\to 4) as the causal network grows.
@@ -313,32 +313,32 @@ A full stabilizer-code construction and decoding-based distance extraction are l
 
 ### **9.4 Summary**
 
-Across three decades in system size and under deliberately adversarial numerical conditions, the microscopic growth law of EGR generates causal networks that:
+Across three decades in system size and under deliberately adversarial numerical conditions, the microscopic growth law of EGG generates causal networks that:
 
 * exhibit **stable four-dimensional connectivity**,
 * show a **robust dimensional flow** from (D_s\lesssim 2) in the UV to (D_s\to 4) in the IR,
 * and display **no contradictions** with the entanglement-geometry correspondence.
 
 While our geometric code-distance proxy is preliminary, the primary falsification tests—graph stability, spectral scaling, and dimensional flow—were all passed.
-Thus, within the scope of this numerical programme, **we find no evidence that contradicts the viability of EGR as an emergent spacetime framework**.
+Thus, within the scope of this numerical programme, **we find no evidence that contradicts the viability of EGG as an emergent spacetime framework**.
 
 ---
 
 ## 10 Conclusion
 
-EGR fuses causal growth, quantum error correction, gauge symmetry and entanglement geometry into a minimal, calculable framework. It reproduces General Relativity and the Standard Model at low energies, resolves the black‑hole information paradox, and offers falsifiable sub‑millimetre, gravitational‑wave and cosmological signatures—all traced to one microscopic scale $\ell_0$ and one large integer $N$. Immediate next steps are two‑loop functional‑RG confirmation of asymptotic safety, refined fits to CMB‑S4 lensing, and laboratory searches for the predicted Yukawa correction at $\mathcal{O}(10\,\mu\text{m})$.
+EGG fuses causal growth, quantum error correction, gauge symmetry and entanglement geometry into a minimal, calculable framework. It reproduces General Relativity and the Standard Model at low energies, resolves the black‑hole information paradox, and offers falsifiable sub‑millimetre, gravitational‑wave and cosmological signatures—all traced to one microscopic scale $\ell_0$ and one large integer $N$. Immediate next steps are two‑loop functional‑RG confirmation of asymptotic safety, refined fits to CMB‑S4 lensing, and laboratory searches for the predicted Yukawa correction at $\mathcal{O}(10\,\mu\text{m})$.
 
 ---
 
-## **11 Implications of Entanglement–Gauge Reality**
+## **11 Implications of Entanglement–Gauge Gravity**
 
-If Entanglement–Gauge Reality (EGR) provides the correct microscopic description of spacetime, matter and gauge interactions, then a number of conceptual and phenomenological consequences follow. These consequences are not optional embellishments: they arise structurally from the growth law, the stabiliser algebra, and the information–geometry correspondence introduced in Sections 2–6. Below we summarize the implications for gravity, quantum information, cosmology, and the long-term fate of the Universe.
+If Entanglement–Gauge Gravity (EGG) provides the correct microscopic description of spacetime, matter and gauge interactions, then a number of conceptual and phenomenological consequences follow. These consequences are not optional embellishments: they arise structurally from the growth law, the stabiliser algebra, and the information–geometry correspondence introduced in Sections 2–6. Below we summarize the implications for gravity, quantum information, cosmology, and the long-term fate of the Universe.
 
 ---
 
 ### **11.1 Spacetime as an emergent, informational medium**
 
-EGR posits that spacetime is *not* fundamental. Instead:
+EGG posits that spacetime is *not* fundamental. Instead:
 
 1. The Universe is a self-updating quantum error-correcting code residing on a stochastically growing causal graph.
 2. Geometry arises from the Fisher-information Hessian of coarse-grained mutual information (Eq. 4.3).
@@ -351,10 +351,10 @@ This reframes spacetime as a *hydrodynamic limit of entanglement flow*, rather t
 
 ### **11.2 Gravity as a gauge redundancy of entanglement protection**
 
-In EGR:
+In EGG:
 
 * Frame fields (H^{a}{}_\mu) arise from fluctuations of the (U(N)) link variables in the stabiliser code.
-* The teleparallel action (Eq. 5.4) emerges from large-(N) integration over these fluctuations.
+* The teleparallel action (Eq. 5.4) emerges from large-(N) intEGGation over these fluctuations.
 * GR is recovered after the Weitzenböck identity relates torsion to curvature.
 
 Thus gravity becomes the statement:
@@ -367,7 +367,7 @@ This explains both the universality of gravitational coupling and the geometric 
 
 ### **11.3 Natural UV completion and asymptotic safety**
 
-Because UV divergences arise only within the large-(N) gauge sector and the finite code distance, EGR predicts:
+Because UV divergences arise only within the large-(N) gauge sector and the finite code distance, EGG predicts:
 
 * A perturbatively accessible asymptotically safe point (Eq. 7.1),
 * Finite entanglement entropy per causal cell,
@@ -381,7 +381,7 @@ These features constitute a UV completion of gravity that does not require super
 
 ### **11.4 Black holes as logical subsystems**
 
-EGR offers a microscopic explanation of black-hole thermodynamics:
+EGG offers a microscopic explanation of black-hole thermodynamics:
 
 1. The Bekenstein–Hawking entropy counts **logical qubits**:
    [
@@ -398,7 +398,7 @@ This gives a unified explanation for the area law and resolves the information p
 ### **11.5 Particle physics: chirality and family replication**
 
 The Clifford algebra (\mathrm{Cl}(3,1)) at each vertex ensures the existence of chiral boundary modes.
-In EGR:
+In EGG:
 
 * Standard-Model fermions arise as **edge modes** of the stabiliser code,
 * The number of particle families is tied to **topological zero-modes** of genus-3 boundary graphs,
@@ -410,7 +410,7 @@ Family replication thus becomes a *topological feature*, not a free parameter.
 
 ### **11.6 Cosmological constant as entanglement pressure**
 
-A central consequence of EGR is that the cosmological constant is *not* a vacuum-energy sum but an entanglement effect:
+A central consequence of EGG is that the cosmological constant is *not* a vacuum-energy sum but an entanglement effect:
 
 [
 \Lambda_{\rm ent} = \frac{\ln 2}{R_{\rm code}^2}.
@@ -442,12 +442,12 @@ This provides a microscopic foundation for thermodynamic irreversibility and for
 
 ### **11.8 Fate of the Universe**
 
-EGR yields sharp predictions for long-term cosmological evolution:
+EGG yields sharp predictions for long-term cosmological evolution:
 
 #### **(a) No Big Crunch**
 
 The stabiliser structure forbids global contraction: collapsing all causal directions would violate code-correctability and parent-set consistency.
-Thus a recollapsing Universe is incompatible with EGR.
+Thus a recollapsing Universe is incompatible with EGG.
 
 #### **(b) No initial singularity**
 
@@ -462,7 +462,7 @@ The ultimate cosmic state is a **sparse, self-correcting quantum code** on the d
 #### **(d) No Big Rip**
 
 A diverging (\Lambda_{\rm ent}) would require (R_{\rm code}\to 0), incompatible with the growth law, which generically increases code depth.
-Thus EGR forbids super-accelerating instabilities.
+Thus EGG forbids super-accelerating instabilities.
 
 #### **(e) Information permanence**
 
@@ -473,7 +473,7 @@ In the far future, all information resides in horizon edge modes.
 
 ### **11.9 Summary**
 
-If correct, EGR offers a unified microscopic explanation for:
+If correct, EGG offers a unified microscopic explanation for:
 
 * the dimensionality and Lorentzian signature of spacetime,
 * gravity as a large-(N) entanglement-gauge redundancy,
@@ -484,7 +484,7 @@ If correct, EGR offers a unified microscopic explanation for:
 * and the global cosmological arrow of time.
 
 The consequences range from phenomenology (Yukawa corrections, running (G)) to deep cosmology (no singularities, no recollapse, unitary heat death).
-The numerical programme of Section 9, designed to falsify the growth law, instead found **no contradictions** with these predictions, reinforcing the viability of EGR as a coherent emergent-gravity framework.
+The numerical programme of Section 9, designed to falsify the growth law, instead found **no contradictions** with these predictions, reinforcing the viability of EGG as a coherent emergent-gravity framework.
 
 ---
 
