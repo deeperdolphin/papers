@@ -667,3 +667,405 @@ Theorem 5.2.1 (Main Result)
 - Circuit class: depth-$d$ AC$^0$, size $s = n^{O(1)}$
 
 - Result: Any such circuit predicting any holonomy bit has advantage $\leq n^{-\omega(1)}$.
+
+### Lemma 9.2.6 (Coordinate Splitting)
+
+After a fixed change of basis on $\alpha$, we can write $\alpha = (\alpha_F, \alpha_{\text{rest}})$ where:
+- $\alpha_F \in \mathbb{F}_2^{r(F)}$ are the coordinates that contribute to cycle parities on $F$
+- $\alpha_{\text{rest}} \in \mathbb{F}_2^{\beta_1 - r(F)}$ are the remaining coordinates
+
+Then:
+$$s_F = \alpha_F \oplus n_F$$
+
+where $n_F := M_F e_F$ is the **noise syndrome**.
+
+*Proof*: We must show the map $\alpha \mapsto M_F(L\alpha)_F$ has rank $r(F)$.
+
+- $L$ is surjective onto $\mathcal{Z} = \ker(B)$.
+- The rows of $M_F$ are cycles supported in $F$, hence elements of $\mathcal{Z}$.
+- The dot-product pairing on $\mathcal{Z}$ is nondegenerate because $\mathcal{Z} \cap \mathcal{Z}^\perp = \mathcal{Z} \cap \text{im}(B^\top) = \{0\}$ for a connected graph. (Dimension count: $\dim \mathcal{Z} + \dim \text{im}(B^\top) = (m-n+1) + (n-1) = m$.)
+- Therefore the $r(F)$ independent cycle rows define $r(F)$ independent linear functionals on $\mathcal{Z}$, so the map has rank $r(F)$.
+
+Choose basis for $\mathbb{F}_2^{\beta_1}$ so the first $r(F)$ coordinates align with this map. ∎
+
+---
+
+### Theorem 9.3.6 (Posterior Support Size — Corrected Statement)
+
+**Clarification**: "Consistent with observation $y_F$" means: there exists an extension of the unobserved coordinates $y_{E \setminus F}$ and a witness $(h, \alpha, e)$ with $|e|_0 \leq k$ such that $y = \delta h \oplus L\alpha \oplus e$ and the restriction to $F$ matches the observation.
+
+Equivalently, we count:
+$$\{\alpha : \exists h, e, |e|_0 \leq k, (\delta h \oplus L\alpha \oplus e)_F = y_F\}$$
+
+**Theorem**: This set has cardinality $2^{\beta_1 - r(F)} \cdot |\mathcal{N}_k(F)|$.
+
+*Proof*: (Unchanged from before.) ∎
+
+---
+
+### Lemma 9.3.8(2) (Corrected)
+
+**Original**: "If $k < d_{\min}(M_F)/2$ where $d_{\min}$ is the minimum distance of the code with parity-check $M_F$..."
+
+**Corrected**: If $k < d_{\min}(\mathcal{C}_F)/2$ where $\mathcal{C}_F := \ker(M_F) \subseteq \mathbb{F}_2^F$ is the **kernel code** (which equals the cut space of $(V(F), F)$), then all error vectors of weight $\leq k$ produce distinct syndromes.
+
+Hence $|\mathcal{N}_k(F)| = \sum_{i=0}^{k} \binom{|F|}{i}$.
+
+*Proof*: Standard unique decoding radius argument. If $e, e'$ have weight $\leq k$ and $M_F e = M_F e'$, then $e - e' \in \ker(M_F)$ has weight $\leq 2k < d_{\min}(\mathcal{C}_F)$, so $e = e'$. ∎
+
+---
+
+### Definition 9.3.9 and Theorem 9.3.10 (Corrected and Clarified)
+
+**Definition 9.3.9 (Syndrome Partition Function)**
+
+For each syndrome $u \in \mathbb{F}_2^{r(F)}$:
+$$W_F(u) := \sum_{e_F : M_F e_F = u} \lambda^{|e_F|_0}$$
+
+The total partition function is:
+$$Z_F := \sum_{u \in \mathbb{F}_2^{r(F)}} W_F(u) = \sum_{e_F \in \{0,1\}^F} \lambda^{|e_F|_0} = (1 + \lambda)^{|F|}$$
+
+**Clarification**: $Z_F = (1+\lambda)^{|F|}$ because summing over all syndromes $u$ removes the constraint $M_F e_F = u$, collapsing to the full product partition function. However, $W_F(u)$ itself depends nontrivially on $M_F$ and is **not** uniform over $u$ in general.
+
+**Theorem 9.3.10 (Gibbs Posterior — Corrected)**
+
+The induced distribution on the noise syndrome $n_F = M_F e_F$ is:
+$$P(n_F = u) = \frac{W_F(u)}{Z_F}$$
+
+Given observation $s_F$, the posterior on $\alpha_F$ is:
+$$P(\alpha_F = a \mid s_F) = \frac{W_F(s_F \oplus a)}{\sum_{a'} W_F(s_F \oplus a')} = \frac{W_F(s_F \oplus a)}{Z_F}$$
+
+(The denominator equals $Z_F$ because summing over $a'$ is equivalent to summing over all syndromes.)
+
+The posterior entropy is:
+$$H(\alpha_F \mid s_F) = H(n_F) = -\sum_u \frac{W_F(u)}{Z_F} \log_2 \frac{W_F(u)}{Z_F}$$
+
+*Proof*: Since $\alpha_F$ is uniform and independent of $n_F$, and $s_F = \alpha_F \oplus n_F$, the conditional distribution of $\alpha_F$ given $s_F$ equals the distribution of $n_F$ shifted by $s_F$. The entropy is preserved under translation. ∎
+
+---
+
+### Theorem 9.5.1 (Corrected Hypothesis)
+
+**Theorem 9.5.1 (AC$^0$ Hardness for Sparse-Error Holonomy Decoding)**
+
+Let $\Gamma$ be a $d$-regular expander with girth $g = \Theta(\log n)$ and cycle rank $\beta_1 = \Theta(n)$.
+
+Consider the sparse-error holonomy decoding problem with instance $y = \delta h \oplus L\alpha \oplus e$ where:
+- $h \in \mathbb{F}_2^V$ is uniform
+- $\alpha \in \mathbb{F}_2^{\beta_1}$ is uniform
+- $e \in \mathbb{F}_2^E$ is sampled from **any distribution supported on $\{e : |e|_0 \leq k\}$ that is independent of $\alpha$**
+
+Let $\rho$ be the two-stage FK-Håstad restriction with $p = 1/(\log n)^{O(d)}$.
+
+For any depth-$d$, size-$s = \text{poly}(n)$ AC$^0$ circuit $C$ attempting to predict any holonomy bit $\alpha_i$:
+$$\Pr[\hat{\alpha}_i = \alpha_i] \leq \frac{1}{2} + o(1)$$
+
+*Proof*:
+
+**Step 1**: By Corollary 3.2.2 (AC$^0$ collapse under FK), with probability $1 - n^{-\omega(1)}$, the circuit collapses to a decision tree of depth $D < g$.
+
+**Step 2**: The queried set $F$ satisfies $|F| < g$, so $F$ is acyclic and $r(F) = 0$.
+
+**Step 3**: When $r(F) = 0$, there is no cycle-syndrome channel. The observation $y_F = (\delta h)_F \oplus (L\alpha)_F \oplus e_F$ satisfies:
+- $(\delta h)_F$ is uniform over the cut space of $F$ (determined by $h$)
+- $(L\alpha)_F$ restricted to a forest lies entirely in the cut space (no cycle component)
+- $e_F$ is independent of $\alpha$
+
+Since $F$ is a forest, $(L\alpha)_F \in \text{im}(B_F^\top)$ (all cycle-space vectors restrict to cuts on forests). Therefore $y_F = (\delta h')_F \oplus e_F$ for some effective $h'$, which is independent of $\alpha$.
+
+**Step 4**: Since $y_F$ is independent of $\alpha$ when $r(F) = 0$:
+$$\Pr[\hat{\alpha}_i = \alpha_i \mid F \text{ acyclic}] = \frac{1}{2}$$
+
+**Step 5**: Total advantage:
+$$\Pr[\hat{\alpha}_i = \alpha_i] - \frac{1}{2} \leq 0 \cdot (1 - n^{-\omega(1)}) + \frac{1}{2} \cdot n^{-\omega(1)} = o(1)$$
+
+---
+
+## Boxed Summary of Uncertainty Functionals
+
+**Definition (Uncertainty Functionals)**
+
+For queried edge set $F \subseteq E$ with cycle rank $r(F)$:
+
+$$\boxed{U_{\text{ent}}(F) := H(\alpha \mid y_F) = \beta_1 - r(F) + H(n_F)}$$
+
+where $n_F = M_F e_F$ is the noise syndrome (entropy depends on error model).
+
+$$\boxed{U_{\text{supp}}(F) := \log_2|\{\alpha : \exists h, e, |e| \leq k, (\delta h \oplus L\alpha \oplus e)_F = y_F\}|}$$
+$$= \beta_1 - r(F) + \log_2|\mathcal{N}_k(F)|$$
+
+$$\boxed{U_{\text{gibbs}}(F) := \beta_1 - r(F) + H_{W_F}(n_F)}$$
+
+where $H_{W_F}$ is entropy under the Gibbs-weighted syndrome distribution.
+
+**Key Property**: All functionals have the form:
+$$U(F) = (\text{free dimensions: } \beta_1 - r(F)) + (\text{noise contribution})$$
+
+**When $r(F) = 0$** (forest queries): All functionals achieve maximum $U(F) = \beta_1$, giving perfect hiding regardless of error model.
+
+---
+
+# Part X: Explicit Parameter Selection and High-Girth Expander Families
+
+## 10.1 Explicit Collapse Inequality
+
+### Theorem 10.1.1 (AC$^0$ Collapse — Explicit Parameters)
+
+Let $C$ be a depth-$d$, size-$s$ AC$^0$ circuit on $m$ Boolean variables. Let $\rho$ be a two-stage restriction where each variable is alive with probability $p$ (independently), and dead variables are assigned uniform random bits.
+
+Then:
+$$\Pr_\rho[\text{DTdepth}(C|_\rho) \geq D] \leq s \cdot (Kp(\log s)^{d-1})^{D/d}$$
+
+where $K > 0$ is an absolute constant (independent of $d, s, p, D$).
+
+*Proof sketch*: This follows from iterating Håstad's switching lemma through $d$ layers.
+
+**Layer-by-layer analysis**:
+
+At depth 1 (bottom gates): Each gate computes a DNF or CNF of width at most $w_1$ (the fan-in). By Håstad's switching lemma, with probability $\geq 1 - (5pw_1)^t$, this gate becomes a decision tree of depth $t$.
+
+At depth $i$: After restriction, inputs to depth-$i$ gates are decision trees of depth $\leq T_{i-1}$. A width-$w_i$ DNF/CNF of such inputs behaves like a width-$(w_i \cdot T_{i-1})$ formula on the original variables.
+
+**Telescoping**: Setting $t_i = D/d$ at each layer and tracking the effective width growth:
+
+The probability that any gate at layer $i$ fails to simplify is at most:
+$$(\text{number of gates at layer } i) \times (5p \cdot w_{\text{eff}})^{D/d}$$
+
+For a size-$s$ circuit with bounded fan-in $w \leq \log s$ (WLOG by standard rebalancing), the effective width after $i$ layers is at most $(\log s)^{i}$.
+
+Union bounding over all gates in all layers:
+$$\Pr[\text{failure}] \leq s \cdot (5p(\log s)^{d-1})^{D/d}$$
+
+Taking $K = 5$ works. ∎
+
+**Corollary 10.1.2 (Collapse Threshold)**
+
+For the collapse probability to be at most $\delta$, it suffices to have:
+$$D \geq d \cdot \frac{\log(s/\delta)}{\log(1/(Kp(\log s)^{d-1}))}$$
+
+Equivalently, if we want collapse to depth $D$ with probability $\geq 1 - \delta$:
+$$p \leq \frac{1}{K(\log s)^{d-1}} \cdot \left(\frac{\delta}{s}\right)^{d/D}$$
+
+---
+
+### Theorem 10.1.3 (FK Transfer — Explicit)
+
+Let $\rho$ be the two-stage FK-Håstad restriction with $\omega \sim \phi_{p,q}$ for any $q \geq 1$.
+
+The same bound holds:
+$$\Pr_\rho[\text{DTdepth}(C|_\rho) \geq D] \leq s \cdot (Kp(\log s)^{d-1})^{D/d}$$
+
+*Proof*: By stochastic domination (Theorem 2.1.3), $\phi_{p,q} \leq_{\text{st}} \phi_{p,1}$ for increasing events. The event "DTdepth $\geq D$" is increasing in the alive set (more alive variables can only increase decision tree depth). ∎
+
+---
+
+## 10.2 Parameter Constraints for Perfect Hiding
+
+We need three constraints to align:
+
+1. **Collapse**: $\Pr[\text{DTdepth}(C|_\rho) \geq D] \leq n^{-\omega(1)}$
+2. **Acyclicity**: $D < g$ (girth of the graph)
+3. **Polynomial size**: $s = n^{O(1)}$
+
+### Lemma 10.2.1 (Parameter Feasibility)
+
+Let $\Gamma$ be a graph with girth $g = c_g \log n$ for constant $c_g > 0$.
+
+Let $C$ be a depth-$d$, size-$s = n^a$ circuit for constant $a > 0$.
+
+Set:
+$$p = \frac{1}{K(\log n)^{d-1} \cdot n^{\epsilon}}$$
+
+for any constant $\epsilon > 0$.
+
+Then for:
+$$D = \frac{c_g}{2} \log n$$
+
+we have:
+1. $D < g$ ✓
+2. $\Pr[\text{DTdepth}(C|_\rho) \geq D] \leq n^{-\omega(1)}$ ✓
+
+*Proof*:
+
+**Constraint 1** (acyclicity): $D = \frac{c_g}{2} \log n < c_g \log n = g$. ✓
+
+**Constraint 2** (collapse probability):
+
+$$\Pr[\text{failure}] \leq s \cdot (Kp(\log s)^{d-1})^{D/d}$$
+
+With $s = n^a$ and $\log s = a \log n$:
+
+$$Kp(\log s)^{d-1} = K \cdot \frac{1}{K(\log n)^{d-1} n^{\epsilon}} \cdot (a \log n)^{d-1} = \frac{a^{d-1}}{n^{\epsilon}}$$
+
+So:
+$$\Pr[\text{failure}] \leq n^a \cdot \left(\frac{a^{d-1}}{n^{\epsilon}}\right)^{D/d} = n^a \cdot \left(\frac{a^{d-1}}{n^{\epsilon}}\right)^{c_g \log n / (2d)}$$
+
+$$= n^a \cdot \exp\left(-\frac{c_g \epsilon \log n}{2d} \cdot \log n + O(\log \log n \cdot \log n)\right)$$
+
+$$= n^a \cdot n^{-c_g \epsilon (\log n) / (2d) + o(\log n)}$$
+
+For $\log n \to \infty$, the exponent goes to $-\infty$, so:
+$$\Pr[\text{failure}] \leq n^{-\omega(1)}$$
+
+---
+
+## 10.3 High-Girth Expander Families
+
+We need explicit families of bounded-degree graphs with:
+- Girth $g = \Omega(\log n)$
+- Good expansion (for the H2 survival bounds)
+- Cycle rank $\beta_1 = \Theta(n)$
+
+### 10.3.1 Lubotzky-Phillips-Sarnak (LPS) Ramanujan Graphs
+
+**Construction**: For primes $p, q$ with $p, q \equiv 1 \pmod 4$ and $\left(\frac{p}{q}\right) = 1$ (Legendre symbol), the LPS graph $X^{p,q}$ is a $(p+1)$-regular graph on $n = q(q^2-1)/2$ or $q(q^2-1)$ vertices (depending on variant).
+
+**Properties**:
+- **Degree**: $d = p + 1$ (constant for fixed $p$)
+- **Girth**: $g \geq \frac{4}{3} \log_p n = \frac{4}{3} \cdot \frac{\log n}{\log p}$
+- **Spectral gap**: Second eigenvalue $\lambda_2 \leq 2\sqrt{p}$ (Ramanujan bound)
+- **Expansion**: Edge expansion $h \geq \frac{(p+1) - 2\sqrt{p}}{2} = \frac{(\sqrt{p}-1)^2}{2}$
+
+**Cycle rank**: $\beta_1 = m - n + 1 = \frac{(p+1)n}{2} - n + 1 = \frac{(p-1)n}{2} + 1 = \Theta(n)$
+
+**Girth constant**: For $p = 5$ (so $d = 6$):
+$$g \geq \frac{4}{3} \cdot \frac{\log n}{\log 5} \approx 0.83 \log n$$
+
+So $c_g \approx 0.83$ for 6-regular LPS graphs.
+
+---
+
+### 10.3.2 Margulis-Gabber-Galil Graphs
+
+**Construction**: Vertices are $\mathbb{Z}_n \times \mathbb{Z}_n$. Each vertex $(x, y)$ connects to:
+$$(x \pm 1, y), (x, y \pm 1), (x \pm y, y), (x, y \pm x)$$
+
+(8-regular after removing self-loops and multi-edges, or variants give different degrees)
+
+**Properties**:
+- **Degree**: $d = 8$ (or variants)
+- **Girth**: $g = \Omega(\log n)$ (explicit constant depends on variant)
+- **Expansion**: Explicit spectral gap
+
+**Advantage**: Very explicit, easy to implement.
+
+**Disadvantage**: Girth constant is smaller than LPS.
+
+---
+
+### 10.3.3 Random Regular Graphs (Non-Explicit but Optimal)
+
+**Construction**: Uniformly random $d$-regular graph on $n$ vertices.
+
+**Properties** (with high probability):
+- **Girth**: $g \geq (1 - o(1)) \log_{d-1} n$
+- **Expansion**: Near-optimal (close to Ramanujan bound)
+- **Cycle rank**: $\beta_1 = \frac{(d-2)n}{2} + 1$
+
+**Girth constant**: For $d = 10$:
+$$g \geq (1 - o(1)) \frac{\log n}{\log 9} \approx 0.48 \log n$$
+
+**Advantage**: Can achieve girth arbitrarily close to the Moore bound.
+
+**Disadvantage**: Non-explicit (need derandomization for uniform circuits).
+
+---
+
+### 10.3.4 Explicit Constructions with Large Girth Constant
+
+**Lazebnik-Ustimenko Graphs**: Algebraic constructions achieving $g \geq c \log n$ with explicit constants approaching the Moore bound.
+
+**Cayley Graphs of $\text{PSL}(2, \mathbb{F}_q)$**: With carefully chosen generators, achieve large girth and good expansion.
+
+---
+
+## 10.4 Complete Parameter Selection
+
+### Theorem 10.4.1 (Explicit Instantiation)
+
+Let $\Gamma = X^{5,q}$ be the LPS Ramanujan graph with:
+- $n = q(q^2-1)/2$ vertices (for prime $q \equiv 1 \pmod 4$ with $\left(\frac{5}{q}\right) = 1$)
+- Degree $d_{\text{graph}} = 6$
+- Girth $g \geq 0.8 \log n$
+- Cycle rank $\beta_1 = 2n + 1$
+
+Let $C$ be a depth-$d_{\text{circuit}}$, size-$s = n^a$ AC$^0$ circuit.
+
+Set parameters:
+- $p = \frac{1}{10 (\log n)^{d_{\text{circuit}}-1} \cdot n^{0.01}}$
+- $q_{\text{FK}} \geq 1$ (any value)
+- $D = 0.3 \log n$ (collapse depth target)
+
+Then:
+1. **Collapse**: With probability $\geq 1 - n^{-\omega(1)}$, $C|_\rho$ is a decision tree of depth $< D$
+2. **Acyclicity**: $D = 0.3 \log n < 0.8 \log n \leq g$, so all queries form a forest
+3. **Perfect hiding**: When queries form a forest, $I(\alpha; y_F) = 0$
+
+**Conclusion**: For any fixed holonomy bit $\alpha_i$:
+$$\Pr[\hat{\alpha}_i = \alpha_i] \leq \frac{1}{2} + n^{-\omega(1)}$$
+
+---
+
+## 10.5 The Locked NP-Verifiable Theorem
+
+### Theorem 10.5.1 (Final Form — Fully Explicit)
+
+**Graph family**: LPS Ramanujan graphs $\Gamma_n = X^{5, q_n}$ with $n \to \infty$ vertices.
+
+**Problem**: Sparse-error holonomy decoding
+- Instance: $(y, k)$ with $y \in \mathbb{F}_2^E$, $k = O(n^{1-\epsilon})$
+- Witness: $(h, \alpha, e)$ with $y = \delta h \oplus L\alpha \oplus e$ and $|e|_0 \leq k$
+
+**Hardness**:
+
+For any:
+- Circuit depth $d = O(1)$
+- Circuit size $s = n^{O(1)}$
+- Error distribution independent of $\alpha$ with $|e|_0 \leq k$
+
+Under two-stage FK-Håstad restriction with $p = n^{-\Omega(1)}$ and any $q \geq 1$:
+
+$$\Pr[\text{AC}^0 \text{ circuit correctly predicts any } \alpha_i] \leq \frac{1}{2} + n^{-\omega(1)}$$
+
+**Proof**: Combine:
+1. Theorem 10.1.3 (explicit collapse bound)
+2. Lemma 10.2.1 (parameter feasibility with $c_g = 0.8$, $D = 0.3 \log n$)
+3. Theorem 9.4.1 (perfect hiding when $r(F) = 0$)
+
+∎
+
+---
+
+## 10.6 Summary Table
+
+| Parameter | Value | Constraint Satisfied |
+|-----------|-------|---------------------|
+| Graph family | LPS $X^{5,q}$ | Explicit, bounded degree |
+| Degree $d_{\text{graph}}$ | 6 | Constant |
+| Girth $g$ | $\geq 0.8 \log n$ | High girth |
+| Cycle rank $\beta_1$ | $2n + 1$ | $\Theta(n)$ holonomy bits |
+| Circuit depth $d_{\text{circuit}}$ | $O(1)$ | AC$^0$ |
+| Circuit size $s$ | $n^{O(1)}$ | Polynomial |
+| FK parameter $p$ | $n^{-\Omega(1)}$ | Subcritical |
+| FK parameter $q$ | $\geq 1$ | Any (domination works) |
+| Collapse depth $D$ | $0.3 \log n$ | $D < g$ |
+| Failure probability | $n^{-\omega(1)}$ | Negligible |
+
+---
+
+## 10.7 What This Achieves and What Remains
+
+### Achieved
+
+✓ **Explicit construction**: Fully specified graph family, circuit class, restriction parameters
+
+✓ **AC$^0$ lower bound**: Polynomial-size constant-depth circuits cannot predict holonomy bits
+
+✓ **NP-verifiable problem**: Sparse-error holonomy decoding is in NP
+
+✓ **Uniform over error models**: Works for random errors, bounded-weight errors, Gibbs-weighted errors (as long as independent of $\alpha$)
+
+✓ **FK generality**: Works for all $q \geq 1$, not just integer $q$
+
+
+
