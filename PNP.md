@@ -1065,6 +1065,260 @@ $$\Pr[\text{AC}^0 \text{ circuit correctly predicts any } \alpha_i] \leq \frac{1
 
 ✓ **Uniform over error models**: Works for random errors, bounded-weight errors, Gibbs-weighted errors (as long as independent of $\alpha$)
 
+
+# MWU in APC₂
+
+---
+
+## 1. Setup and Definitions
+
+We work in the theory **APC₂**, i.e. (T^1_2) extended with the surjective weak pigeonhole principle for (\Sigma^b_1)-definable functions. APC₂ supports **multiplicative approximate counting** of (\Sigma^b_1)-definable sets, via integer size witnesses.
+
+### 1.1 Experts and Losses
+
+* **Experts:** (\mathcal{E} = [N]) where (N = 2^L), with (L = O(s \log s)).
+  (Invalid circuit encodings are treated as dummy experts that always incur loss.)
+* **Loss Function:** A PV((\alpha))-computable function
+  [
+  \ell : [N] \times [T] \to {0,1}.
+  ]
+* **Parameters:**
+
+  * Target error (\varepsilon \in (0,1]).
+  * Learning rate (\eta = 2^{-k}) where
+    [
+    k = \lceil \log_2(4/\varepsilon) \rceil,
+    ]
+    so (\eta \le \varepsilon/4 \le 1/2).
+  * Time horizon
+    [
+    T = \left\lceil \frac{16 L \ln 2}{\varepsilon^2} \right\rceil .
+    ]
+
+### 1.2 Scaled Integer Weights
+
+Let
+[
+m_i^{(t)} = \sum_{\tau < t} \ell(i,\tau).
+]
+Define the **scaled weight** of expert (i) at time (t):
+[
+\tilde{w}_i^{(t)} ;=; 2^{k(t-m_i^{(t)})}(2^k-1)^{m_i^{(t)}}.
+]
+These are integers of polynomial bitlength and are PV-computable from ((i,t)).
+
+### 1.3 Weight Sets
+
+Define the (\Sigma^b_1(\alpha))-definable sets:
+[
+S^{(t)} = {(i,r): i\in[N],\ 0\le r<\tilde{w}_i^{(t)}},
+]
+[
+S^{(t)}_1 = {(i,r)\in S^{(t)} : \ell(i,t)=1}.
+]
+
+---
+
+## 2. Exact Update Identity via Definable Bijection
+
+### Lemma 2.1 (PV-Definable Bijection)
+
+There exists a PV-definable bijection
+[
+\Phi : S^{(t+1)} ;\longleftrightarrow; (S^{(t)} \times [2^k]) \setminus T^{(t)},
+]
+where
+[
+T^{(t)} = {((i,r),0) : (i,r)\in S^{(t)}_1}.
+]
+
+**Proof.**
+
+* If (\ell(i,t)=0), then (\tilde w_i^{(t+1)}=2^k\tilde w_i^{(t)}).
+  Map ((i,r')) to (((i,\lfloor r'/2^k\rfloor), r'\bmod 2^k)).
+* If (\ell(i,t)=1), then (\tilde w_i^{(t+1)}=(2^k-1)\tilde w_i^{(t)}).
+  Map ((i,r')) to (((i,\lfloor r'/(2^k-1)\rfloor),(r'\bmod(2^k-1))+1)).
+
+The images are disjoint and cover exactly
+((S^{(t)}\times[2^k])\setminus(S^{(t)}_1\times{0})).
+The inverse map is defined by reversing these cases. ∎
+
+### Corollary 2.2 (Exact Update)
+
+[
+|S^{(t+1)}| = 2^k|S^{(t)}| - |S^{(t)}_1|. \tag{★}
+]
+
+This identity is proved *exactly*, without approximate counting.
+
+---
+
+## 3. Ratio Approximation in APC₂
+
+### Definition 3.1 (Ratio Approximant)
+
+For (A\subseteq B) with (|B|>0), a rational (\lambda) is a **(\delta)-approximant** to (|A|/|B|) if
+[
+\left|\lambda - \frac{|A|}{|B|}\right|\le\delta.
+]
+
+### Lemma 3.2 (APC₂ Ratio Witnesses)
+
+Let (A\subseteq B) be (\Sigma^b_1(\alpha))-definable with (|B|>0).
+For any polynomially bounded (1/\delta), APC₂((\alpha)) proves the existence of integers
+(s_A, s_B>0) such that
+[
+s_A \in (1\pm\delta/3)\cdot|A|,\qquad
+s_B \in (1\pm\delta/3)\cdot|B|.
+]
+Defining (\lambda := s_A/s_B), we have
+[
+\left|\lambda - \frac{|A|}{|B|}\right|\le \delta.
+]
+
+*Proof.* Since (|A|/|B|\in[0,1]),
+[
+\frac{s_A}{s_B}
+\in \frac{|A|}{|B|}\cdot\frac{1\pm\delta/3}{1\pm\delta/3}
+\subseteq \frac{|A|}{|B|}\pm\delta.
+]
+∎
+
+---
+
+## 4. Analytic Inequalities (PV₂)
+
+### Lemma 4.1
+
+For (x\in[0,1/2]):
+[
+-x-x^2 \le \ln(1-x) \le -x.
+]
+
+### Lemma 4.2 (Lipschitz Bound)
+
+For (x,y\in[0,1/2]):
+[
+|\ln(1-x)-\ln(1-y)| \le 2|x-y|.
+]
+
+Both are provable in PV₂ via geometric-series bounds.
+
+---
+
+## 5. MWU Regret Bound in APC₂
+
+### Theorem 5.1 (Regret Bound)
+
+Let (\delta = \varepsilon/(12T)).
+APC₂((\alpha)) proves the existence of rationals
+(\lambda_1,\dots,\lambda_T) such that:
+
+1. (\lambda_t) is a (\delta)-approximant to (|S^{(t)}_1|/|S^{(t)}|).
+2. For every expert (j\in[N]),
+   [
+   \frac{1}{T}\sum_{t=1}^T \lambda_t
+   \le
+   \frac{1}{T}\sum_{t=1}^T \ell(j,t) + \varepsilon.
+   ]
+
+---
+
+### Proof
+
+Let (L_t = |S^{(t)}_1|/|S^{(t)}|).
+
+#### Step 1: Product Identity
+
+From (★),
+[
+\frac{|S^{(t+1)}|}{2^k|S^{(t)}|}
+= 1 - \eta L_t.
+]
+Telescoping,
+[
+\frac{|S^{(T+1)}|}{2^{kT}|S^{(1)}|}
+= \prod_{t=1}^T (1-\eta L_t).
+]
+
+#### Step 2: Lower Bound by One Expert
+
+Let (m_j=\sum_{t=1}^T \ell(j,t)). Then
+[
+|S^{(T+1)}| \ge \tilde w_j^{(T+1)}
+= 2^{k(T+1-m_j)}(2^k-1)^{m_j}.
+]
+Since (|S^{(1)}|=N\cdot2^k),
+[
+\prod_{t=1}^T (1-\eta L_t)
+\ge \frac{(1-\eta)^{m_j}}{N}.
+]
+
+#### Step 3: Logarithmic Inequalities
+
+Taking logs and using Lemma 4.1,
+[
+\sum_{t=1}^T \ln(1-\eta L_t)
+\ge m_j\ln(1-\eta) - \ln N
+\ge -m_j(\eta+\eta^2)-L\ln2.
+]
+Also (\ln(1-\eta L_t)\le -\eta L_t), so
+[
+-\eta\sum_{t=1}^T L_t
+\ge -m_j(\eta+\eta^2)-L\ln2.
+]
+Thus
+[
+\sum_{t=1}^T L_t
+\le m_j(1+\eta)+\frac{L\ln2}{\eta}.
+]
+
+#### Step 4: Parameter Choice
+
+Divide by (T). With (\eta\le\varepsilon/4) and
+(T\ge 16L\ln2/\varepsilon^2),
+[
+\frac{1}{T}\sum_{t=1}^T L_t
+\le \frac{m_j}{T} + \frac{3\varepsilon}{4}.
+]
+
+#### Step 5: APC₂ Approximation Transfer
+
+Replace (L_t) by (\lambda_t) with (|\lambda_t-L_t|\le\delta).
+Using Lemma 4.2,
+the cumulative error is at most (T\delta=\varepsilon/12).
+Hence
+[
+\frac{1}{T}\sum_{t=1}^T \lambda_t
+\le \frac{m_j}{T} + \varepsilon.
+]
+∎
+
+---
+
+## 6. Consequences
+
+### 6.1 Existence of Hard Distributions (Non-Witnessing)
+
+APC₂(SAT) proves the existence of a sequence
+((x_1,\dots,x_T)) such that the uniform distribution (D) over it satisfies
+[
+\max_{C\in\mathcal C_s}\Pr_{x\sim D}[C(x)=\mathrm{SAT}(x)]
+\le v^*+\varepsilon,
+]
+where (v^*) is the minimax value.
+This follows by choosing (existential) best responses (x_t) against the MWU-induced circuit distributions and applying Theorem 5.1.
+
+### 6.2 The Witnessing Gap
+
+APC₂ proves **existence** of such sequences, but computing them via a PV function would require **feasible best responses**, i.e.
+[
+x_t=\arg\max_x \mathbf E_{C\sim P^{(t)}}[\mathrm{error}(C,x)],
+]
+which is equivalent to feasible anticheckers.
+Whether EF can efficiently justify such witnesses is exactly the Pich–Santhanam hinge underlying conditional (P\neq NP).
+
+
 ✓ **FK generality**: Works for all $q \geq 1$, not just integer $q$
 
 
