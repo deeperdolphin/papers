@@ -1,915 +1,682 @@
-# Entanglement‑Gauge Gravity: A Unified Framework for Quantum Information, Gauge Symmetry and Emergent Gravity
+# Entanglement–Gauge Gravity: Emergent Geometry, Gauge Holonomy, and Quantum Information on a Growing Causal Graph
+
+**Version 2 — revised draft**
 
 ---
 
 ## Abstract
 
-We propose **Entanglement–Gauge Gravity (EGG)**, a microscopic framework in which the Universe is fundamentally a growing causal structure whose large-scale organization gives rise to spacetime geometry, gravity, and gauge interactions. In this picture, local quantum degrees of freedom reside on a stochastic causal graph, geometry is not fundamental but emergent, and gravity arises as a redundancy associated with the protection and transport of quantum information. Dimensionality, locality, and curvature are collective, scale-dependent properties rather than fixed background features.
+We propose **Entanglement–Gauge Gravity (EGG)**, a microscopic framework in which the Universe is fundamentally a growing causal graph whose vertices carry finite operator algebras and whose large-scale organization gives rise to spacetime geometry, gravity, and gauge interactions. Geometry is not fundamental but emergent; gravity arises as the universal infrared description of how gauge redundancy and information protection organize on the causal substrate.
 
-We present a concrete realization of this framework based on a causal growth law with finite local operator algebras and gauge symmetry, and we outline how entanglement structure and gauge redundancy organize into an effective continuum description whose infrared limit reproduces the kinematic structure of General Relativity in a teleparallel formulation. These continuum identifications are proposed as a coherent unifying mechanism rather than as established results.
+The framework rests on three ingredients: a stochastic causal growth law; local algebras $\mathcal{A}_v = M_N(\mathbb{C})\otimes\mathrm{Cl}(3,1)$ with link variables transporting both internal $U(N)$ and frame data; and gauge-invariant consistency weights defined on **causal diamonds** (closed loops of the causal graph). A structural observation organizes the whole construction: on a tree, every link configuration is gauge-trivial, so gauge dynamics, error-correcting redundancy, and curvature observables all vanish identically. **Gauge structure, quantum error correction, and geometry therefore co-emerge at the tree-to-loop crossover** of the growing graph — the same crossover at which the measured spectral dimension flows from its ultraviolet value toward four.
 
-To assess the viability of the framework’s most basic geometric premise, we implement the microscopic growth dynamics numerically and study the resulting geometry using the spectral dimension derived from diffusion on the emergent graph. Across system sizes up to (3\times10^5) vertices, we observe a robust scale-dependent spectral dimension: at short diffusion scales the geometry exhibits a universal ultraviolet plateau (D_s^{\mathrm{UV}}\simeq1.2–1.4), consistent with branched-polymer and causal-tree universality, while at large scales the dimension flows toward (D_s^{\mathrm{IR}}\simeq4). This behavior indicates that a four-dimensional macroscopic spacetime can emerge dynamically from a low-dimensional causal microstructure.
+We outline how these structures organize into an infrared teleparallel description dynamically equivalent to General Relativity, with the Newton constant induced by the $N^2$ matrix degrees of freedom per vertex and the Bekenstein–Hawking entropy following automatically from the same counting. A seesaw relation, $\Lambda_{\mathrm{ent}}\sim \ell_P^{2}/R_{\mathrm{code}}^{4}$, ties the observed cosmological constant to the finite depth $R_{\mathrm{code}}$ of the information-protecting structure; matching the observed value fixes $R_{\mathrm{code}}\approx 40\text{–}90\,\mu\mathrm{m}$, predicting that any finite-range deviation from Newtonian gravity must appear at precisely the length scales now probed by torsion-balance experiments.
 
-Taken together, these results establish EGG as a concrete and testable proposal for the microscopic organization of spacetime, providing a unified setting in which gravity, geometry, and quantum information may be understood as emergent phenomena.
+Numerically, we implement the growth law and measure the spectral dimension by diffusion on graphs of up to $3\times10^{5}$ vertices. We find a robust scale-dependent dimension: a universal ultraviolet plateau $D_s^{\mathrm{UV}}\simeq1.2\text{–}1.4$, consistent with branched-polymer and causal-tree universality, flowing toward $D_s^{\mathrm{IR}}\simeq4$ at large scales, with the infrared plateau sharpening systematically with system size. We are explicit about what these results do and do not establish: the simulations to date use a density exponent and an auxiliary embedding that could in principle inject the observed dimensionality. We therefore **pre-register a set of decisive control experiments** — a density-exponent scan, an embedding ablation, and an intrinsic-locality variant of the model — whose outcomes will either substantiate or falsify the emergence claim. The paper organizes all of its assertions into three explicit tiers: numerically established, defined-and-computable, and conjectural.
 
 ---
 
 ## 1 Introduction
 
-The empirical success of quantum field theory and General Relativity has left unresolved a fundamental question: *what microscopic structure, if any, underlies spacetime itself?* Despite their accuracy within their respective domains, the two frameworks make incompatible assumptions about locality, background structure, and ultraviolet behavior. This tension has motivated a wide range of approaches to quantum gravity, including causal-set growth models [1], gauge-theoretic formulations of gravity [2], asymptotically safe renormalization-group flows [3], and holographic constructions inspired by quantum error correction [4]. Each captures important aspects of the problem, yet none has converged on a shared microscopic picture of spacetime, matter, and information.
+The empirical success of quantum field theory and General Relativity leaves unresolved a fundamental question: *what microscopic structure, if any, underlies spacetime itself?* Despite their accuracy within their respective domains, the two frameworks make incompatible assumptions about locality, background structure, and ultraviolet behavior. This tension has motivated a wide range of approaches: causal-set kinematics and sequential-growth dynamics [1,2], causal dynamical triangulations (CDT) [3,4], gauge-theoretic and teleparallel formulations of gravity [5,6], asymptotically safe renormalization-group flows [7], graph-dynamical models of emergent geometry [8,9,10], and holographic constructions based on quantum error correction and tensor networks [11,12]. Each captures important aspects of the problem; none has converged on a shared microscopic picture of spacetime, matter, and information.
 
-**Entanglement–Gauge Gravity (EGG)** is proposed as a unifying microscopic framework that takes a definite stance on this question. In EGG, the Universe is not built upon a pre-existing manifold. Instead, it is fundamentally a growing causal structure: a directed acyclic graph whose vertices carry finite quantum degrees of freedom and whose large-scale organization gives rise to geometry, dimensionality, and gravitational dynamics. Spacetime, in this view, is not fundamental but emergent—a collective, scale-dependent phenomenon arising from causal connectivity and information flow. Gravity is not introduced as a fundamental interaction, but as an effective redundancy associated with the consistent transport and protection of quantum information across this structure.
+**Entanglement–Gauge Gravity (EGG)** takes a definite stance. The Universe is not built on a pre-existing manifold. It is a growing causal structure: a directed acyclic graph whose vertices carry finite quantum degrees of freedom and whose large-scale organization gives rise to geometry, dimensionality, and gravitational dynamics. Gravity is not a fundamental interaction but the effective, hydrodynamic description of how gauge redundancy and information protection organize across this structure — a stance in the lineage of Sakharov's induced gravity [13] and Jacobson's derivation of the Einstein equation as an equation of state and as a condition of entanglement equilibrium [14,15].
 
-The framework combines three ingredients. First, a **stochastic causal growth law** generates a layered causal network without assuming dimension or locality a priori. Second, each vertex hosts a finite operator algebra with gauge symmetry, providing both local quantum degrees of freedom and a natural large-(N) control parameter. Third, global consistency is enforced through constraints analogous to quantum error correction, ensuring that coarse-grained observables remain stable under local perturbations. Within this setting, geometry is defined operationally, through diffusion and correlation structure on the emergent graph, rather than by postulating a metric from the outset.
+The framework combines three ingredients. First, a **stochastic causal growth law** generates a layered causal network. Second, each vertex hosts the finite algebra $M_N(\mathbb{C})\otimes\mathrm{Cl}(3,1)$, and each causal link carries a transport operator with both internal $U(N)$ and Lorentz-frame components; the matrix factor supplies a large-$N$ control parameter, the Clifford factor supplies the raw material for frame fields and spinors. Third, **gauge-invariant consistency weights on causal diamonds** — closed loops of the causal graph — enforce coherent information transport and induce code-like protection of coarse-grained observables.
 
-A central claim of EGG is that familiar spacetime physics appears only after coarse-graining. At microscopic scales the causal network is highly anisotropic and effectively low-dimensional, while at macroscopic scales it organizes into a smooth, approximately four-dimensional geometry. In the continuum limit, the same gauge redundancy that stabilizes information at the microscopic level is argued to reorganize into an effective gravitational description whose infrared kinematics coincide with those of General Relativity in a teleparallel formulation. These continuum identifications are proposed as a coherent mechanism linking causality, gauge symmetry, and gravity, rather than as results derived from first principles.
+A single structural fact organizes these ingredients, and we state it here because it is the conceptual heart of the revised framework. *On a tree, the cycle space is empty: every configuration of link variables is gauge-equivalent to the identity.* There are then no gauge-invariant holonomy observables, no curvature or torsion content, and no nontrivial code structure — gauge dynamics is pure gauge. All three structures switch on together when loops form. Since the loop content of the growing graph is controlled by the same connectivity parameter that drives the measured dimensional flow, **gauge fields, error correction, and geometry co-emerge at the tree-to-loop crossover**. The ultraviolet branched-polymer regime is not merely low-dimensional; it is the pre-gauge, pre-geometric phase of the theory.
 
-To assess whether this picture is viable at its most basic level, we subject the microscopic growth law to direct numerical scrutiny. We generate large causal graphs and diagnose their emergent geometry using the **spectral dimension**, extracted from diffusion on the graph Laplacian. This observable provides a coordinate-free probe of dimensionality and scale dependence. Across increasing system sizes, we find a robust dimensional flow: at short diffusion scales the geometry exhibits a universal ultraviolet plateau (D_s^{\mathrm{UV}}\simeq1.2–1.4), consistent with branched-polymer and causal-tree universality classes, while at large diffusion scales the spectral dimension flows toward (D_s^{\mathrm{IR}}\simeq4). The sharpening of the infrared plateau with system size indicates that four-dimensional spacetime arises dynamically from an underlying low-dimensional causal microstructure, rather than being imposed by construction.
+### 1.1 Claim structure
 
-The purpose of this paper is therefore twofold. First, we present a concrete and unified proposal for the microscopic organization of spacetime, grounded in causality, gauge structure, and quantum information. Second, we provide nontrivial numerical evidence that the core geometric premise of this proposal—the emergence of four-dimensional spacetime from causal growth—is internally consistent and robust. While many aspects of EGG remain conjectural, the framework defines a clear ontology, a concrete mechanism, and a set of falsifiable targets, offering a structured arena in which the relationship between spacetime, gravity, and information can be explored.
+To keep the epistemic status of every statement explicit, we organize the paper's claims into three tiers and tag each section accordingly.
 
-The remainder of the paper is organized as follows. Section 2 defines the stochastic causal growth law. Section 3 introduces the local operator algebra and stabilizer-inspired consistency constraints. Section 4 discusses the operational definition of geometry and its relation to information-theoretic quantities. Section 5 outlines the emergence of an effective gauge-theoretic gravitational description in the infrared. Section 6 presents the resulting field equations. Section 7 discusses ultraviolet behavior and phenomenological implications. Section 8 addresses black-hole thermodynamics within the framework. Section 9 reports the numerical results, including spectral-dimension measurements and geometric diagnostics of causal structure.
+**Tier I — numerically established (this work, Section 9).** The growth law at the studied parameter point generates large, stable, sparse causal graphs; the spectral dimension exhibits a universal ultraviolet plateau $D_s^{\mathrm{UV}}\simeq1.2\text{–}1.4$ consistent with the branched-polymer value $4/3$; and the infrared spectral dimension increases systematically with system size, reaching $\approx 3.8$ at $3\times10^{5}$ vertices.
 
-We set (\ell_P=\sqrt{\hbar G/c^3}) as the Planck length and take the microscopic length scale (\ell_0\simeq\ell_P), unless rescaled by the large-(N) structure of the local operator algebra.
+**Tier II — defined and computable, not yet computed (Sections 3–4, 9.5).** The quantum state of the network (an isometric tensor network generated by the growth itself), mutual-information observables, the information-theoretic metric, the operational code distance, curvature diagnostics, and — critically — the control experiments that test whether the infrared dimension is emergent or injected by the simulation inputs. These are concrete computations with specified protocols.
+
+**Tier III — conjectural continuum identifications (Sections 5–8).** The teleparallel effective action, the induced Newton constant, the emergent Einstein equations, the cosmological seesaw, and black-hole thermodynamics. These are structurally motivated and internally consistent, but not derived from first principles.
+
+We believe this discipline is not a weakness but the appropriate way to present a framework of this scope: Tier I motivates Tier II, and Tier II, if successful, would begin to constrain Tier III.
+
+The remainder of the paper is organized as follows. Section 2 defines the growth law in two variants — an embedded regulator model (the one simulated to date) and an intrinsic-locality model — and confronts the Lorentz-invariance question directly. Section 3 introduces the local algebras, link transport, diamond consistency weights, the co-emergence principle, the quantum state of the network, and the corrected code-distance structure. Section 4 constructs geometry from mutual information via a world-function coincidence limit. Section 5 builds gauge-invariant metric and frame observables from diamond holonomies and presents the teleparallel effective action with a selection principle for the GR-equivalent point. Section 6 presents the emergent field equations. Section 7 rebuilds the ultraviolet and phenomenological discussion around the cosmological seesaw. Section 8 treats black-hole thermodynamics with consistent large-$N$ counting. Section 9 reports the numerical results and pre-registers the decisive control experiments. Section 10 concludes; Section 11 is a brief, explicitly speculative outlook.
+
+We set $\ell_P=\sqrt{\hbar G/c^{3}}$ and denote by $\ell_0$ the microscopic graph scale. As shown in Section 5, consistency of the induced-gravity normalization implies $\ell_0 \simeq N\,\ell_P$ up to order-unity constants: the discreteness scale lies *above* the Planck length by a factor of the internal gauge dimension.
 
 ---
 
-## **2 Microscopic Growth Law**
+## 2 Microscopic Growth Law
 
-The fundamental microscopic structure in Entanglement–Gauge Gravity is a **growing causal network**. Vertices are added sequentially, and each new vertex is connected only to vertices in its causal past, ensuring that the resulting graph is a directed acyclic graph (DAG). No background manifold, metric, or dimensionality is assumed at this level; these properties are intended to emerge dynamically from the growth process.
+The fundamental structure in EGG is a growing causal network. Vertices are added in discrete layers, and each new vertex is connected only to vertices in its causal past, so the graph is a directed acyclic graph (DAG). No metric or dimensionality is assumed; these are diagnosed *a posteriori* through diffusion, order-theoretic, and correlation observables.
 
-Each newly created vertex (v) is assigned a *parent set* (P_v), drawn stochastically from the existing vertices according to a local weight function. The probability of choosing a given parent set is
+### 2.1 Growth schedule
+
+Let $t\in\mathbb{N}$ be the **layer index**. At layer $t$, the number of new vertices added is
 
 ```math
-\boxed{
-\Pr(P_v) \;\propto\;
-\gamma^{|P_v|}
-\exp\!\left[
--\alpha \sum_{p<q\in P_v}\frac{d_{pq}^2}{\ell_0^2}
-\right]
-}
+\Delta n(t) \;=\; \big\lceil \beta\,\big(t^{\,p}-(t-1)^{p}\big)\big\rceil \;\approx\; p\,\beta\, t^{\,p-1},
+\qquad p=4 \text{ in the simulations reported here,}
 ```
 
 (2.1)
 
-where (|P_v|) is the number of parents, (d_{pq}) is the spatial separation between candidate parents in an auxiliary embedding used solely to enforce locality, (\ell_0) is the microscopic length scale, and (\gamma,\alpha>0) are dimensionless control parameters. The normalization factor, obtained by summing over all admissible parent sets with (|P_v|\le k_{\max}), ensures a proper probability distribution.
+so that the cumulative vertex count grows as $n(t)\simeq\beta t^{p}$. We emphasize from the outset that **$p$ is a control parameter, not a principle**. The choice $p=4$ guarantees sufficient causal depth for a four-dimensional macroscopic regime to be *possible*; whether it is the *source* of the observed infrared dimensionality is an empirical question. The density-exponent scan defined in Section 9.5 — rerunning the entire programme at $p\in\{2,3,5,6\}$ — is the decisive test. If the infrared spectral dimension tracks $p$, the model transduces causal density into geometry and the emergence claim must be withdrawn in its strong form; if $D_s^{\mathrm{IR}}\approx4$ proves robust against $p$, the emergence claim is dramatically strengthened. We commit to reporting the outcome either way.
 
-The growth process is layered in a coarse-grained time variable (t), defined implicitly by the number of vertices present. The expected vertex count scales as
+### 2.2 Parent selection: embedded and intrinsic variants
 
-```math
-n(t) = \beta\, t^{4},
-```
+Each new vertex $v$ receives a *parent set* $P_v$ drawn stochastically from existing vertices. We define two variants of the attachment law.
 
-(2.2)
-
-so that the total number of vertices grows quartically with coarse time. This scaling is not imposed to enforce four-dimensionality at the microscopic level; rather, it ensures that sufficient causal depth exists for macroscopic dimensionality to emerge at large scales.
-
-
----
-
-### **Interpretation and role of the parameters**
-
-The growth law is intentionally minimal. Its parameters do not encode spacetime dimension directly, but instead regulate **connectivity, locality, and causal thickness**, which collectively determine the emergent geometry.
-
-**Connectivity parameter (\gamma).**
-The parameter (\gamma) controls the typical size of parent sets and therefore the local branching structure of the causal graph. For small (\gamma), new vertices attach to only a few parents, producing a locally tree-like and strongly anisotropic structure. As (\gamma) increases, parent sets broaden, loops proliferate, and the causal network becomes increasingly interconnected.
-
-Crucially, the numerical results reported in Section 9 show that **tree-like microstructure is not a failure mode but a defining ultraviolet feature**. Across a wide range of system sizes, the spectral dimension at short diffusion scales stabilizes near (D_s^{\mathrm{UV}}\simeq1.2–1.4), consistent with the universal value (D_s=4/3) characteristic of branched-polymer and causal-tree geometries. This places the microscopic growth law firmly in a well-studied universality class, rather than requiring fine-tuning toward a target ultraviolet dimension.
-
-At larger scales, increased connectivity enables coarse-grained mixing, and the spectral dimension flows upward toward four. The approach to (D_s\simeq4) sharpens systematically with increasing graph size, indicating that macroscopic dimensionality is an emergent collective property rather than a parameter chosen at the outset.
-
-**Locality parameter (\alpha).**
-The parameter (\alpha) suppresses parent sets whose members are widely separated in the auxiliary embedding. For (\alpha\ell_0^2\gg1), long-range connections are strongly disfavored and the graph becomes effectively tree-like even at large scales. For (\alpha\ell_0^2\ll1), locality is lost and the graph rapidly approaches a dense, non-geometric structure.
-
-The physically relevant regime is (\alpha\ell_0^2=\mathcal{O}(1)), where locality is enforced without fine-tuning. In this regime, the growth law generates a sparse causal network whose short-scale structure is filamentary, while still allowing sufficient loop formation for higher-dimensional geometry to emerge upon coarse-graining.
-
----
-
-### **Emergent dimensionality rather than imposed geometry**
-
-It is important to emphasize that neither Eq. (2.1) nor Eq. (2.2) encodes spacetime dimension directly. The microscopic growth law defines only causal precedence, local connectivity, and stochastic attachment. Dimensionality is diagnosed *a posteriori*, through diffusion and spectral observables on the resulting graph.
-
-The numerical evidence presented later demonstrates that this minimal causal dynamics produces a robust and nontrivial dimensional flow: a low-dimensional, tree-like ultraviolet regime transitions smoothly into an effectively four-dimensional infrared geometry. This behavior motivates the interpretation of spacetime in EGG as a **hydrodynamic limit of causal growth**, rather than as a fundamental background structure.
-
----
-
-### **Why this growth law is the right starting point**
-
-The purpose of the microscopic growth law is not to reproduce continuum physics directly, but to define a **causal substrate** capable of supporting it. The emergence of a universal ultraviolet spectral dimension near (4/3), together with a stable infrared flow toward four dimensions, indicates that the growth process sits at the intersection of causal-set dynamics, random geometry, and renormalization-group universality.
-
-This places strong constraints on any proposed microscopic description of spacetime: the fundamental structure must be sparse, causal, and effectively low-dimensional at short scales, while still capable of organizing into a smooth four-dimensional geometry at large scales. The growth law defined here satisfies these requirements without assuming geometry, dimension, or locality a priori, making it a natural foundation for the entanglement- and gauge-theoretic constructions developed in subsequent sections.
-
-### **2.X Relation to Hypergraph Rewriting Approaches**
-
-The microscopic growth dynamics defined above share certain structural similarities with **hypergraph rewriting approaches** to emergent spacetime, most notably the Wolfram Physics program, in which the Universe is modeled as the evolution of a discrete hypergraph under local rewriting rules. In both settings, spacetime is not assumed a priori, causal structure plays a central role, and geometric properties are diagnosed using diffusion-based observables such as the spectral dimension. These common features place both approaches within a broader class of discrete, background-independent models of spacetime emergence.
-
-Despite this superficial overlap, the underlying mechanisms and ontological commitments differ in important respects. In hypergraph rewriting frameworks, dynamics are driven by deterministic or rule-based substitutions acting on hyperedges, and vertices typically carry no intrinsic degrees of freedom beyond their combinatorial connectivity. The rewriting rules themselves are fundamental, and the evolution of the hypergraph is the primary source of structure. In contrast, EGG employs a **stochastic causal growth process** in which vertices are endowed with finite local operator algebras and gauge structure. The fundamental dynamical object is not a rewriting rule but a probabilistic attachment law constrained by locality, causality, and information-theoretic consistency.
-
-A further distinction lies in what is taken to be primary. Hypergraph rewriting treats combinatorial evolution as the source from which all other structures must emerge. EGG instead treats **information flow, gauge redundancy, and error-protection constraints** as foundational, with causal growth providing the substrate on which these structures organize. Geometry and dimensionality in EGG arise through coarse-graining and collective mixing of an initially sparse, tree-like causal microstructure, rather than through repeated application of fixed rewriting patterns.
-
-As a result, although both approaches aim to explain spacetime as an emergent phenomenon of discrete dynamics, they likely occupy **distinct universality classes**. In particular, the ultraviolet spectral dimension observed in EGG, which stabilizes near the universal value (D_s\simeq4/3) characteristic of causal-tree and branched-polymer geometries, reflects the stochastic, information-constrained nature of the growth law rather than deterministic rewriting. Any deeper relationship between these frameworks, if it exists, would therefore have to emerge at the level of coarse-grained universality rather than microscopic dynamics.
-
----
-
-## **3 Vertex Algebra and Information-Theoretic Structure**
-
-In Entanglement–Gauge Gravity, each vertex of the causal graph carries finite local quantum degrees of freedom. These degrees of freedom are not treated as pointlike fields on a background manifold, but as operator algebras associated to causal events. Concretely, to each vertex (v) we associate the algebra
+**Model A (embedded regulator — the model simulated to date).** Candidate parents are drawn from a pool of the $K$ vertices nearest the new vertex's prospective lightcone in an auxiliary embedding of dimension $d_{\mathrm{emb}}$, and the parent set is selected with probability
 
 ```math
 \boxed{
-\mathcal{A}_v = M_N(\mathbb{C}) \otimes \mathrm{Cl}(3,1)
+\Pr(P_v) \;\propto\;
+\gamma^{|P_v|}\,
+\exp\!\left[
+-\alpha \sum_{p<q\,\in P_v}\frac{d_{pq}^{2}}{\ell_0^{2}}
+\right],
+\qquad |P_v|\le k_{\max},
+}
+```
+
+(2.2a)
+
+where $d_{pq}$ is the separation of candidate parents in the auxiliary embedding. **[AUTHOR NOTE: state $d_{\mathrm{emb}}$ and the embedding signature explicitly here — the simulations must declare exactly what was used, since this is the locus of the circularity concern discussed below.]**
+
+We are explicit about the status of this construction: the auxiliary embedding is a **regulator that breaks background independence**, and the lightcone-aligned candidate pool inherits causal structure from it. A skeptical reader is entitled to suspect that the four-dimensional infrared geometry reported in Section 9 is partially or wholly injected by $d_{\mathrm{emb}}$, the pool geometry, and $p=4$. We share this concern, which is why Model A is presented as a regulated starting point rather than as the fundamental dynamics, and why the embedding-ablation experiments of Section 9.5 (varying $d_{\mathrm{emb}}$, deforming the pool) are part of the core programme.
+
+**Model B (intrinsic locality — the fundamental proposal).** All reference to an embedding is removed. Locality is enforced using only data intrinsic to the existing graph: let $D_g(p,q)$ denote the undirected graph distance between candidate parents, computed (by truncated breadth-first search) within the most recent $\tau$ layers, and let the candidate pool consist of the $K$ vertices of smallest graph eccentricity within those layers relative to a randomly chosen anchor vertex. The attachment probability is
+
+```math
+\boxed{
+\Pr(P_v) \;\propto\;
+\gamma^{|P_v|}\,
+\exp\!\left[
+-\alpha \sum_{p<q\,\in P_v} \frac{D_g(p,q)^{2}}{\ell_g^{2}}
+\right],
+\qquad |P_v|\le k_{\max},
+}
+```
+
+(2.2b)
+
+with $\ell_g$ an order-unity scale in graph units. Model B is background-independent in the strict sense: the only structures it uses are the causal order and the graph metric the order itself generates. It is the EGG analogue of the order-invariance requirement of classical sequential growth [2] — with the crucial difference that locality is enforced rather than absent. It is known that order-invariant sequential-growth models generically fail to produce manifold-like causal sets; EGG's wager is that intrinsic locality is precisely the missing ingredient. If Model B reproduces the dimensional flow of Model A, the background-independence objection evaporates and the result becomes, to our knowledge, the first manifold-like infrared phase from a purely intrinsic causal growth law. If it does not, Model A's results must be reinterpreted as properties of a regulated theory whose regulator dependence has to be quantified. Either outcome is scientifically valuable, and Section 9.5 commits to both runs.
+
+### 2.3 Interpretation of the parameters
+
+**Connectivity $\gamma$** controls parent-set size and hence the loop content of the graph. Small $\gamma$ yields tree-like, strongly anisotropic structure; larger $\gamma$ proliferates loops. As established in Section 3, loops are simultaneously the carriers of gauge dynamics, error-correcting redundancy, and curvature/torsion observables, so $\gamma$ controls not merely connectivity but the onset of *all* post-tree structure in the theory. The numerical results show that the tree-like ultraviolet regime is not a failure mode: $D_s^{\mathrm{UV}}\simeq1.2\text{–}1.4$ matches the universal value $4/3$ of branched-polymer and random-tree geometries, placing the microscopic phase in a known universality class. We note for contrast that in dynamical-triangulation language the branched-polymer phase is the *degenerate* phase one must escape; in EGG the claim is that the growth dynamics escapes it automatically at large scales, and the burden of Section 9 is to substantiate that claim.
+
+**Locality $\alpha$** suppresses parent sets whose members are mutually distant. For $\alpha\gg1$ the graph remains tree-like at all scales; for $\alpha\ll1$ locality is lost and the graph approaches a dense, expander-like, non-geometric structure (for which $D_s$ diverges rather than settling at four). The physically relevant regime is $\alpha=\mathcal{O}(1)$. Mapping the phase boundaries in the $(\gamma,\alpha)$ plane — tree / geometric / crumpled — is part of the Section 9.5 protocol; the claim of "no fine-tuning" is meaningful only once the geometric phase is shown to occupy a finite region rather than a point.
+
+### 2.4 Lorentz invariance and the preferred foliation
+
+We confront directly an issue the framework cannot evade. A theorem of Bombelli, Henson, and Sorkin [16] establishes that Poisson sprinkling is, in effect, the only way to discretize a Lorentzian manifold without selecting a preferred frame; any discrete structure with bounded valence and regular layering breaks microscopic Lorentz invariance. EGG's growth law is layered and has $k_{\max}$-bounded valence: it therefore possesses a preferred foliation at the fundamental level, and microscopic Lorentz invariance is *not* a symmetry of the theory.
+
+We adopt the same strategic position as causal dynamical triangulations [3,4] and Hořava-type constructions [17]: the foliation is fundamental, and **infrared Lorentz invariance is an emergent property to be demonstrated, not assumed**. This is a genuine vulnerability — observational constraints on preferred-frame effects are severe — and we prefer to state it as a falsifiable conjecture with concrete tests: (i) isotropy of the emergent lightcones extracted from mutual-information decay (Section 4), and (ii) the dispersion relation of long-wavelength collective modes in the tensor-network realization (Section 3.3), both computable within the Section 9.5 programme. We also note the instructive contrast with sprinkled causal sets, whose exact Lorentz invariance comes at the price of infinite valence and intrinsic nonlocality, producing a spectral dimension that *increases* in the ultraviolet [18]. EGG sits at the opposite pole: bounded valence and enforced locality, at the price of a foliation. The two programmes thus bracket the discreteness–Lorentz tension from opposite sides.
+
+### 2.5 Relation to other discrete approaches
+
+*Causal sets and sequential growth.* EGG's growth law descends conceptually from Rideout–Sorkin classical sequential growth [2], but departs from it in two ways: locality is enforced (intrinsically in Model B), and vertices carry operator algebras rather than being structureless. The departure from strict order-invariance is deliberate and is the price paid for manifold-likeness.
+
+*Causal dynamical triangulations.* CDT [3,4] shares the preferred foliation and the strategy of emergent infrared dimensionality, and its measured dimensional flow ($D_s\approx2$ in the UV to $\approx4$ in the IR) is the closest established analogue of our result. EGG differs in its ultraviolet universality class ($4/3$, tree-like, versus $\approx2$) and in carrying gauge and informational structure on the graph from the outset.
+
+*Quantum graphity and combinatorial quantum gravity.* The idea that geometry emerges from a graph dynamics with local quantum degrees of freedom appears in quantum graphity [8] and in Trugenberger's combinatorial quantum gravity [9], where Ollivier curvature plays the organizing role. EGG differs in being causal and growth-based rather than equilibrium-based, and in tying the graph dynamics to gauge holonomy and error correction.
+
+*Hypergraph rewriting.* The Wolfram programme [10] models the Universe as deterministic or rule-based hypergraph rewriting. EGG shares the discrete, background-free ambition and the use of spectral diagnostics, but differs fundamentally: dynamics is stochastic attachment constrained by locality and information-theoretic consistency, vertices carry operator algebras, and the foundational objects are information flow and gauge redundancy rather than rewriting rules. The ultraviolet universality class observed here ($D_s\simeq4/3$) is a signature of stochastic, locality-constrained tree growth; any relationship to rewriting systems would have to appear at the level of coarse-grained universality.
+
+*Random tensor networks and holographic codes.* Once the quantum state of the network is defined (Section 3.3), EGG becomes a random tensor network in the sense of [12] — with the decisive difference that the network's graph is not a fixed hyperbolic lattice but is *generated dynamically by the causal growth law itself*. Holographic error-correcting codes [11] are the static ancestors of the code structure proposed here.
+
+
+---
+
+## 3 Vertex Algebra, Diamond Consistency, and the Quantum State of the Network
+
+*(Tier II–III: structures defined here are computable in the realization of Section 3.3; continuum interpretations are conjectural.)*
+
+### 3.1 Local algebras and link transport
+
+To each vertex $v$ we associate the finite algebra
+
+```math
+\boxed{
+\mathcal{A}_v \;=\; M_N(\mathbb{C}) \,\otimes\, \mathrm{Cl}(3,1),
 }
 ```
 
 (3.1)
 
-where (M_N(\mathbb{C})) is the algebra of (N\times N) complex matrices and (\mathrm{Cl}(3,1)) is the real Clifford algebra associated with Minkowski signature. This choice is not unique, but it captures two structural requirements of the framework: a large internal gauge redundancy and the capacity to support spinorial degrees of freedom at the emergent level.
+the $N\times N$ complex matrices tensored with the real Clifford algebra of signature $(3,1)$, with generators $\{\gamma^a,\gamma^b\}=2\eta^{ab}$, $a,b=0,\dots,3$. The matrix factor supplies a local $U(N)$ gauge redundancy and a large-$N$ control parameter; the Clifford factor supplies the raw material for frame fields and spinorial structure.
 
-The **matrix factor** (M_N(\mathbb{C})) provides a local (U(N)) gauge symmetry at each vertex. This symmetry plays a dual role. At the microscopic level, it supplies a large-(N) control parameter that suppresses ultraviolet fluctuations and stabilizes coarse-grained observables. At the emergent level, it furnishes the raw material from which effective gauge and gravitational degrees of freedom may arise. While familiar Standard-Model gauge groups could in principle appear through symmetry breaking or boundary reduction, no such identification is assumed or derived here.
+We state plainly what is input and what is claimed emergent, correcting an inconsistency in an earlier version of this framework. **The signature $(3,1)$ of the local algebra is an input.** What is claimed to be emergent is its *geometric realization*: whether the coarse-grained correlation structure of the network actually organizes into a metric of Lorentzian signature with isotropic lightcones is a property of the dynamics, made sharp and computable in Sections 4–5, not a consequence of the algebraic choice alone. (One can write $\mathrm{Cl}(3,1)$ on any graph; most graphs will not develop Lorentzian geometry.)
 
-The **Clifford factor** (\mathrm{Cl}(3,1)) ensures that the local algebra is compatible with spinorial structure and Lorentzian kinematics in the continuum limit. Its role is to guarantee that, if a smooth spacetime description emerges, fermionic degrees of freedom and Dirac-type operators are not excluded by construction. As with the gauge sector, this choice is a structural commitment rather than a detailed model of particle physics.
-
----
-
-### **Causal coupling and link variables**
-
-Vertices are connected to their causal parents through directed links. To each causal link (p\to v) we associate a unitary operator
+Each causal link $p\to v$ carries a transport operator
 
 ```math
-U_{p\to v} \in U(N),
-```
-
-which mediates the transport of quantum information between local algebras. These link variables encode relational data between events and provide the microscopic origin of parallel transport in the emergent description. Importantly, they do not presuppose a notion of distance or geometry; they are defined purely on the causal graph.
-
-The collection of vertex algebras and link unitaries defines a highly redundant description of the microscopic state. Physical information is not stored in individual vertex degrees of freedom, but in correlations distributed across causal neighborhoods.
-
----
-
-### **Stabilization, redundancy, and code-like structure**
-
-A central organizing principle of EGG is that large-scale observables must be **insensitive to local microscopic disturbances**. This motivates the introduction of stabilizing constraints that restrict the physically relevant subspace of the full Hilbert space. Rather than specifying a concrete stabilizer code in the strict sense of quantum error correction, we impose **stabilizer-inspired consistency conditions** that penalize configurations incompatible with coherent information flow across causal links.
-
-At each vertex (v), we define a local stabilizing map of the schematic form
-
-```math
-S_v = \exp\!\left[
-i\,\frac{g}{N}
-\sum_{p\in P_v}
-\left(
-\mathrm{Tr}\,U_{p\to v} + \mathrm{Tr}\,U_{v\to p}^{\dagger}
-\right)
-\right],
+V_{p\to v} \;=\; U_{p\to v}\,\otimes\,\Lambda_{p\to v},
+\qquad U_{p\to v}\in U(N),\quad \Lambda_{p\to v}\in \mathrm{Spin}(3,1),
 ```
 
 (3.2)
 
-where (P_v) denotes the parent set of (v) and (g) is a dimensionless coupling. This operator favors configurations in which link variables entering and leaving a vertex are mutually consistent, effectively suppressing incoherent fluctuations. The precise form of (S_v) should be regarded as illustrative rather than unique; its purpose is to encode the idea that gauge redundancy and information protection are enforced locally but manifest globally.
-
-Taken together, these stabilizing constraints induce a **code-like structure** on the causal graph: logical information is delocalized over extended causal regions, while local errors remain correctable in the coarse-grained description. In this sense, EGG draws on ideas from quantum error correction, but does not require an explicit construction of a commuting stabilizer Hamiltonian or a specific decoding algorithm.
-
----
-
-### **Code depth and emergent cutoffs**
-
-To characterize the robustness of this delocalized information, it is useful to introduce a geometric notion of code depth. Consider a causal ball of radius (R_{\text{code}}), defined in terms of graph distance. Heuristically, the ability to reconstruct coarse-grained observables from partial data improves rapidly with the size of such regions. Motivated by known results for hypergraph-product and gauge-theoretic codes, we posit that the effective code distance scales as
+mediating internal gauge transport and local-frame transport respectively. Under a local internal gauge transformation $g_v\in U(N)$ and a local frame rotation $s_v\in\mathrm{Spin}(3,1)$,
 
 ```math
-\boxed{
-d_{\text{code}} \sim c_0\,N^{1/2}\,e^{\xi R_{\text{code}}/\ell_0}
-}
+V_{p\to v} \;\longrightarrow\; (g_v\otimes s_v)\,V_{p\to v}\,(g_p\otimes s_p)^{-1}.
 ```
 
 (3.3)
 
-where (c_0) and (\xi) are order-unity constants and (\ell_0) is the microscopic length scale. This expression is not derived from an explicit stabilizer construction; rather, it encodes the expectation that increasing causal depth and gauge redundancy dramatically enhance robustness.
+### 3.2 Causal diamonds, gauge-invariant consistency weights, and the co-emergence principle
 
-From the perspective of the emergent continuum description, this scale acts as an **intrinsic ultraviolet regulator**. Fluctuations at distances shorter than the effective code scale are suppressed, while long-wavelength collective modes remain dynamical. In later sections, this mechanism will be connected to the appearance of smooth geometry and to the infrared dominance of gravitational degrees of freedom.
+An earlier version of this framework imposed consistency weights built from single-link traces $\mathrm{Tr}\,U_{p\to v}$. Such terms are not invariant under (3.3); a model whose action is built from them does not actually possess the gauge symmetry it advertises. We therefore rebuild the consistency structure on the gauge-invariant objects the causal graph naturally provides: its **closed loops**.
+
+A **minimal causal diamond** $\Diamond$ is a pair of directed paths $\pi_1,\pi_2$ from a vertex $p$ to a vertex $q$ ($p\prec q$) that share no interior vertices. To each diamond associate the holonomy
+
+```math
+W_{\Diamond} \;=\; V_{\pi_1}\,V_{\pi_2}^{-1}
+\;\equiv\; \Big(\overrightarrow{\textstyle\prod_{\ell\in\pi_1}}V_\ell\Big)\Big(\overrightarrow{\textstyle\prod_{\ell\in\pi_2}}V_\ell\Big)^{-1},
+```
+
+(3.4)
+
+based at $p$. Under (3.3), $W_\Diamond \to (g_p\otimes s_p)\,W_\Diamond\,(g_p\otimes s_p)^{-1}$: diamond holonomies transform by conjugation at the base point, so their normalized trace
+
+```math
+\mathbb{tr}(X)\;\equiv\;\frac{1}{4N}\,\mathrm{Tr}_{M_N\otimes\mathrm{Cl}}(X)
+```
+
+is fully gauge invariant. The microscopic consistency weight is then the Wilson-type product over minimal diamonds,
+
+```math
+\boxed{
+\mathcal{W}[\{V\}] \;=\; \prod_{\Diamond}\exp\!\Big[\frac{N^{2}}{\lambda_t}\,\mathrm{Re}\;\mathbb{tr}\big(W_{\Diamond}\big)\Big],
+}
+```
+
+(3.5)
+
+with $\lambda_t$ a 't Hooft coupling held fixed as $N\to\infty$. The weight is maximized on **flat configurations** $W_\Diamond=\mathbb{1}$; these are the "stabilized" configurations, and deviations from flatness play the role of correctable errors. The construction is the $U(N)\times\mathrm{Spin}(3,1)$ analogue, on causal diamonds, of the plaquette stabilizers of Kitaev's toric code [19] — which is itself exactly a $\mathbb{Z}_2$ lattice gauge theory. The phrase "stabilizer-inspired" of the earlier draft is hereby made concrete: the stabilizer group is generated by the flatness conditions on diamonds, and it is gauge invariant by construction.
+
+**The co-emergence principle.** This repair has a structural consequence that we regard as the central insight of the revised framework. The diamonds of a graph generate its cycle space. *On a tree the cycle space is empty*: every link configuration can be brought to $V_\ell=\mathbb{1}$ by a gauge transformation, all holonomies are trivial, the weight (3.5) is identically constant, and there are no gauge-invariant observables beyond constants. In the tree-like ultraviolet phase of the growth law there is therefore **no gauge dynamics, no curvature or torsion content, and no nontrivial code** — not approximately, but identically. All three structures switch on together when loops proliferate, and loop proliferation is controlled by the same connectivity parameter $\gamma$ that drives the measured flow of the spectral dimension from $4/3$ toward $4$. Gauge fields, error correction, and geometry are not three mechanisms that happen to coexist; they are a single mechanism — the cycle structure of the causal graph — viewed through three lenses. The ultraviolet regime of EGG is the pre-gauge, pre-geometric phase of the theory, and the tree-to-loop crossover is its fundamental phase transition.
+
+### 3.3 The quantum state of the network
+
+An earlier version of this framework invoked mutual information between vertices without specifying the quantum state of the network — leaving those quantities undefined. We repair this by observing that **the growth law itself defines a state**: it is, read quantum mechanically, an instruction for building an isometric tensor network.
+
+Assign to each link a finite Hilbert space $\mathcal{H}_\ell$ (dimension $\chi$). Each vertex $v$ created with parent set $P_v$ carries a fixed budget of outgoing legs and applies an isometry
+
+```math
+T_v:\;\bigotimes_{p\in P_v}\mathcal{H}_{p\to v}\;\longrightarrow\;\bigotimes_{c}\mathcal{H}_{v\to c}\,,
+```
+
+(3.6)
+
+where the outgoing legs are consumed by subsequently created children; legs not yet consumed at layer $t$ are the *dangling legs* of the network. Starting from a small seed state, the state of "space at layer $t$" is
+
+```math
+|\Psi_t\rangle \;=\; \Big(\prod_{v:\,\mathrm{layer}(v)\le t} T_v\Big)\,|\mathrm{seed}\rangle
+\;\in\;\bigotimes_{\ell\,\mathrm{dangling}}\mathcal{H}_\ell\,,
+```
+
+(3.7)
+
+defined on the cut of dangling legs. The isometries are drawn from an ensemble — Haar-random, or random Clifford, or biased by the diamond weights (3.5); the interplay between the weight and the isometry ensemble is an open question flagged for future work. We call the resulting ensemble of states the **EGG ensemble**.
+
+Two consequences are immediate. First, EGG is revealed as a **random tensor network in the sense of Hayden et al. [12], whose graph is generated dynamically by the causal growth law** rather than fixed by hand — a precise point of contact with holographic duality. Second, choosing the isometries to be random *Clifford* operations makes the entire state exactly and efficiently simulable by the Gottesman–Knill theorem [20]: entanglement entropies, mutual informations, and erasure-recovery properties of $|\Psi_t\rangle$ are computable by binary linear algebra at the $10^{5}$–$10^{6}$-vertex scale of our existing graphs. Every information-theoretic quantity invoked in Sections 4 and 8 is thereby promoted from conjecture to **Tier II: defined and computable**, and the corresponding computations are part of the Section 9.5 protocol.
+
+### 3.4 Code structure and a corrected distance law
+
+The flatness stabilizers of Section 3.2, acting on the states of Section 3.3, delocalize logical information over extended causal regions. An earlier version of this framework posited a code distance growing *exponentially* with the radius $R_{\mathrm{code}}$ of a causal ball. That scaling must be retracted: for codes generated by geometrically local constraints, distance is bounded *polynomially* in region size — in $D$ spatial dimensions, $d\lesssim O(R^{D-1})$, by the tradeoff theorems of Bravyi, Poulin, and Terhal [21]. An exponential law would require nonlocality that the growth law itself forbids. We therefore replace the earlier ansatz by
+
+```math
+\boxed{
+d_{\mathrm{code}}(R)\;\sim\; c_0\,N^{\,\nu}\,\Big(\frac{R}{\ell_0}\Big)^{\zeta},
+\qquad 1\le \zeta \le D-1,
+}
+```
+
+(3.8)
+
+with $\nu,\zeta$ to be *measured*, not assumed. In the Clifford realization the measurement is concrete and efficient: erasure decoding for stabilizer codes is polynomial-time, so the **operational code depth** — the probability that logical information survives erasure of a causal ball of radius $R$ — is directly computable on our existing graphs. We note with candor that the geometric proxy data reported in Section 9.3 (boundary-separation distances growing sublinearly with $R$) already disfavored the exponential law of the earlier draft and are consistent with the polynomial form (3.8); the largest-radius data point is, moreover, shown there to be a finite-size artifact. The framework's infrared scales must therefore be built on polynomial protection depth, and Section 5.4 does so.
 
 ---
 
-### **Role of information structure in the overall framework**
+## 4 Entanglement and the Emergence of Geometry
 
-The purpose of the vertex algebra and stabilizing constraints is not to provide a detailed microscopic model of quantum matter, but to establish a **conceptual bridge** between causality, gauge redundancy, and emergent geometry. The causal growth law of Section 2 supplies the network on which information is distributed; the algebraic structure introduced here governs how that information is stored, transported, and protected.
+*(Tier II: every object in this section is computable in the Clifford realization of Section 3.3.)*
 
-Together, these ingredients prepare the ground for the emergence of continuum physics. In particular, they enable a reinterpretation of gravitational dynamics as a manifestation of large-scale information consistency, an idea that will be developed in the subsequent sections. While many aspects of this picture remain conjectural, the combination of causal growth and code-like stabilization defines a concrete and unified microscopic substrate from which spacetime physics may arise.
-
-## **4 Entanglement and the Emergence of Geometry**
-
-A defining premise of Entanglement–Gauge Gravity is that spacetime geometry is not fundamental, but emerges from the relational structure of quantum information distributed across the causal network. While geometry is diagnosed operationally through diffusion and spectral observables, as discussed in Section 2 and quantified in Section 9, entanglement provides a complementary and deeper characterization of how causal connectivity organizes into an effective continuum description.
-
-To formalize this connection, we associate quantum states to finite causal regions of the graph and consider their information-theoretic relations. For two vertices (v) and (w), we define the mutual information
+With the state $|\Psi_t\rangle$ defined, correlation-based geometry becomes well posed. For coarse-graining cells $x,y$ on a fixed cut (double-cone cells of temporal depth $\sim2\ell_0$ and graph radius $\sim2\ell_0$, as before), define the mutual information
 
 ```math
-\mathcal{I}_{vw}
-=
-S(\rho_v) + S(\rho_w) - S(\rho_{vw}),
+\mathcal{I}(x,y)\;=\;S(\rho_x)+S(\rho_y)-S(\rho_{xy}),
 ```
 
 (4.1)
 
-where (\rho_v) and (\rho_w) are reduced density matrices associated with local vertex algebras, and (\rho_{vw}) is their joint state. Mutual information serves as a robust, regulator-independent measure of total correlations and is well defined even when no background notion of distance exists.
+a positive, regulator-independent measure of total correlation requiring no prior notion of distance.
 
----
+### 4.1 An information world function
 
-### **Coarse-graining and information geometry**
+An earlier version of this framework defined the emergent metric as the coordinate Hessian of a coarse-grained scalar information potential. That construction is not tensorial — the second coordinate derivative of a scalar fails to transform covariantly except at critical points — and we replace it with a construction modeled on Synge's world function [22], in the spirit of the mutual-information geometry of Cao, Carroll, and Michalakis [23].
 
-To extract continuum behavior, mutual information must be coarse-grained over finite causal neighborhoods. We introduce **double-cone cells**, defined as causal regions spanning a temporal depth (\Delta t\in[0,2\ell_0]) and a graph radius of order (2\ell_0), typically containing (\mathcal{O}(10^1)) vertices. Within such a cell centered at an emergent coordinate location (x), we define the averaged information potential
+Generic many-body states exhibit decay of mutual information with separation; we *define* separation through that decay. Introduce the **information world function**
 
 ```math
-\overline{\mathcal{I}}(x)
-=
-\frac{1}{|\text{cell}|}
-\sum_{v,w\in\text{cell}}
-\mathcal{I}_{vw}.
+\sigma(x,y)\;\equiv\;-\,\xi^{2}\,\ln\!\frac{\mathcal{I}(x,y)}{\mathcal{I}_0},
 ```
 
 (4.2)
 
-This quantity captures how strongly degrees of freedom within a causal neighborhood are correlated with one another, independent of any assumed geometric structure.
-
-Information geometry provides a natural way to associate a tensorial object to such a potential. In classical and quantum information theory, the Hessian of a suitable information functional defines a Fisher information metric on the space of states. Motivated by this correspondence, we propose to identify the emergent spacetime metric with the coarse-grained Hessian of (\overline{\mathcal{I}}(x)).
-
----
-
-### **Metric from information-theoretic structure**
-
-Specifically, we define the effective metric tensor as
+with $\xi$ a correlation length and $\mathcal{I}_0$ a coincidence normalization, and extract the spatial metric on the cut from the coincidence limit of the mixed bilocal derivative,
 
 ```math
 \boxed{
-g_{\mu\nu}(x)
-=
-\frac{4\,\ell_P^{\,2}}{\ln 2}
-\,
-\partial_\mu \partial_\nu
-\overline{\mathcal{I}}(x),
+h_{ij}(x)\;=\;-\,\lim_{y\to x}\,\frac{\partial}{\partial x^{i}}\frac{\partial}{\partial y^{j}}\,\sigma(x,y),
 }
 ```
 
 (4.3)
 
-where (\partial_\mu) denotes derivatives with respect to emergent continuum coordinates defined implicitly through coarse-graining. The normalization is chosen so that areas measured in Planck units correspond naturally to information measured in bits, anticipating the connection to gravitational entropy.
+which, unlike a scalar Hessian, transforms as a tensor by construction (it is the standard coincidence-limit extraction of a metric from a bi-scalar distance function). Positive-definiteness of $h_{ij}$ follows wherever mutual information decays monotonically in all directions — a property to be verified, not assumed, in the EGG ensemble.
 
-This identification should be understood as a **proposal for the continuum interpretation** of the underlying information structure, rather than as a derivation from first principles. Its role is to link the operational notion of distance inferred from correlations to a geometric description compatible with Lorentzian spacetime.
+### 4.2 Assembly of the Lorentzian metric
 
----
+The full spacetime metric is assembled in ADM form from the foliation the growth law itself provides:
 
-### **Relation to spectral geometry and causality**
+```math
+ds^{2}\;=\;-\,\mathcal{N}(x)^{2}\,d\tau^{2}\;+\;h_{ij}(x)\big(dx^{i}+\mathcal{N}^{i}d\tau\big)\big(dx^{j}+\mathcal{N}^{j}d\tau\big),
+```
 
-The construction above is not intended to replace the diffusion-based diagnostics introduced earlier, but to complement them. Spectral observables determine whether the causal graph admits a geometric interpretation at all and reveal the scale dependence of dimensionality. The information-theoretic metric, if well defined, refines this picture by encoding local anisotropies, causal structure, and curvature.
+(4.4)
 
-In particular, the emergence of a Lorentzian signature is tied to the underlying causal asymmetry of the graph. Preliminary numerical experiments indicate that, after a modest number of causal layers, the coarse-grained Hessian of (\overline{\mathcal{I}}) exhibits one positive and three negative eigenvalues, consistent with a ((+,-,-,-)) signature. While these observations are not yet part of the systematic numerical programme reported in Section 9, they motivate the identification of the information-geometric tensor with a spacetime metric.
+with the lapse $\mathcal{N}$ fixed by the local layer thickness (the graph depth traversed per unit coarse time) and the shift $\mathcal{N}^{i}$ by the drift of cells between cuts. We are explicit about what this construction does and does not claim. The Lorentzian *signature* of (4.4) is supplied by the causal layering — time enters through the foliation, space through correlation decay — and is therefore an output of the combination (growth law + state), not of either alone. What remains genuinely open, and computable, is whether the emergent lightcones are *isotropic and foliation-independent in the infrared* — the emergent-Lorentz-invariance question of Section 2.4. A claim in an earlier draft that preliminary numerics exhibited a $(+,-,-,-)$ Hessian signature is withdrawn: the state had not been specified, so the claim was not well defined. Its sharp, well-defined successors are: (i) positive-definiteness and isotropy of $h_{ij}$ from (4.3), and (ii) the independent signature test on the holonomy bilinear $\mathbb{G}_{\mu\nu}$ of Section 5.1. Both are part of the Section 9.5 protocol.
 
----
+### 4.3 Status
 
-### **Status and scope of the entanglement–geometry map**
-
-It is important to emphasize that the entanglement-based construction introduced here is **not required** to establish the emergence of four-dimensional geometry. The latter is already supported by diffusion-based evidence. Instead, the entanglement–geometry map provides a conceptual and mathematical mechanism by which geometric notions such as distance, causal cones, and curvature may be encoded directly in quantum correlations.
-
-In this sense, entanglement in EGG plays a role analogous to that of a constitutive relation in hydrodynamics: it does not generate spacetime by itself, but determines how the underlying microscopic degrees of freedom organize into a smooth geometric phase once the conditions for emergence are met. Subsequent sections will build on this identification to connect information structure to effective gravitational dynamics.
+Diffusion observables (Section 9) determine *whether* the graph admits a geometric phase and its dimensionality; the construction above determines *which* geometry, encoding anisotropy and curvature. It plays the role of a constitutive relation in hydrodynamics: it does not generate the geometric phase, but specifies how microscopic correlations organize into metric data once that phase exists.
 
 ---
 
-## **5 Emergent Gauge Fields and Teleparallel Gravity**
+## 5 Gauge-Invariant Geometry from Holonomy, and the Teleparallel Effective Action
 
-The causal and information-theoretic structures introduced in the previous sections admit a natural reorganization in terms of effective gauge fields at large scales. In EGG, gravity does not appear as a fundamental interaction, but as an emergent description of collective fluctuations in the relational degrees of freedom that transport information across the causal network.
+*(Tier III, with Tier II ingredients: the observables of Section 5.1 are computable; the effective action and its couplings are conjectural.)*
 
-At the microscopic level, causal links (p\to v) are decorated with unitary operators (U_{p\to v}\in U(N)). In a regime where a smooth geometric description becomes meaningful, these link variables may be expanded as
+### 5.1 Elitzur-safe metric observables from diamond holonomies
 
-[
-U_{p\to v} = \exp!\left(\frac{i}{N} A_{p\to v}\right),
-]
+An earlier version of this framework defined a collective frame field as the expectation value of a single-link trace, $\langle\mathrm{Tr}(T^{a}U_{v\to w})\rangle$. That definition fails twice over. First, it violates **Elitzur's theorem** [24]: a local gauge symmetry cannot break spontaneously, and the expectation value of any gauge-variant local operator vanishes identically — the proposed field is exactly zero. Second, its index $a$ ranges over the $N^{2}$ generators of $U(N)$, whereas a frame field requires a four-valued local Lorentz index; teleparallel gravity is the gauge theory of translations, not of an internal unitary group, and no mechanism was given for selecting four directions out of $N^{2}$. Both failures are repaired at once by building the frame from the gauge-invariant loop observables of Section 3.2 and extracting the Lorentz index from the Clifford factor.
 
-where (A_{p\to v}) are Hermitian generators and the factor of (1/N) anticipates a controlled large-(N) limit. We decompose (A_{p\to v}=\langle A\rangle+\delta A) into a coarse-grained expectation value and fluctuations.
+For a minimal diamond $\Diamond$ based at cell $x$, define the **internal-trace holonomy**
 
----
+```math
+\mathcal{W}_{\Diamond}\;\equiv\;\frac{1}{N}\,\mathrm{Tr}_{M_N}\!\big(W_{\Diamond}\big)\;\in\;\mathrm{Cl}(3,1),
+```
 
-### **Coarse-grained frame fields from link variables**
-
-Within a coarse-graining cell of the type defined in Section 4, collective modes of the link variables define an effective field
-
-[
-H^{a}{}_{\mu}(x)
-================
-
-\left\langle
-\mathrm{Tr}!\left(T^{a} U_{v\to w}\right)
-\right\rangle_{v,w\in\text{cell}},
-]
 (5.1)
 
-where (T^{a}) are generators of the internal gauge algebra and the index (\mu) labels emergent spacetime directions defined by the coarse-graining procedure. This object should be interpreted as a **collective gauge-field mode** rather than as a fundamental tetrad. Its physical meaning is fixed only in the infrared, where a continuum description becomes appropriate.
+which is exactly invariant under internal $U(N)$ transformations (conjugation at the base point traces out) and transforms by Spin conjugation under local frame rotations, $\mathcal{W}_\Diamond\to s_x\,\mathcal{W}_\Diamond\,s_x^{-1}$. Expand in the Clifford basis and extract the vector component,
 
-The antisymmetric derivative
+```math
+w^{a}(\Diamond)\;=\;\tfrac{1}{4}\,\mathrm{tr}_{\mathrm{Cl}}\!\big(\gamma^{a}\,\mathcal{W}_{\Diamond}\big),
+```
 
-[
-S^{a}_{\mu\nu}
-==============
-
-## \partial_\mu H^{a}_{\nu}
-
-\partial_\nu H^{a}_{\mu}
-]
 (5.2)
 
-defines a field strength associated with these collective modes. In the emergent description, (S^{a}_{\mu\nu}) encodes torsion rather than curvature, reflecting the fact that parallel transport is defined by relational link variables rather than by an underlying Levi–Civita connection.
-
----
-
-### **Infrared effective action**
-
-Integrating out short-wavelength fluctuations (\delta A) in a large-(N) expansion yields an effective action for the coarse-grained fields. At leading order, symmetry and dimensional analysis restrict the infrared action to the form
-
-[
-\boxed{
-S_{\mathrm{eff}}
-================
-
-\int d^4x,\sqrt{-g}
-\left[
-\frac{1}{2},\kappa,
-S^{a}*{\mu\nu} S*{a}^{;\mu\nu}
-+
-\Lambda_{\mathrm{ent}}
-\right],
-}
-]
-(5.3)
-
-where (g_{\mu\nu}) is the emergent metric defined in Section 4. The effective coupling
-
-[
-\kappa \sim \frac{N,\ell_0^{,2}}{4\pi}
-]
-(5.4)
-
-sets the overall strength of the gravitational interaction, while
-
-[
-\Lambda_{\mathrm{ent}} \sim \frac{\ln 2}{R_{\mathrm{code}}^{,2}}
-]
-(5.5)
-
-acts as an effective cosmological constant determined by the depth of the information-protecting structure introduced in Section 3.
-
-These expressions should be understood parametrically: the precise numerical coefficients depend on details of the coarse-graining and stabilization scheme, but their scaling with (N), (\ell_0), and (R_{\mathrm{code}}) is fixed by the underlying structure.
-
----
-
-### **Teleparallel interpretation**
-
-The action (5.3) takes the form of a **teleparallel gravity** theory, in which torsion rather than curvature encodes gravitational dynamics. Using the Weitzenböck identity, the torsion-squared term differs from the Einstein–Hilbert Lagrangian by a total derivative. As a result, the field equations derived from (S_{\mathrm{eff}}) are dynamically equivalent to those of General Relativity, up to boundary contributions.
-
-In the context of EGG, the teleparallel formulation is not merely a reformulation of GR but a natural infrared language for a theory whose microscopic variables are link-based and gauge-redundant. Since parallel transport is fundamental while curvature is emergent, torsion provides the appropriate carrier of gravitational information.
-
----
-
-### **Status of the gravitational identification**
-
-It is important to stress that the appearance of teleparallel gravity here is an **infrared identification**, not a microscopic postulate. The numerical results reported in Section 9 establish the emergence of a four-dimensional geometric phase but do not directly probe the dynamics of the effective gauge fields. The gravitational action presented in this section represents the simplest continuum description compatible with the causal, gauge-theoretic, and information-theoretic structures of the framework.
-
-In this sense, gravity in EGG is best understood as a hydrodynamic theory of information flow: a universal, long-wavelength description that becomes inevitable once the underlying causal network supports stable geometry and protected correlations. Subsequent sections will explore the consequences and phenomenology of this identification.
-
----
-
-## **6 Emergent Field Equations**
-
-In the geometric phase where a continuum description is valid, the effective action introduced in Section 5 admits a standard variational treatment. Varying the infrared action with respect to the coarse-grained gauge fields (H^{a}{}_{\mu}), and translating the result into metric variables using the information-geometric identification of Section 4, yields gravitational field equations of teleparallel form.
-
-At the level of the emergent metric (g_{\mu\nu}), these equations take the familiar structure
+which transforms as a **local Lorentz vector** — precisely the transformation law a co-frame must have. Coarse directions enter through the diamonds themselves: let $\Diamond_\mu(x)$ denote the minimal diamonds at $x$ whose extent is aligned with the emergent direction $\mu$ (temporal diamonds span adjacent layers; spatial diamonds lie within a cut). The fully gauge-invariant — and therefore Elitzur-safe — metric observable is the connected bilinear
 
 ```math
 \boxed{
-G_{\mu\nu}
-+
-\Lambda_{\mathrm{ent}}\, g_{\mu\nu}
-=
-8\pi G_N\, T_{\mu\nu}^{(\mathrm{edge})},
+\mathbb{G}_{\mu\nu}(x)\;\propto\;\eta_{ab}\,\Big\langle\, w^{a}\big(\Diamond_\mu(x)\big)\;w^{b}\big(\Diamond_\nu(x)\big)\,\Big\rangle,
+}
+```
+
+(5.3)
+
+invariant under both $U(N)$ and local $\mathrm{Spin}(3,1)$ (the $\eta_{ab}$ contraction removes the frame ambiguity). Whether $\mathbb{G}_{\mu\nu}$ is nondegenerate and Lorentzian in the EGG ensemble is a sharp, computable question — the second signature test promised in Section 4.2 — and its agreement or disagreement with the mutual-information metric (4.3)–(4.4) is a stringent internal consistency check between the gauge and entanglement sectors of the framework. Note also the structural echo of Section 3.2: on a tree all $\mathcal{W}_\Diamond$ are trivially the identity, $w^{a}=0$, and $\mathbb{G}_{\mu\nu}$ vanishes — there is no metric content before loops. Geometry, in the holonomy sense, is *made of* the same cycles that carry gauge dynamics and code structure.
+
+### 5.2 Frame section and torsion
+
+For the teleparallel description one chooses a **frame section**: a smooth assignment $H^{a}{}_{\mu}(x)$ with $\eta_{ab}H^a{}_\mu H^b{}_\nu=\mathbb{G}_{\mu\nu}$, defined up to local Lorentz rotations — exactly the redundancy a tetrad is supposed to have. In the Weitzenböck gauge the torsion of the emergent frame is
+
+```math
+T^{a}{}_{\mu\nu}\;=\;\partial_{\mu}H^{a}{}_{\nu}-\partial_{\nu}H^{a}{}_{\mu},
+```
+
+(5.4)
+
+reflecting the fact that the microscopic variables are transporters: parallel transport is fundamental, curvature derived, so torsion is the natural carrier of gravitational information.
+
+### 5.3 The effective action and a selection principle for the GR point
+
+An earlier version of this framework wrote the infrared action as a single torsion-squared invariant, $S^{a}{}_{\mu\nu}S_{a}{}^{\mu\nu}$, and invoked the Weitzenböck identity to claim equivalence with General Relativity. That claim was incorrect as stated: the identity holds only for one specific combination of the three independent quadratic torsion invariants. The general quadratic theory is the Hayashi–Shirafuji "new general relativity" family [25], whose generic members propagate extra (and typically ghostly) modes and are *not* equivalent to GR. The correct statement uses the **teleparallel torsion scalar**
+
+```math
+\mathbb{T}\;=\;\tfrac{1}{4}\,T^{\rho\mu\nu}T_{\rho\mu\nu}\;+\;\tfrac{1}{2}\,T^{\rho\mu\nu}T_{\nu\mu\rho}\;-\;T^{\rho}{}_{\rho\mu}\,T_{\nu}{}^{\nu\mu},
+```
+
+(5.5)
+
+for which (conventions of [6]) $e\,\mathbb{T}=-e\,R+2\,\partial_\mu\!\big(e\,T_{\nu}{}^{\nu\mu}\big)$: this combination, and only this combination, differs from the Einstein–Hilbert Lagrangian by a boundary term. The conjectured infrared action is therefore
+
+```math
+\boxed{
+S_{\mathrm{eff}}\;=\;\frac{1}{16\pi G_N}\int d^{4}x\;e\,\big(\mathbb{T}\;-\;2\,\Lambda_{\mathrm{ent}}\big)\;+\;S_{\mathrm{edge}},
+}
+```
+
+(5.6)
+
+with $e=\det H^a{}_\mu$ and $S_{\mathrm{edge}}$ the effective action of the matter-like modes (Section 6).
+
+Why should coarse-graining land on the TEGR point of the Hayashi–Shirafuji family rather than a generic member? We propose a **selection principle**. The frame section $H^{a}{}_{\mu}$ of Section 5.2 is defined only up to local Lorentz rotations — the choice of Clifford basis per cell is pure convention introduced by the coarse-graining, with no microscopic counterpart. A legitimate effective action must therefore depend on the section only through boundary terms. Within quadratic torsion theories, invariance under local Lorentz rotations of the frame up to a total derivative singles out precisely the combination (5.5) [6,26]; the same point is also distinguished as the ghost-free member of the family. The TEGR point is thus not an aesthetic choice but the unique quadratic theory consistent with the conventional character of the frame section. Elevating this argument from a selection principle to a derivation — by performing the large-$N$ integration over short-wavelength holonomy fluctuations and exhibiting the coefficients of the three invariants — is the central open analytic problem of the framework, and we state it as such.
+
+The Newton constant is **induced**, in the sense of Sakharov [13]: each cell of size $\ell_0$ carries $\sim N^{2}$ matrix degrees of freedom whose short-distance correlations stiffen the frame field, giving
+
+```math
+\frac{1}{16\pi G_N}\;\simeq\;\frac{c_G\,N^{2}}{\ell_0^{2}}
+\qquad\Longleftrightarrow\qquad
+\ell_P\;\simeq\;\frac{\ell_0}{\sqrt{16\pi c_G}\;N},
+```
+
+(5.7)
+
+with $c_G$ an order-unity constant. Two remarks. First, the dimensions are now correct (an earlier draft's $\kappa\sim N\ell_0^{2}$ was dimensionally inconsistent for a gravitational stiffness). Second, (5.7) inverts the naive hierarchy: the discreteness scale $\ell_0$ sits a factor $\sim N$ *above* the Planck length. Large $N$ does not hide the graph deeper below $\ell_P$; it generates $\ell_P$ from a coarser substrate. The same $N^{2}$ counting will be required, independently, by black-hole thermodynamics in Section 8 — a nontrivial internal consistency condition that the earlier draft's $\ln N$ entropy law violated.
+
+### 5.4 The cosmological seesaw
+
+An earlier version of this framework set $\Lambda_{\mathrm{ent}}\sim R_{\mathrm{code}}^{-2}$ while simultaneously taking $R_{\mathrm{code}}\sim10$–$100\,\mu$m for laboratory phenomenology. Those two statements are mutually inconsistent by roughly sixty orders of magnitude (the observed $\Lambda\approx1.1\times10^{-52}\,\mathrm{m}^{-2}$ would require $R_{\mathrm{code}}$ of order the Hubble radius). The repair is a **seesaw**, and it converts the framework's worst internal inconsistency into its sharpest prediction.
+
+The code structure of Section 3.4 protects information only up to the depth $R_{\mathrm{code}}$; beyond it, of order one quantum of correlation per code cell remains unresolved. The residual energy density is Casimir-like,
+
+```math
+\rho_{\mathrm{res}}\;\sim\;\frac{\hbar c}{R_{\mathrm{code}}^{4}},
+```
+
+(5.8)
+
+and gravitates through the emergent Einstein equations with the induced $G_N$ of (5.7), giving
+
+```math
+\boxed{
+\Lambda_{\mathrm{ent}}\;\simeq\;\frac{8\pi\,\ell_P^{2}}{R_{\mathrm{code}}^{4}}\,.
+}
+```
+
+(5.9)
+
+The Planck-squared prefactor is what the earlier draft was missing, and it is forced by dimensional analysis once the vacuum term is recognized as *gravitating residual energy* rather than a bare geometric scale. Inverting (5.9) against the observed cosmological constant fixes
+
+```math
+R_{\mathrm{code}}\;=\;\Big(\frac{8\pi\,\ell_P^{2}}{\Lambda_{\mathrm{obs}}}\Big)^{1/4}\;\approx\;40\text{–}90\;\mu\mathrm{m},
+```
+
+(5.10)
+
+the spread reflecting order-unity normalization choices. This is, not coincidentally, the well-known "dark-energy length" $(\hbar c/\rho_\Lambda)^{1/4}\approx85\,\mu$m long noted in the experimental-gravity literature [27,28]; EGG gives that scale a microscopic identity — the information-protection depth of the causal network — and, crucially, ties it to a *second*, independent observable: the range of finite-distance deviations from Newtonian gravity (Section 7). One scale, two phenomena. This is the framework's flagship quantitative consequence.
+
+### 5.5 Consistency with the Weinberg–Witten theorem
+
+Any claim of an emergent graviton must answer Weinberg and Witten [29], who forbid a massless spin-2 particle in any Lorentz-invariant quantum field theory possessing a Lorentz-covariant conserved stress tensor. EGG evades the theorem's hypotheses rather than its conclusion: the fundamental theory is not a Lorentz-invariant QFT (Section 2.4 — the growth law selects a foliation, and exact Lorentz symmetry is at best emergent in the infrared), and no Lorentz-covariant conserved microscopic $T^{\mu\nu}$ exists on the graph. This is the same evasion route taken by induced-gravity and analogue-gravity constructions and by CDT. The theorem then functions not as an obstruction but as a *prediction of the framework's logic*: if gravity is emergent in this sense, exact microscopic Lorentz invariance must fail — which is precisely the falsifiable commitment made in Section 2.4.
+
+
+---
+
+## 6 Emergent Field Equations
+
+*(Tier III.)*
+
+In the geometric phase, variation of (5.6) with respect to the frame, translated to metric variables via $g_{\mu\nu}=\eta_{ab}H^a{}_\mu H^b{}_\nu$, yields — by virtue of the TEGR equivalence established for the specific scalar (5.5) — field equations of Einstein form:
+
+```math
+\boxed{
+G_{\mu\nu}\;+\;\Lambda_{\mathrm{ent}}\,g_{\mu\nu}\;=\;8\pi G_N\,T^{(\mathrm{edge})}_{\mu\nu},
 }
 ```
 
 (6.1)
 
-where (G_{\mu\nu}) is the Einstein tensor constructed from (g_{\mu\nu}), (\Lambda_{\mathrm{ent}}) is the effective cosmological constant introduced in Eq. (5.5), and (G_N) is the emergent Newton constant determined by the large-(N) scaling of the microscopic theory.
+with $T^{(\mathrm{edge})}_{\mu\nu}=-\frac{2}{\sqrt{-g}}\frac{\delta S_{\mathrm{edge}}}{\delta g^{\mu\nu}}$ sourced by modes propagating on extended structures of the graph.
 
-The stress–energy tensor on the right-hand side arises from degrees of freedom that propagate on extended structures of the causal graph and interact with the bulk geometry only through coarse-grained correlations. Formally, it is defined as
+Equation (6.1) is an **infrared consistency condition**, not a microscopic law, and we state its intellectual lineage explicitly: it is the EGG realization of Jacobson's programme, in which the Einstein equation arises as an equation of state [14] and, in its modern form, as the condition of entanglement equilibrium — stationarity of entanglement entropy in small causal diamonds at fixed volume [15]. In EGG the small causal diamonds are not a device of the argument but the literal microscopic carriers of gauge, code, and geometric structure (Section 3.2); the framework can be read as a proposal for *what the microscopic degrees of freedom are* in a Jacobson-type derivation. As in hydrodynamics, the universality of (6.1) reflects the insensitivity of long-wavelength behavior to microscopic detail once the structural conditions — a stable geometric phase with protected correlations — are met. The numerical programme of Section 9 tests those structural conditions; it does not yet test the dynamics of (6.1), and verifying that dynamics (fluctuations, propagation, matter coupling) is the principal open problem downstream of the analytic task stated in Section 5.3.
+
+---
+
+## 7 Ultraviolet Structure and Phenomenology
+
+*(Tier III, with the constraints stated honestly.)*
+
+### 7.1 Two ultraviolet softening mechanisms
+
+An earlier version of this framework described its ultraviolet behavior as an asymptotically safe fixed point while writing a beta function, $\beta_g=-(b_1/N)g^{3}$, whose only fixed point is Gaussian. We correct the characterization and separate two distinct mechanisms.
+
+**Dimensional reduction.** The measured flow $D_s\to4/3$ at short scales is itself an ultraviolet regulator: the power counting of gravitational fluctuations is governed by the spectral dimension, and for $D_s<2$ the gravitational coupling becomes power-counting super-renormalizable [30]. In EGG the deep ultraviolet is not a smaller four-dimensional spacetime but an effectively $(4/3)$-dimensional tree — indeed (Section 3.2) a *pre-geometric* phase in which the gravitational observables literally vanish. The "trans-Planckian problem" is not solved but dissolved: geometric notions cease to apply below the tree-to-loop crossover.
+
+**Large-$N$ asymptotic freedom of the holonomy sector.** The diamond weight (3.5) defines, in the geometric phase, a lattice gauge theory whose 't Hooft coupling runs as
 
 ```math
-T_{\mu\nu}^{(\mathrm{edge})}
-=
--\frac{2}{\sqrt{-g}}
-\frac{\delta S_{\mathrm{edge}}}{\delta g^{\mu\nu}},
-```
-
-(6.2)
-
-where (S_{\mathrm{edge}}) denotes the effective action governing these modes.
-
----
-
-### **Interpretation**
-
-Equation (6.1) should be read as an **infrared consistency condition**, not as a microscopic law. It expresses the requirement that the collective, information-protecting dynamics of the causal network admit a self-consistent geometric description at large scales. In this description, matter sources curve spacetime in precisely the way prescribed by General Relativity, while the cosmological term reflects the finite depth of the underlying information-theoretic structure.
-
-The appearance of Einstein-type equations is therefore not imposed by hand, but follows from the combination of causal growth, gauge redundancy, and coarse-grained stability. As in hydrodynamics, the universality of the field equations reflects the insensitivity of long-wavelength behavior to microscopic details, provided the necessary structural conditions are met.
-
----
-
-### **Scope and limitations**
-
-The numerical results presented later establish the emergence of a four-dimensional geometric phase but do not directly test the dynamical content of Eq. (6.1). The field equations should thus be understood as the **simplest continuum completion** compatible with the emergent geometry and the teleparallel structure of the effective action. Verifying their detailed validity—through fluctuations, propagation, and coupling to matter—remains an open task for future work.
-
----
-
-### **Role within EGG**
-
-Within Entanglement–Gauge Gravity, Eq. (6.1) encapsulates the central claim of the framework: **gravity is the universal, long-distance manifestation of information-theoretic consistency on a causal substrate**. Once a stable geometric phase exists, the dynamics of that phase are forced into a form equivalent to General Relativity, up to boundary terms and effective couplings fixed by microscopic structure.
-
----
-
-## **7 Ultraviolet Structure and Phenomenological Signatures**
-
-A central motivation of Entanglement–Gauge Gravity is that microscopic gauge redundancy and finite information depth regulate ultraviolet behavior without the need for additional degrees of freedom or imposed cutoffs. While the numerical programme reported here probes primarily the geometric sector, the structure of the framework allows a controlled discussion of ultraviolet running and low-energy phenomenology.
-
----
-
-### **Large-(N) scaling and ultraviolet behavior**
-
-The presence of a local (U(N)) gauge redundancy at each vertex introduces a natural expansion parameter. In the infrared geometric phase, fluctuations of the collective gauge fields organize into an effective field theory whose couplings admit a (1/N) expansion. At leading order, dimensional analysis and symmetry considerations suggest a beta function of the form
-
-```math
-\beta_g
-=
--\frac{b_1}{N}\, g^{3}
-+
-\mathcal{O}(N^{-2}),
+\beta_{\lambda_t}\;=\;-\,b_0\,\lambda_t^{2}\;+\;\mathcal{O}(\lambda_t^{3}),\qquad b_0>0,
 ```
 
 (7.1)
 
-where (g) denotes a dimensionless effective coupling and (b_1>0) is an order-unity coefficient. This structure admits a nontrivial ultraviolet fixed point at large (N), consistent with an **asymptotically safe** scenario. The fixed point is not imposed, but emerges as a consequence of gauge redundancy and the suppression of short-distance fluctuations by information-theoretic stabilization.
+i.e., the sector is **asymptotically free**, flowing to the Gaussian fixed point in the ultraviolet. We no longer characterize this as asymptotic safety; a nontrivial fixed point would require a zero of the beta function at $\lambda_t^{*}\neq0$, which nothing in the present construction supplies. (Asymptotic safety remains a logical possibility for the intermediate regime, but we make no claim.) The earlier draft's logarithmic running formula for $G(k)$ is withdrawn; the quantitative running of the gravitational coupling awaits the fluctuation analysis of Section 5.3.
 
-In this regime, the effective Newton constant becomes scale dependent,
+### 7.2 The sub-millimeter prediction
+
+The seesaw (5.9)–(5.10) fixes the range of finite-distance modifications of gravity. At separations approaching $R_{\mathrm{code}}$ the Newtonian potential acquires a Yukawa correction,
 
 ```math
-G(k)
-=
-\frac{G_0}{1 + \tfrac{\beta_1}{N}\ln(k/k_0)},
+\Phi(r)\;=\;-\,\frac{G_N M}{r}\Big[\,1\;+\;\alpha\,e^{-r/R_{\mathrm{code}}}\,\Big],
+\qquad
+R_{\mathrm{code}}\;\approx\;40\text{–}90\;\mu\mathrm{m}\ \ \text{(fixed by }\Lambda_{\mathrm{obs}}\text{)},
 ```
 
 (7.2)
 
-where (k) is a momentum scale and (\beta_1) encodes subleading contributions. This logarithmic running reflects the gradual weakening of gravitational interactions at high energies rather than a breakdown of the theory.
+with the **range fixed by cosmology** and the amplitude $\alpha$ model-dependent (between $\mathcal{O}(N^{-2})$ and $\mathcal{O}(1)$ depending on how strongly the lightest massive collective mode couples; computing it is part of the open fluctuation analysis). The logical structure of the prediction is therefore asymmetric, and we state it precisely: *any* observed finite-range deviation from the inverse-square law must appear at $40$–$90\,\mu$m if the seesaw mechanism is right; null results at ever-smaller $\alpha$ progressively bound $N$ and the mode couplings but cannot by themselves falsify the mechanism. Torsion-balance experiments currently probe exactly this window — the strongest limits constrain $|\alpha|\lesssim\mathcal{O}(1)$ at $\lambda\approx40\,\mu$m, tightening rapidly toward $|\alpha|\lesssim10^{-2}$ near $200\,\mu$m [27,28,31] **[AUTHOR NOTE: pull the current published exclusion curve (Eöt-Wash 2020, HUST 2020, and any successors) and quote the exact $(\alpha,\lambda)$ limits here]** — so the prediction sits on the active experimental frontier rather than beyond it.
 
----
+### 7.3 What is not testable, stated plainly
 
-### **Finite information depth and infrared modifications**
-
-The code-like structure introduced in Section 3 implies a finite depth over which quantum information can be protected and reconstructed. This scale, characterized by (R_{\mathrm{code}}), enters the infrared effective theory as a physical length beyond which deviations from classical gravity become suppressed.
-
-At distances comparable to (R_{\mathrm{code}}), the Newtonian potential acquires a Yukawa-type correction,
+Collective gravitational excitations acquire modified dispersion at high momentum,
 
 ```math
-\Phi(r)
-=
--\frac{G_0 M}{r}
-\left[
-1
-+
-\alpha\, e^{-r/R_{\mathrm{code}}}
-\right],
-\qquad
-\alpha \sim \frac{1}{N},
+\omega^{2}\;=\;k^{2}\Big[\,1\;+\;c_2\,(\ell_P k)^{2}\;+\;\dots\Big].
 ```
 
 (7.3)
 
-where the amplitude of the correction is controlled by the same large-(N) parameter that governs ultraviolet stability. This modification reflects the finite range over which microscopic information-theoretic correlations can influence the emergent geometry.
+At gravitational-wave frequencies $(\ell_P k)^{2}\sim10^{-80}$: the correction is unobservable by some seventy orders of magnitude, and an earlier draft's claim that binary-merger observations constrain $N$ through (7.3) was numerically meaningless and is withdrawn. We retain (7.3) only as a statement of principle — Lorentz-violating dispersion is suppressed to second order in $\ell_P k$ because the foliation affects only the deep ultraviolet — and not as phenomenology.
 
-Similarly, collective gravitational excitations are expected to exhibit a modified dispersion relation at high momentum,
+### 7.4 Summary of observational handles
+
+| Observable | Status in EGG | Honest assessment |
+| --- | --- | --- |
+| Cosmological constant $\Lambda_{\mathrm{obs}}$ | Fixes $R_{\mathrm{code}}\approx40\text{–}90\,\mu$m via the seesaw (5.9) | Postdiction / consistency; one parameter absorbed |
+| Sub-mm inverse-square tests | Yukawa range **predicted** at $40\text{–}90\,\mu$m; amplitude open | The flagship target; on the current experimental frontier |
+| Lunar laser ranging, BBN/CMB bounds on $\dot G/G$ | Constrain any cosmological-scale running of $G_N$ | Mild constraint pending the fluctuation analysis |
+| GW dispersion | $(\ell_P k)^{2}$-suppressed | Not testable; previous claim withdrawn |
+| UV dimensional reduction | $D_s\to4/3$ (Tier I, measured) | Structural; shared qualitatively with CDT/Hořava/asymptotic safety [30] |
+
+---
+
+## 8 Black-Hole Thermodynamics and Information
+
+*(Tier III, now with internally consistent large-$N$ counting.)*
+
+### 8.1 Entropy from the induced-gravity counting
+
+In EGG a horizon is a maximal erasure surface: the boundary beyond which the code structure of Section 3.4 can no longer protect interior logical information for an exterior observer. The entropy is the entanglement entropy of the matrix degrees of freedom across that surface. Each cell of area $\ell_0^{2}$ carries $\sim N^{2}$ such degrees of freedom (the adjoint-valued link and vertex content), so
 
 ```math
-\omega^2
-=
-k^2
-\left[
-1
-+
-\frac{c_2}{N}\, (\ell_P k)^2
-+
-\dots
-\right],
-```
-
-(7.4)
-
-where higher-order terms encode progressively suppressed corrections. These deviations arise not from Lorentz violation at the microscopic level, but from the breakdown of the hydrodynamic description as wavelengths approach the underlying causal and informational scales.
-
----
-
-### **Phenomenological constraints**
-
-Although the precise values of the coefficients appearing in Eqs. (7.1)–(7.4) depend on details of coarse-graining and stabilization, existing observations already constrain the allowed parameter space. Current bounds can be summarized schematically as follows:
-
-| Observable                          | Probe                          | Implication                                                              |
-| ----------------------------------- | ------------------------------ | ------------------------------------------------------------------------ |
-| **Sub-millimeter gravity tests**    | Yukawa correction to (\Phi(r)) | (N \gtrsim 10^3) for (R_{\mathrm{code}}\sim 10\text{–}100,\mu\mathrm{m}) |
-| **Binary neutron-star mergers**     | Graviton dispersion            | (N \gtrsim 10^2)                                                         |
-| **Cosmological lensing and growth** | Running (G(k))                 | (\beta_1/N \lesssim 10^{-3})                                             |
-
-These constraints are mutually consistent and indicate that the regime in which EGG reproduces classical gravity to high accuracy is broad. More precise bounds will require dedicated modeling of the effective action and improved numerical control of the infrared couplings.
-
----
-
-### **Status of the phenomenological predictions**
-
-The phenomenological signatures discussed in this section should be understood as **targets**, not as firm predictions. They follow from the internal logic of the framework once a geometric phase exists, but they have not yet been derived from a fully controlled continuum limit. Their primary role is to demonstrate that EGG is not only conceptually coherent but also experimentally vulnerable.
-
-In this sense, the framework makes a clear wager: if gravity is indeed the hydrodynamic manifestation of information-theoretic consistency on a causal substrate, then deviations from classical behavior must eventually appear at scales set by (N) and (R_{\mathrm{code}}). Whether Nature realizes this structure remains an open question, but the framework provides a concrete path by which it could be tested.
-
----
-
-## **8 Black-Hole Thermodynamics and Information**
-
-Within Entanglement–Gauge Gravity, black holes are not treated as exotic singular solutions added to an otherwise smooth spacetime. Instead, they arise as extreme configurations of the same causal, informational, and gauge-theoretic structures that underlie spacetime everywhere. Their thermodynamic properties are therefore interpreted directly in terms of information storage, protection, and reconstruction on the causal network.
-
----
-
-### **Entropy as protected information**
-
-A defining feature of black holes in semiclassical gravity is the Bekenstein–Hawking area law. In EGG, this law is reinterpreted as a statement about the number of independent degrees of freedom that can be reliably protected behind a causal horizon.
-
-The stabilizer-inspired structure introduced in Section 3 implies that logical information is delocalized over extended causal regions and that only a finite amount of information can be reconstructed from data outside a sufficiently large erased region. When a causal horizon forms, it acts as a maximal erasure surface. The number of logical degrees of freedom that remain inaccessible to an external observer scales with the area of that surface.
-
-Motivated by this correspondence, we identify the black-hole entropy with the number of logical degrees of freedom protected by the horizon,
-
-```math
-\boxed{
-S_{\mathrm{BH}}
-=
-\frac{A}{4\,\ell_P^{\,2}}\,
-\ln N,
-}
+S_{\mathrm{BH}}\;\simeq\;c_S\,N^{2}\,\frac{A}{\ell_0^{2}}
+\;=\;\frac{A}{4\,G_N}
+\qquad\text{provided}\qquad c_S=4\pi c_G\,,
 ```
 
 (8.1)
 
-where (A) is the horizon area and (N) is the dimension of the local gauge algebra. The appearance of (\ln N) reflects the fact that each protected degree of freedom carries an internal Hilbert-space dimension set by the microscopic gauge structure.
+using the induced Newton constant (5.7). The area law is thus not an additional postulate: **the same $N^{2}$ counting that generates $G_N$ generates $S_{\mathrm{BH}}=A/4G_N$**, with one order-unity matching condition between the two coarse-graining coefficients. This is the resolution of the "species problem" familiar from induced gravity — the species dependence of entanglement entropy cancels against the species dependence of the induced coupling [13,32,33] — promoted here to an internal consistency requirement of the framework. An earlier draft's entropy law $S\propto A\ln N$ is withdrawn: it counted only an $N$-dimensional register per cell while the gravitational stiffness was generated by $N^{2}$ adjoint modes, and the mismatch would have violated $S=A/4G$ within the framework's own conventions. Deviations from the strict area law remain possible for Planckian ($\ell_0$-scale) black holes, where the discrete cell structure resolves, but we make no sharp claim.
 
-This expression should be understood as a **structural identification**, not as a microscopic counting derived from an explicit code construction. Its role is to show that the area law follows naturally once horizons are interpreted as information-theoretic boundaries rather than as geometric singularities.
+### 8.2 Evaporation and unitarity
 
----
-
-### **Universality and effective normalization**
-
-For macroscopic astrophysical black holes, the effective normalization of entropy must reproduce the standard Bekenstein–Hawking result. This can be achieved if the combination of microscopic parameters entering (\ell_P) and (N) renormalizes such that (\ln N) is absorbed into the definition of the effective Planck scale. In this regime, EGG is indistinguishable from semiclassical General Relativity.
-
-For sufficiently small or highly quantum black holes, however, deviations from the strict area law may become visible, reflecting the discrete internal structure of the underlying causal network. Such deviations are not predicted sharply here, but they represent a potential observational handle on the microscopic theory.
+Hawking radiation is read as the gradual erosion of the horizon's error-protecting capacity: as quanta are emitted, the operational code depth (Section 3.4) of the horizon region decreases, and logical information becomes progressively reconstructible from the exterior — the information was delocalized by construction, never destroyed. This picture aligns with the modern reconstruction-based account of evaporation [11,34] and requires no modification of quantum mechanics. We emphasize its standing honestly: EGG does not yet derive a Page curve or a microstate count; what it offers is a setting in which the qualitative requirements any such derivation must meet — area-law protected entropy, polynomial code depth, unitary leakage — arise from one mechanism. In the Clifford realization, toy versions of these statements (erasure thresholds of horizon-like regions, recovery of logical content as a region is progressively "evaporated") are directly simulable, and we flag them as a natural extension of the Section 9.5 programme.
 
 ---
 
-### **Evaporation and unitarity**
+## 9 Numerical Programme and Results
 
-Hawking radiation in EGG is interpreted as a gradual leakage of encoded information from a region whose error-protecting capacity is being eroded by quantum fluctuations. As radiation is emitted, the effective code depth associated with the horizon decreases, eventually allowing the full logical content of the black hole to be reconstructed from the exterior degrees of freedom.
+*(Tier I, with its scope stated exactly; Section 9.5 is the pre-registered Tier II protocol.)*
 
-This picture aligns naturally with modern developments in quantum information theory, in which black-hole evaporation is described using entanglement wedges and reconstruction maps. In EGG, unitarity is not restored by modifying quantum mechanics or introducing nonlocal dynamics, but follows from the fact that information is never destroyed—only redistributed across the causal network.
+The numerical programme tests the **internal viability of the microscopic growth law** — whether it produces stable, sparse, geometric structure — and explicitly does *not* yet test the continuum identifications of Sections 5–8. All results below were obtained with **Model A** (the embedded regulator, Eq. 2.2a) at density exponent $p=4$; this scope restriction is the reason for the control protocol of Section 9.5.
 
----
+We generated causal graphs at sizes $N_{\mathrm{v}}\in\{2\times10^{4},\,10^{5},\,3\times10^{5}\}$ with parameters $\gamma=0.9$, $\alpha=1.6$, $k_{\max}=12$, candidate pool $K=25$, and measured (i) connectivity statistics, (ii) the spectral dimension via Hutchinson trace estimation with Lanczos quadrature on the normalized undirected graph Laplacian, and (iii) a geometric proxy for causal protection depth. **[AUTHOR NOTE: state the number of independent random seeds per size; if results to date are single realizations, say so here and add seed variance in the rerun.]**
 
-### **Scope and limitations**
+### 9.1 Graph connectivity and causal structure
 
-The arguments presented here are necessarily qualitative. The framework does not yet provide a microscopic derivation of the Page curve or a detailed model of black-hole microstates. Instead, it offers a unifying interpretation in which black-hole thermodynamics, entropy, and evaporation are consequences of the same information-theoretic principles that govern spacetime emergence more generally.
+The growth law generates DAGs with stable, modest local connectivity and no fragmentation, percolation collapse, or runaway valence. The mean undirected degree was
 
-In this sense, black holes serve as a consistency check on the framework rather than as its primary motivation. Any viable microscopic theory of spacetime must explain why horizons obey an area law and why evaporation is unitary. EGG accommodates these features naturally once gravity is understood as an emergent, information-governed phenomenon.
+```math
+\langle k\rangle \approx 3.84,\;\;3.99,\;\;4.25
+\qquad\text{at}\qquad
+N_{\mathrm{v}}=2\times10^{4},\;10^{5},\;3\times10^{5}.
+```
 
----
+The graphs are sparse and exhibit no small-world shortcuts at the scales probed. Two cautions, recorded for the rerun: the upward drift of $\langle k\rangle$ with size must be shown to saturate (slow densification would eventually produce expander-like behavior, for which $D_s$ diverges rather than settling at four), and the non-small-world claim should be quantified by verifying that graph diameter scales as $N_{\mathrm{v}}^{1/4}$ rather than $\log N_{\mathrm{v}}$. Both checks are in the Section 9.5 protocol. We also retract a suggestion in an earlier draft that $\langle k\rangle\to4$ is itself "consistent with" four-dimensionality; mean degree has no clean relation to emergent dimension, and we let the spectral and order-theoretic estimators carry that burden.
 
-### **Role within the overall framework**
+### 9.2 Spectral dimension and emergent geometry
 
-Black holes occupy a special place in EGG because they probe the deepest interplay between causality, geometry, and information. The reinterpretation of horizon entropy as protected logical information reinforces the central claim of the framework: that spacetime and gravity are macroscopic manifestations of underlying information-theoretic structure.
+The return probability and running spectral dimension are
 
-While much work remains to sharpen this picture, the black-hole sector illustrates how EGG connects conceptual unification with established semiclassical results, without introducing additional assumptions beyond those already required for emergent geometry.
-
----
-
-## **9 Numerical Programme and Results**
-
-The numerical programme was designed to test the **internal viability of the microscopic growth law**, not to fit parameters or reproduce continuum physics by construction. In particular, the aim was to identify any structural or geometric pathology—such as fragmentation, runaway connectivity, dimensional collapse, or small-world behavior—that would invalidate the emergence of a macroscopic geometric phase.
-
-We implemented the causal growth dynamics defined in Sections 2 and 3 and subjected the resulting graphs to a small set of adversarial diagnostics: (i) large-scale graph generation, (ii) spectral-dimension measurement via diffusion on the graph Laplacian, and (iii) a geometric proxy for causal depth related to information protection. All computations were performed using Hutchinson trace estimation and Lanczos quadrature on graphs with up to (3\times10^5) vertices.
-
-Unless otherwise stated, growth parameters were fixed at (\gamma=0.9), (\alpha=1.6), (k_{\max}=12), and a candidate pool of 25 near-lightcone vertices. The density scaling (n(t)=\beta t^4) was chosen so that the final causal layer reached the target graph size. For each graph size (N\in{2\times10^4,10^5,3\times10^5}), the full growth process and spectral analysis were carried out independently.
-
----
-
-### **9.1 Graph connectivity and causal structure**
-
-The growth law generates directed acyclic graphs with stable and modest local connectivity. The undirected degree distribution narrows with increasing system size, and its mean approaches a value consistent with the emergence of four-dimensional geometry at large scales:
-
-[
-\langle k_{\mathrm{undirected}}\rangle \approx
-\begin{cases}
-3.84 & (N=2\times10^4),[4pt]
-3.99 & (N=10^5),[4pt]
-4.25 & (N=3\times10^5).
-\end{cases}
-]
-
-The gradual increase in (\langle k\rangle) reflects the quartic density scaling and the enforcement of locality in the parent-selection process. No evidence of graph fragmentation, percolation collapse, or runaway valence was observed. In particular, the graphs remain sparse and non-small-world even at the largest sizes studied.
-
----
-
-### **9.2 Spectral dimension and emergent geometry**
-
-To probe the emergent geometry without reference to embedding coordinates, we computed the return probability of a diffusion process governed by the **normalized undirected Laplacian**,
-
-[
-P(\sigma)
-=========
-
-\frac{1}{N},
-\mathrm{Tr}!\left(e^{-\sigma L_{\mathrm{norm}}}\right),
+```math
+P(\sigma)=\frac{1}{N_{\mathrm{v}}}\,\mathrm{Tr}\,e^{-\sigma L_{\mathrm{norm}}},
 \qquad
-D_s(\sigma)
-===========
+D_s(\sigma)=-2\,\frac{d\ln P}{d\ln\sigma}.
+```
 
--2,\frac{d\ln P}{d\ln\sigma}.
-]
+This probe is deliberately conservative: it discards causal directionality, assumes no manifold prior, and is sensitive to spectral pathologies and shortcuts. (On any finite graph $P(\sigma)\to1/N_{\mathrm{v}}$ as $\sigma\to\infty$, driving $D_s\to0$; the infrared plateau is therefore a *window* below the spectral-gap scale, and the rerun will report plateau windows and verify that they widen with system size, rather than extracting plateaus from fixed fractions of the diffusion range as was done to date.)
 
-This choice is deliberately conservative: it discards causal directionality, imposes no manifold prior, and is sensitive to spectral degeneracies and pathological shortcuts.
+Across all sizes the spectral dimension is strongly scale dependent:
 
-Across all graph sizes, the spectral dimension exhibits a clear **scale dependence**. At short diffusion times, the geometry is effectively low-dimensional, while at long diffusion times it approaches a higher-dimensional regime. Extracting ultraviolet and infrared plateaus from the lowest and highest portions of the diffusion scale yields:
-
-[
+```math
 \begin{aligned}
-N=2\times10^4: &\quad D_s^{\mathrm{UV}}\approx 1.20,\quad D_s^{\mathrm{IR}}\approx 3.42,\
-N=10^5:        &\quad D_s^{\mathrm{UV}}\approx 1.21,\quad D_s^{\mathrm{IR}}\approx 3.63,\
-N=3\times10^5: &\quad D_s^{\mathrm{UV}}\approx 1.22,\quad D_s^{\mathrm{IR}}\approx 3.81.
+N_{\mathrm{v}}=2\times10^{4}:&\quad D_s^{\mathrm{UV}}\approx1.20,\quad D_s^{\mathrm{IR}}\approx3.42,\\
+N_{\mathrm{v}}=10^{5}:&\quad D_s^{\mathrm{UV}}\approx1.21,\quad D_s^{\mathrm{IR}}\approx3.63,\\
+N_{\mathrm{v}}=3\times10^{5}:&\quad D_s^{\mathrm{UV}}\approx1.22,\quad D_s^{\mathrm{IR}}\approx3.81.
 \end{aligned}
-]
+```
 
-Two features are particularly significant.
+Two features stand out. First, the ultraviolet value stabilizes at $D_s^{\mathrm{UV}}\simeq1.2$–$1.4$, consistent with the universal branched-polymer/random-tree value $4/3$ and only weakly sensitive to causal directionality (checked separately with directed Laplacians): the microscopic phase sits in a known universality class, with no tuning toward a target ultraviolet dimension. Second, the infrared value increases monotonically with size with no sign of saturation below four. Within Model A at $p=4$, this establishes a robust dimensional flow from a tree-like ultraviolet to an approximately four-dimensional infrared.
 
-First, the ultraviolet spectral dimension stabilizes near (D_s^{\mathrm{UV}}\simeq1.2–1.4) and shows only weak sensitivity to causal directionality (as verified separately using directed Laplacians). This value is consistent with the universal (D_s=4/3) associated with branched-polymer and causal-tree geometries, indicating that the microscopic growth law lies in a well-defined universality class rather than requiring fine-tuning.
+What it does **not** yet establish is that the infrared "four" is emergent rather than transduced from the inputs ($p=4$; the embedding; the lightcone-aligned pool). That question is answerable only by the controls of Section 9.5, and we decline to claim more than the data support.
 
-Second, the infrared spectral dimension increases systematically with system size, approaching four as (N) grows. No saturation at a lower value was observed. This behavior strongly suggests that four-dimensional geometry is an emergent, large-scale property of the causal network, not an artifact of finite size or parameter choice.
+### 9.3 Causal protection depth, and a corrected reading of the data
 
----
+As a proxy for code depth we measured $d_{\mathrm{geo}}(R)$, the minimal graph distance separating past and future temporal boundaries of a causal ball of radius $R$. For the $N_{\mathrm{v}}=3\times10^{5}$ graph,
 
-### **9.3 Causal depth and geometric robustness**
+```math
+d_{\mathrm{geo}}(R{=}10)\approx8,\qquad
+d_{\mathrm{geo}}(R{=}20)\approx15,\qquad
+d_{\mathrm{geo}}(R{=}40)\approx18.
+```
 
-As a minimal diagnostic of causal depth and robustness, we measured a geometric proxy for code distance: the minimal graph distance separating “past” and “future” temporal boundaries within a causal ball of radius (R). Although this quantity is not equivalent to the stabilizer-code distance discussed in Section 3, it serves as a coarse indicator of how rapidly causal connectivity thickens with scale.
+We correct the interpretation given in an earlier draft. The growth from $R=10$ to $R=20$ is consistent with approximately **linear** scaling of protection depth, in line with the polynomial law (3.8) and the locality bounds behind it [21] — and *inconsistent* with the exponential law that draft had posited. The apparent flattening at $R=40$ is a **finite-size artifact**: a ball of radius 40 in a four-dimensional geometry contains of order $40^{4}\sim10^{6}$ vertices, exceeding the entire graph, so that data point saturates the system and carries no scaling information. The rerun will confine $R$ to the regime $R^{4}\ll N_{\mathrm{v}}$ and, in the Clifford realization, replace this proxy by the operational distance itself (erasure-recovery probability, Section 3.4).
 
-For the (N=3\times10^5) graph, we find
+### 9.4 Summary of established findings
 
-[
-d_{\mathrm{geo}}(R=10)\approx 8,\qquad
-d_{\mathrm{geo}}(R=20)\approx 15,\qquad
-d_{\mathrm{geo}}(R=40)\approx 18.
-]
+Within the stated scope — Model A, $p=4$, single parameter point — the numerics establish that: the growth law produces large, stable, sparse causal graphs free of connectivity pathologies; the ultraviolet geometry lies in the branched-polymer universality class, $D_s^{\mathrm{UV}}\simeq4/3$; the infrared spectral dimension flows toward four with increasing system size; and the causal protection depth grows polynomially, consistent with (3.8). These are the Tier I claims of this paper, no more and no less.
 
-The monotonic growth of (d_{\mathrm{geo}}(R)) confirms the absence of pathological shortcuts and supports the interpretation of increasing causal depth at larger scales. A full stabilizer-code construction and decoding-based distance analysis remain open problems.
+### 9.5 Decisive control experiments: a pre-registered protocol
 
----
+We commit in advance to the following experiments and to the interpretations of their possible outcomes, so that the framework's central empirical claim is exposed to falsification rather than insulated from it.
 
-### **9.4 Summary of numerical findings**
+**(C1) Density-exponent scan.** Rerun the full programme at $p\in\{2,3,5,6\}$ (Model A unchanged otherwise). *Pre-registered interpretations:* if $D_s^{\mathrm{IR}}\approx4$ for all $p$, dimensional emergence is established in the strong sense (a major result); if $D_s^{\mathrm{IR}}$ tracks $p$, the strong emergence claim is **withdrawn** and the model is reinterpreted as a dimension-transduction map from causal density to geometry (a well-defined, weaker result that we would still report); if neither, the map $D_s^{\mathrm{IR}}(p)$ is characterized as the primary finding.
 
-Within the scope of the diagnostics employed, the numerical results establish three robust facts:
+**(C2) Embedding ablation and the intrinsic model.** Within Model A, vary $d_{\mathrm{emb}}\in\{2,3,4,5\}$ and deform the candidate-pool geometry; then run **Model B** (Eq. 2.2b), which uses no embedding at all. *Pre-registered interpretations:* survival of the dimensional flow in Model B establishes background-independent emergence and becomes the paper's headline; failure confines all Tier I claims to the regulated theory and demands quantification of regulator dependence.
 
-* the causal growth law generates large, stable, sparse graphs without pathological connectivity,
-* the emergent geometry exhibits a **universal ultraviolet spectral dimension near (4/3)**,
-* and the infrared geometry flows toward **four dimensions** as system size increases.
+**(C3) Statistics and finite-size scaling.** Multiple independent seeds per size with error bars; extension to $10^{6}$ vertices (the Hutchinson–Lanczos pipeline scales); plateau extraction by stationarity of $D_s(\sigma)$ with reported windows; fits of $D_s^{\mathrm{IR}}(N_{\mathrm{v}})=4-c\,N_{\mathrm{v}}^{-\theta}$ against alternatives that asymptote below four.
 
-These results do not establish the full dynamical content of Entanglement–Gauge Gravity. They do, however, provide nontrivial evidence that the framework’s **most basic geometric premise**—the emergence of four-dimensional spacetime from a causal, low-dimensional microstructure—is internally consistent and robust under adversarial testing.
+**(C4) Independent dimension estimators.** The Myrheim–Meyer order-theoretic dimension [35,36] (purely causal, embedding-free); the Hausdorff dimension from ball-volume scaling $V(r)\sim r^{d_H}$, with the sharp discriminator that branched polymers have $d_H=2$ so a genuinely geometric infrared requires $d_H\to4$ alongside $D_s\to4$; the walk-dimension consistency relation $d_w=2d_H/D_s$; and the combinatorial Laplacian alongside the normalized one.
 
-In this sense, the numerical programme serves as a proof-of-viability rather than a proof-of-correctness. It identifies a concrete microscopic dynamics that supports the kind of emergent geometric phase required by the framework, and thereby justifies the continuum constructions explored in the preceding sections.
+**(C5) Phase diagram.** Scan $(\gamma,\alpha)$ to map the tree / geometric / crumpled-expander phases and demonstrate that $D_s^{\mathrm{IR}}\approx4$ occupies a finite region; monitor $\langle k\rangle(N_{\mathrm{v}})$ and diameter scaling per Section 9.1.
 
----
+**(C6) Curvature.** The Benincasa–Dowker action density [37] (cited but unused in the earlier draft) as a discrete Ricci-scalar diagnostic of near-flatness, and the Ollivier–Ricci curvature distribution [38].
 
-## **10 Conclusion**
-
-Entanglement–Gauge Gravity (EGG) proposes a concrete microscopic picture of spacetime in which geometry, gravity, and matter arise from the collective organization of a growing causal structure endowed with quantum degrees of freedom. The framework replaces a fundamental background manifold with a stochastic causal network, treats geometry as an emergent, scale-dependent phenomenon, and interprets gravity as an infrared manifestation of gauge redundancy and information-theoretic consistency.
-
-The primary result of this work is not a complete derivation of gravitational dynamics, but the demonstration that a **minimal causal growth law** can support a stable geometric phase with nontrivial structure. Numerical investigations show that the emergent geometry exhibits a universal ultraviolet spectral dimension near (D_s\simeq4/3), characteristic of causal-tree and branched-polymer universality classes, together with a robust flow toward four dimensions at large scales. This behavior establishes the internal viability of the framework’s core premise: that four-dimensional spacetime can emerge dynamically from a low-dimensional causal microstructure without imposing geometry or dimensionality by hand.
-
-Building on this foundation, we have outlined how local gauge structure, stabilizer-inspired redundancy, and entanglement geometry can be unified into a continuum effective description whose infrared kinematics coincide with those of General Relativity in a teleparallel formulation. These identifications remain conjectural, but they are structurally motivated and constrained by the underlying causal and information-theoretic architecture. In this picture, black-hole thermodynamics, ultraviolet softness, and deviations from classical gravity arise naturally as consequences of finite information depth and large-(N) gauge redundancy.
-
-EGG therefore occupies a middle ground between abstract principle-based approaches and fully specified microscopic theories. It does not claim correctness, but it does claim coherence, calculability, and falsifiability. The framework makes clear wagers: that ultraviolet dimensional reduction is real, that gravity is hydrodynamic rather than fundamental, and that information-theoretic structure governs the emergence of spacetime. Each of these claims can be sharpened, challenged, or refuted by further analytical and numerical work.
-
-Immediate directions for future investigation include refining the continuum limit of the effective action, developing controlled treatments of fluctuations around the emergent geometric phase, and improving numerical diagnostics of causal depth and information protection. On the phenomenological side, the framework motivates searches for finite-range deviations from Newtonian gravity, scale-dependent gravitational couplings, and high-frequency modifications of gravitational-wave propagation.
-
-Whether or not Entanglement–Gauge Gravity ultimately describes Nature, it provides a concrete arena in which ideas from causality, gauge theory, and quantum information can be explored on equal footing. By identifying a microscopic dynamics that supports emergent geometry with the right large-scale behavior, the framework sharpens the question of what spacetime is—and what it must be built from—at the most fundamental level.
+**(C7) The Clifford tensor-network campaign.** Realize the EGG ensemble (Section 3.3) with random Clifford isometries on the existing graphs and compute: mutual-information decay $\mathcal{I}(x,y)$ versus graph distance (testing the world-function ansatz (4.2)); ball-entropy scaling (area law?); positive-definiteness and isotropy of the information metric (4.3); the signature and nondegeneracy of the holonomy bilinear $\mathbb{G}_{\mu\nu}$ (5.3) and its agreement with the information metric; and the operational code distance via erasure decoding, fitting $(\nu,\zeta)$ in (3.8). This campaign converts the framework's information-theoretic core from conjecture to measurement.
 
 ---
 
-## **11 Implications if Entanglement–Gauge Gravity Is Correct**
+## 10 Conclusion
 
-This section is intentionally speculative. Its purpose is not to summarize established results, but to make explicit what would follow *if* Entanglement–Gauge Gravity provides an approximately correct microscopic description of spacetime. The implications listed below are not independent assumptions or optional embellishments. They arise structurally from the causal growth law, the local gauge algebra, and the information-theoretic interpretation developed in Sections 2–6.
+Entanglement–Gauge Gravity proposes that spacetime, gravity, and gauge structure are macroscopic manifestations of a single microscopic substrate: a growing causal graph carrying finite operator algebras, with gauge-invariant consistency enforced on its causal diamonds. The revised framework is organized around one structural principle — on a tree there is no gauge dynamics, no code, and no geometry; all three are made of loops and switch on together at the tree-to-loop crossover — and one quantitative wager — the seesaw $\Lambda_{\mathrm{ent}}\simeq8\pi\ell_P^{2}/R_{\mathrm{code}}^{4}$, which ties the observed dark-energy scale to a predicted modification of gravity at $40$–$90\,\mu$m, on the active frontier of torsion-balance experiments.
 
-If EGG is correct, then spacetime, gravity, and matter are not separate ingredients of Nature, but different manifestations of a single underlying causal–informational substrate. The consequences of this unification are profound.
+The paper's claims are tiered, and we restate them as such. Established numerically (Tier I): the growth law supports a stable, sparse causal phase whose spectral dimension flows from the branched-polymer value $4/3$ in the ultraviolet toward four in the infrared, with polynomial causal protection depth. Defined and computable (Tier II): the quantum state of the network as a dynamically grown random tensor network — exactly simulable in its Clifford realization — together with the information metric, the holonomy metric, curvature diagnostics, operational code distance, and, decisively, the control experiments (density-exponent scan, embedding ablation, intrinsic-locality model) that will determine whether the infrared dimension is emergent or injected. Conjectural (Tier III): the teleparallel effective action at the GR-equivalent point selected by the frame-section redundancy, the induced Newton constant and the matching Bekenstein–Hawking entropy from one $N^{2}$ counting, the Einstein equations as a Jacobson-type consistency condition, and the cosmological seesaw.
 
----
-
-### **11.1 What spacetime is**
-
-If EGG is correct, then spacetime is **not fundamental**.
-
-Instead:
-
-* The Universe is a growing causal network whose vertices carry finite quantum degrees of freedom.
-* Geometry is an emergent, scale-dependent description inferred from coarse-grained correlations and diffusion.
-* Dimensionality is not fixed: the microscopic structure is effectively low-dimensional, while four dimensions emerge only at large scales.
-* Lorentzian signature is emergent, not postulated, arising from the causal asymmetry of the underlying graph.
-
-In this picture, spacetime is a **hydrodynamic phase of information flow**, analogous to how elasticity or fluid mechanics emerge from atomic structure.
+The framework's honest vulnerabilities are equally explicit: a preferred foliation with emergent Lorentz invariance unproven; a regulated growth law whose background-independent variant is defined but untested; and a continuum limit whose central analytic step — the large-$N$ fluctuation integration that should produce (5.5)–(5.7) — remains open. We regard the combination of a falsifiable laboratory-scale prediction, a pre-registered numerical protocol capable of killing the core claim, and a stated analytic programme as the appropriate standard for a proposal of this scope. Whether or not Nature realizes this structure, the framework sharpens the question it was built to address: what spacetime is, and what it must be built from.
 
 ---
 
-### **11.2 What gravity is**
+## 11 Outlook (explicitly speculative)
 
-If EGG is correct, then gravity is **not a fundamental interaction**.
-
-Instead:
-
-* Gravity is the universal infrared description of how gauge redundancy and information protection organize on a causal substrate.
-* Parallel transport is fundamental; curvature is emergent.
-* The equivalence principle reflects the universality of information-theoretic consistency, not a geometric axiom.
-* Einstein’s equations arise as an infrared consistency condition once a stable geometric phase exists.
-
-Gravity is therefore to information what pressure is to molecular motion: an inevitable collective phenomenon, not a microscopic force.
+If the control experiments of Section 9.5 uphold the emergence claim and the analytic programme of Section 5.3 closes, the resulting picture would be economical: spacetime as the hydrodynamic phase of causal information flow; gravity as the universal infrared description of holonomy stiffness, with the equivalence principle reflecting the universality of that description rather than a geometric axiom; the ultraviolet not as a violent trans-Planckian regime but as a pre-geometric tree in which gravitational observables simply vanish; black-hole entropy and the induced Newton constant as two readings of one $N^{2}$ counting, with evaporation as decoded leakage rather than destruction; dark energy as the gravitating residue of finite information depth, already tied by the seesaw to a laboratory length; and the arrow of time as the growth direction of the causal network, with time-reversal symmetry emergent and approximate. Matter would be the physics of stable excitation patterns on the loop structure — a sector about which the present framework says almost nothing concrete, and which we list first among its open problems, alongside the fluctuation analysis, the restoration (or observable violation) of infrared Lorentz invariance, and the derivation of a Page curve in the Clifford realization. Each of these is a place where the framework can fail; that is what makes it worth pursuing.
 
 ---
 
-### **11.3 What ultraviolet completion looks like**
+## Appendix A — Glossary (revised entries marked •)
 
-If EGG is correct, then quantum gravity does not require:
-
-* extra spacetime dimensions,
-* supersymmetry,
-* fundamental strings,
-* or a breakdown of locality imposed by hand.
-
-Instead:
-
-* ultraviolet divergences are softened by finite information depth and large-(N) gauge redundancy,
-* dimensionality reduces at short scales rather than proliferating,
-* and the theory approaches a nontrivial ultraviolet fixed point rather than a singularity.
-
-The “trans-Planckian problem” is replaced by a regime in which geometric notions simply cease to apply.
-
----
-
-### **11.4 What black holes are**
-
-If EGG is correct, then black holes are **not mysterious quantum-gravitational objects**, but extreme information-theoretic configurations.
-
-In particular:
-
-* Horizon entropy counts protected logical degrees of freedom, not microscopic geometric states.
-* The area law reflects the information-storage capacity of a causal boundary.
-* Hawking radiation is decoded information leakage, not destruction.
-* Black-hole evaporation is unitary without modifying quantum mechanics.
-
-The black-hole information paradox disappears because information was never lost—it was encoded nonlocally by construction.
+* **$\ell_P$** — Planck length, $\sqrt{\hbar G/c^{3}}$. • In EGG an *emergent* scale: $\ell_P\simeq\ell_0/(\sqrt{16\pi c_G}\,N)$, Eq. (5.7).
+* **$\ell_0$** — microscopic graph scale. • Sits a factor $\sim N$ *above* $\ell_P$.
+* **Causal graph / growth law** — as before; • now in two variants: Model A (embedded regulator, simulated) and Model B (intrinsic locality, fundamental proposal), Eqs. (2.2a/b).
+* **Layer index $t$** — • the discrete time of the growth schedule (2.1); replaces the circular "time defined by vertex count" of the earlier draft.
+* **Minimal causal diamond $\Diamond$** — • a pair of interior-disjoint directed paths between $p\prec q$; the elementary loop of the causal graph; carrier of holonomy, stabilizer, and geometric content.
+* **Diamond holonomy $W_\Diamond$ / consistency weight** — • Eqs. (3.4)–(3.5); the gauge-invariant replacement for the single-link "stabilizers" of the earlier draft; maximized on flat configurations.
+* **Co-emergence principle** — • on a tree the cycle space is empty, so gauge dynamics, error correction, and holonomy geometry all vanish identically; all three switch on together at the tree-to-loop crossover controlled by $\gamma$.
+* **EGG ensemble** — • the ensemble of states $|\Psi_t\rangle$ (3.7) generated by reading the growth law as an isometric tensor network; in its Clifford realization, exactly simulable (Gottesman–Knill).
+* **Operational code depth** — • erasure-recovery probability of causal balls in the Clifford realization; polynomial law (3.8) replaces the retracted exponential ansatz.
+* **Information world function $\sigma(x,y)$** — • Eq. (4.2); bilocal distance functional built from mutual-information decay; the metric is its coincidence-limit mixed derivative (4.3), replacing the non-tensorial Hessian construction.
+* **Holonomy metric $\mathbb{G}_{\mu\nu}$** — • Eq. (5.3); the Elitzur-safe, fully gauge-invariant metric bilinear built from Clifford vector components of diamond holonomies.
+* **Frame section $H^{a}{}_\mu$** — • a local-Lorentz choice of square root of $\mathbb{G}_{\mu\nu}$; its conventional character is the selection principle for the TEGR point.
+* **TEGR torsion scalar $\mathbb{T}$** — • Eq. (5.5); the unique quadratic torsion combination equivalent to GR up to a boundary term; replaces the incorrect single-invariant action of the earlier draft.
+* **Cosmological seesaw** — • $\Lambda_{\mathrm{ent}}\simeq8\pi\ell_P^{2}/R_{\mathrm{code}}^{4}$, Eq. (5.9); fixes $R_{\mathrm{code}}\approx40$–$90\,\mu$m and replaces the internally inconsistent $R_{\mathrm{code}}^{-2}$ law.
+* **Dimension transduction** — • the pre-registered fallback interpretation if the infrared spectral dimension is found to track the density exponent $p$ (protocol C1).
+* **Spectral dimension, UV/IR, double-cone cell, large-$N$ limit, teleparallel gravity, Weitzenböck identity, emergent geometry** — as in the earlier draft.
 
 ---
 
-### **11.5 What matter and gauge charges are**
+## References
 
-If EGG is correct, then matter fields are **not fundamental building blocks**.
-
-Instead:
-
-* Gauge charges correspond to constraints on information flow.
-* Fermionic structure arises from the algebraic content of local degrees of freedom.
-* Matter excitations may live on extended or boundary-like structures of the causal network.
-* Features such as family replication, if realized, would reflect topological properties of causal organization rather than arbitrary parameters.
-
-Particle physics becomes a study of stable information patterns, not of elementary pointlike objects.
-
----
-
-### **11.6 What the cosmological constant is**
-
-If EGG is correct, then the cosmological constant is **not vacuum energy**.
-
-Instead:
-
-* It is an entanglement-geometric effect tied to the finite depth over which information can be protected.
-* Its small value reflects large-scale causal structure, not fine-tuning.
-* It is insensitive to ultraviolet physics by construction.
-* Cosmic acceleration is a manifestation of residual long-range information correlations.
-
-Dark energy becomes a statement about information geometry, not about exotic matter.
-
----
-
-### **11.7 What time is**
-
-If EGG is correct, then time is **fundamental but asymmetric**.
-
-Specifically:
-
-* The arrow of time is built into the growth of the causal network.
-* Time-reversal symmetry is emergent and approximate.
-* Entropy increase reflects the irreversible accumulation of causal structure.
-* The low-entropy early Universe corresponds to a shallow causal past, not special initial conditions.
-
-Thermodynamic irreversibility and cosmological time share a common origin.
-
----
-
-### **11.8 What the global fate of the Universe is**
-
-If EGG is correct, then several standard cosmological scenarios are ruled out:
-
-* **No initial singularity:** the Big Bang is a transition from a pre-geometric to a geometric phase.
-* **No Big Crunch:** global contraction would violate causal consistency.
-* **No Big Rip:** super-accelerating instabilities are incompatible with increasing information depth.
-* **Eternal expansion:** the Universe asymptotically approaches a finite-entropy, de Sitter–like regime.
-
-In the far future, information is not destroyed but redistributed, residing in large-scale horizon degrees of freedom.
-
----
-
-### **11.9 What is at stake**
-
-If Entanglement–Gauge Gravity is correct, then it provides a single microscopic explanation for:
-
-* why spacetime has four large dimensions,
-* why gravity is geometric and universal,
-* why black holes obey an area law yet evaporate unitarily,
-* why ultraviolet divergences are softened,
-* and why time has a preferred direction.
-
-The numerical results of Section 9 do not prove this picture. They do, however, show that its most basic geometric prerequisite—the emergence of four-dimensional spacetime from causal growth—is viable. What remains is to determine whether the deeper claims of the framework survive further analytical, numerical, and experimental scrutiny.
-
----
-
-## **Appendix A Glossary**
-
-* **(\ell_P)**
-  Planck length, defined as (\ell_P=\sqrt{\hbar G/c^3}). In EGG, (\ell_P) sets the scale at which the emergent geometric description becomes valid.
-
-* **(\ell_0)**
-  Microscopic length scale associated with causal growth and locality enforcement on the graph. Typically taken to be of order (\ell_P), but not assumed to be identical to it.
-
-* **Causal graph**
-  A directed acyclic graph whose vertices represent elementary causal events and whose directed edges encode causal precedence. No background spacetime structure is assumed.
-
-* **Causal growth law**
-  The stochastic rule governing the addition of new vertices and their attachment to existing ones, subject to locality and causal constraints.
-
-* **Double-cone cell**
-  A finite causal neighborhood used for coarse-graining, spanning a temporal depth (\Delta t\in[0,2\ell_0]) and a graph radius of order (2\ell_0). Serves as the basic unit for defining emergent continuum quantities.
-
-* **Spectral dimension (D_s(\sigma))**
-  A scale-dependent notion of dimensionality extracted from the return probability of a diffusion process on the graph Laplacian. Used as a coordinate-free diagnostic of emergent geometry.
-
-* **Ultraviolet (UV) / Infrared (IR)**
-  Respectively, short- and long-distance regimes defined operationally by diffusion scale or coarse-graining depth, not by coordinate distance.
-
-* **Vertex algebra (\mathcal{A}_v)**
-  The finite operator algebra associated with a vertex of the causal graph. In EGG, taken to be (M_N(\mathbb{C})\otimes\mathrm{Cl}(3,1)), encoding gauge redundancy and spinorial compatibility.
-
-* **Link variable (U_{p\to v})**
-  A unitary operator associated with a directed edge of the causal graph, mediating information transport between vertex algebras.
-
-* **Large-(N) limit**
-  The regime in which the internal gauge dimension (N) is large, providing a control parameter that suppresses microscopic fluctuations and stabilizes coarse-grained observables.
-
-* **Stabilizer-inspired constraints**
-  Local consistency conditions imposed on link variables to suppress incoherent configurations and induce delocalized, code-like information storage. Not a full stabilizer code in the strict quantum-information sense.
-
-* **Code depth / (R_{\text{code}})**
-  A length scale characterizing the causal extent over which information can be protected and reconstructed. Enters the infrared effective description as a physical scale.
-
-* **Entanglement pressure**
-  A heuristic term for the contribution of finite information depth to the infrared gravitational description, appearing as an effective cosmological constant scaling as (R_{\text{code}}^{-2}).
-
-* **Information geometry**
-  The study of geometric structures defined on spaces of probability distributions or quantum states. In EGG, used to motivate a relation between coarse-grained correlations and emergent metric structure.
-
-* **Fisher information metric**
-  A tensor defined as the Hessian of an appropriate information-theoretic functional. Serves as a proposed bridge between correlation structure and emergent spacetime geometry.
-
-* **Teleparallel gravity**
-  A formulation of General Relativity in which torsion, rather than curvature, encodes gravitational dynamics. In EGG, it provides a natural infrared language for link-based, gauge-redundant microscopic structures.
-
-* **Weitzenböck identity**
-  A mathematical identity relating torsion-squared invariants to the Einstein–Hilbert Lagrangian up to a boundary term, establishing the dynamical equivalence between teleparallel gravity and GR.
-
-* **Emergent geometry**
-  A continuum geometric description inferred from coarse-grained properties of the causal graph, rather than assumed at the microscopic level.
-
----
-
-### References
-
-[1] Bombelli et al., *Phys. Rev. D* 34 (1986) 373.  
-[2] Aldrovandi & Pereira, *Teleparallel Gravity* (Springer 2013).  
-[3] Reuter, *Phys. Rev. D* 57 (1998) 971.  
-[4] Pastawski et al., *JHEP* 06 (2015) 149.  
-[5] Benincasa & Dowker, *Phys. Rev. Lett.* 104 (2010) 181301.  
-[6] Amari, *Information Geometry and Its Applications* (Springer 2016).  
-[7] Nieh & Yan, *Ann. Phys.* 138 (1982) 237.
+[1] L. Bombelli, J. Lee, D. Meyer, R. D. Sorkin, "Space-time as a causal set," *Phys. Rev. Lett.* **59**, 521 (1987). **[AUTHOR NOTE: the earlier draft cited "Phys. Rev. D 34 (1986) 373" — verify and correct.]**
+[2] D. P. Rideout, R. D. Sorkin, "Classical sequential growth dynamics for causal sets," *Phys. Rev. D* **61**, 024002 (2000).
+[3] J. Ambjørn, J. Jurkiewicz, R. Loll, "Spectral dimension of the universe," *Phys. Rev. Lett.* **95**, 171301 (2005).
+[4] R. Loll, "Quantum gravity from causal dynamical triangulations: a review," *Class. Quantum Grav.* **37**, 013002 (2020).
+[5] K. Hayashi, T. Shirafuji — see [25].
+[6] R. Aldrovandi, J. G. Pereira, *Teleparallel Gravity: An Introduction* (Springer, 2013).
+[7] M. Reuter, "Nonperturbative evolution equation for quantum gravity," *Phys. Rev. D* **57**, 971 (1998).
+[8] T. Konopka, F. Markopoulou, L. Smolin, "Quantum graphity," arXiv:hep-th/0611197 (2006).
+[9] C. A. Trugenberger, "Combinatorial quantum gravity: geometry from random bits," *JHEP* **09**, 045 (2017).
+[10] S. Wolfram, "A class of models with the potential to represent fundamental physics," *Complex Systems* **29**, 107 (2020).
+[11] F. Pastawski, B. Yoshida, D. Harlow, J. Preskill, "Holographic quantum error-correcting codes," *JHEP* **06**, 149 (2015).
+[12] P. Hayden, S. Nezami, X.-L. Qi, N. Thomas, M. Walter, Z. Yang, "Holographic duality from random tensor networks," *JHEP* **11**, 009 (2016).
+[13] A. D. Sakharov, "Vacuum quantum fluctuations in curved space and the theory of gravitation," *Dokl. Akad. Nauk SSSR* **177**, 70 (1967); reprinted *Gen. Rel. Grav.* **32**, 365 (2000).
+[14] T. Jacobson, "Thermodynamics of spacetime: the Einstein equation of state," *Phys. Rev. Lett.* **75**, 1260 (1995).
+[15] T. Jacobson, "Entanglement equilibrium and the Einstein equation," *Phys. Rev. Lett.* **116**, 201101 (2016).
+[16] L. Bombelli, J. Henson, R. D. Sorkin, "Discreteness without symmetry breaking: a theorem," *Mod. Phys. Lett. A* **24**, 2579 (2009).
+[17] P. Hořava, "Spectral dimension of the universe in quantum gravity at a Lifshitz point," *Phys. Rev. Lett.* **102**, 161301 (2009).
+[18] A. Eichhorn, S. Mizera, "Spectral dimension in causal set quantum gravity," *Class. Quantum Grav.* **31**, 125007 (2014).
+[19] A. Yu. Kitaev, "Fault-tolerant quantum computation by anyons," *Ann. Phys.* **303**, 2 (2003).
+[20] D. Gottesman, "The Heisenberg representation of quantum computers," arXiv:quant-ph/9807006 (1998); S. Aaronson, D. Gottesman, *Phys. Rev. A* **70**, 052328 (2004).
+[21] S. Bravyi, D. Poulin, B. Terhal, "Tradeoffs for reliable quantum information storage in 2D systems," *Phys. Rev. Lett.* **104**, 050503 (2010).
+[22] J. L. Synge, *Relativity: The General Theory* (North-Holland, 1960).
+[23] C. Cao, S. M. Carroll, S. Michalakis, "Space from Hilbert space: recovering geometry from bulk entanglement," *Phys. Rev. D* **95**, 024031 (2017).
+[24] S. Elitzur, "Impossibility of spontaneously breaking local symmetries," *Phys. Rev. D* **12**, 3978 (1975).
+[25] K. Hayashi, T. Shirafuji, "New general relativity," *Phys. Rev. D* **19**, 3524 (1979).
+[26] M. Krššák, E. N. Saridakis, "The covariant formulation of f(T) gravity," *Class. Quantum Grav.* **33**, 115009 (2016).
+[27] E. G. Adelberger, B. R. Heckel, A. E. Nelson, "Tests of the gravitational inverse-square law," *Annu. Rev. Nucl. Part. Sci.* **53**, 77 (2003).
+[28] R. Sundrum, "Fat gravitons, the cosmological constant and submillimeter tests," *Phys. Rev. D* **69**, 044014 (2004).
+[29] S. Weinberg, E. Witten, "Limits on massless particles," *Phys. Lett. B* **96**, 59 (1980).
+[30] S. Carlip, "Dimension and dimensional reduction in quantum gravity," *Class. Quantum Grav.* **34**, 193001 (2017).
+[31] J. G. Lee, E. G. Adelberger, T. S. Cook, S. M. Fleischer, B. R. Heckel, "New test of the gravitational $1/r^{2}$ law at separations down to 52 μm," *Phys. Rev. Lett.* **124**, 101101 (2020); W.-H. Tan *et al.*, *Phys. Rev. Lett.* **124**, 051301 (2020).
+[32] T. Jacobson, "Black hole entropy and induced gravity," arXiv:gr-qc/9404039 (1994).
+[33] V. P. Frolov, D. V. Fursaev, A. I. Zelnikov, "Statistical origin of black hole entropy in induced gravity," *Nucl. Phys. B* **486**, 339 (1997).
+[34] P. Hayden, J. Preskill, "Black holes as mirrors: quantum information in random subsystems," *JHEP* **09**, 120 (2007).
+[35] J. Myrheim, "Statistical geometry," CERN preprint TH-2538 (1978).
+[36] D. A. Meyer, *The Dimension of Causal Sets*, PhD thesis, MIT (1988).
+[37] D. M. T. Benincasa, F. Dowker, "The scalar curvature of a causal set," *Phys. Rev. Lett.* **104**, 181301 (2010).
+[38] Y. Ollivier, "Ricci curvature of Markov chains on metric spaces," *J. Funct. Anal.* **256**, 810 (2009).
