@@ -307,8 +307,6 @@ Let $|\Psi\rangle$ have definite parity on the Fock space of $M$ Majorana modes 
 
 ## References
 
-*Assembled without network access; verify before circulation.*
-
 [1] C. Cao, S. M. Carroll, S. Michalakis, "Space from Hilbert space: recovering geometry from bulk entanglement," *Phys. Rev. D* **95**, 024031 (2017).
 [2] T. Jacobson, "Thermodynamics of spacetime: the Einstein equation of state," *Phys. Rev. Lett.* **75**, 1260 (1995).
 [3] T. Jacobson, "Entanglement equilibrium and the Einstein equation," *Phys. Rev. Lett.* **116**, 201101 (2016).
