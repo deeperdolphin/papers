@@ -1,9 +1,5 @@
 # Emergent Locality as Minimum-Description Communication
 
-*Broadcast reuse and a locality window — revision 4*
-
-Oct 6, 2026 · @Erc
-
 ## 1. Model
 
 Locality is the window of horizons in which a metric-ball permission is a cheapest sufficient reusable broadcast rule. Under coefficient 1 on every codelength, communication pays only when one emission is reused by several receivers, so the window needs the ball to beat every cheaper rule per event (A3, whose inside reading is near-site common information) as much as it needs far-site screening (A1).
@@ -266,5 +262,3 @@ N_{\mathrm{lo}}=\inf\{N: G_{N'}(\omega)\ge 0\ \forall N'\ge N,\ \forall\omega:\D
 5. A far extra recipient of an existing broadcast enters no earlier than ΔL / ε\_k(r), about log n / ε, and later if its gain falls short of the cap. A new single-recipient far emission never enters. Crossing a pairwise horizon makes a competitor eligible, not a member of C\*\_τ(N).
 
 Communication pays only when a broadcast is informative to several receivers. Locality is where common information lives. Geometry is the permission under which that reuse is local, and only while the horizon sits between amortization of the ball's name and the first far broadcast that has paid for its own.
-
-**Open items.** A2 is retired: a hub is an ordinary far competitor priced by a(P\_h), and the pairwise sum in Section 4 is the sufficient condition for it to satisfy A3. Check that condition on the global-common-cause family. Free delivery is the model this theorem is about. Charging delivery per recipient or by distance would be a different theorem, in which geometry is a physical cost rather than the name of a customer list; it is not pursued here. Run families 1–3 of the protocol and check that transitions land on N\_lo, N\_hi, and the N\_c(e\_j).
